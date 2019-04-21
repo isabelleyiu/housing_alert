@@ -4,18 +4,25 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { secretOrKey } = require('../../config/keys');
 const passport = require('passport');
+const { validateSignup } = require('../../validation/');
 
 // @route   POST api/users/signup
 // @desc    User signup
 // @access  Public
 router.post('/signup', (req, res) => {
+  const { errors, isValid } = validateSignup(req.body);
+
+  // check input validation
+  if(!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const { phone, password } = req.body;
   User.findOne({ phone })
     .then(user => {
       if(user) {
-        res.status(400).json({
-          phone: 'An account associated with this phone number already exists'
-        })
+        errors.phone = 'An account associated with this phone number already exists';
+        return res.status(400).json(errors);
       } else {
         const newUser = new User({
           phone,
@@ -35,6 +42,7 @@ router.post('/signup', (req, res) => {
         });
       }
     })
+    .catch(err => console.log(err));
 });
 
 // @route   POST api/users/login
@@ -46,7 +54,7 @@ router.post('/login', (req, res) => {
   User.findOne({ phone })
     .then(user => {
       if(!user) {
-        res.status(404).json({ phone: 'Account not found' });
+        return res.status(404).json({ phone: 'Account not found' });
       } else {
         const payload = { 
           id: user.id,
@@ -57,27 +65,19 @@ router.post('/login', (req, res) => {
           .then(isMatch => {
             if(isMatch) {
               jwt.sign(payload, secretOrKey, { expiresIn: '1h'}, (err, token) => {
-                res.json({
+                return res.json({
                   success: true,
                   token: `Bearer ${token}`
                 });
               })
             } else {
-              res.status(400).json({ password: 'Password incorrect'});
+              return res.status(400).json({ password: 'Password incorrect'});
             }
           })
       }
     });
 });
 
-// @route   GET api/users/:phone
-// @desc    User Account dashboard
-// @access  Private
-router.get('/:phone', passport.authenticate('jwt', {session: false}), (req, res) => {
-  res.json({
-    id: req.user.id,
-    phone: req.user.phone
-  });
-}); 
+
 
 module.exports = router;
