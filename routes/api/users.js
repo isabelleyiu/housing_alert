@@ -3,11 +3,10 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { secretOrKey } = require('../../config/keys');
-const passport = require('passport');
 const { validateSignup, validateLogin } = require('../../validation/');
 
 // @route   POST api/users/signup
-// @desc    User signup
+// @usage   Signup user
 // @access  Public
 router.post('/signup', (req, res) => {
   const { errors, isValid } = validateSignup(req.body);
@@ -46,7 +45,7 @@ router.post('/signup', (req, res) => {
 });
 
 // @route   POST api/users/login
-// @desc    User login
+// @usage   Login user
 // @access  Public
 router.post('/login', (req, res) => {
   const { errors, isValid } = validateLogin(req.body);
