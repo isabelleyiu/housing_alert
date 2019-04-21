@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { secretOrKey } = require('../../config/keys');
 const passport = require('passport');
-const { validateSignup } = require('../../validation/');
+const { validateSignup, validateLogin } = require('../../validation/');
 
 // @route   POST api/users/signup
 // @desc    User signup
@@ -49,12 +49,18 @@ router.post('/signup', (req, res) => {
 // @desc    User login
 // @access  Public
 router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLogin(req.body);
+  if(!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const { phone, password } = req.body;
 
   User.findOne({ phone })
     .then(user => {
       if(!user) {
-        return res.status(404).json({ phone: 'Account not found' });
+        errors.phone = 'Account not found';
+        return res.status(404).json({ errors });
       } else {
         const payload = { 
           id: user.id,
@@ -71,7 +77,8 @@ router.post('/login', (req, res) => {
                 });
               })
             } else {
-              return res.status(400).json({ password: 'Password incorrect'});
+              errors.password = 'Password incorrect';
+              return res.status(400).json({ errors });
             }
           })
       }
