@@ -16,6 +16,7 @@ require('./config/passport')(passport);
 
 // routes
 const users = require('./routes/api/users');
+const profile = require('./routes/api/profile');
 
 // connect to MongoDB
 const { mongoURI } = require('./config/keys');
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 // router
 app.use('/api/users', users);
+app.use('/api/profile', profile);
 
 
 app.listen(PORT, () => {
