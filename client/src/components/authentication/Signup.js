@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-class Navbar extends Component{
+class Signup extends Component{
   render() {
     return (
-      <div>navbar</div>
+      <h1>Sign Up</h1>
     )
   }
 }
 
-export default Navbar;
+export default Signup;
