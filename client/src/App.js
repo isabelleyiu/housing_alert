@@ -11,14 +11,20 @@ import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
   render() {
     return (
       <Router>
         <div className="App">
-          <Navbar />
+          {/* <Navbar /> */}
           <Route exact path="/" component={ Landing } />
-          <Signup />
-          <Login />
+          {/* <Signup />
+          <Login /> */}
         </div>
       </Router> 
       
