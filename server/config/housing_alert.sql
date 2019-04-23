@@ -1,0 +1,2 @@
+createdb housing_alert
+psql housing_alert
