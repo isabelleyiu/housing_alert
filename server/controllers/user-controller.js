@@ -7,7 +7,8 @@ module.exports = {
       defaults: { phone: req.body.phone }})
     .then(([user, created]) => {
       if(created) {
-        return res.json(user.dataValues)
+        user.dataValues.message = `Your number ${user.dataValues.phone} has been successfully added to our system`
+        return res.json(user.dataValues);
       } 
       return res.json({ message: 'This phone number already exists in the system.' });
     })
