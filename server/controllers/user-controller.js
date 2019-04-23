@@ -1,6 +1,26 @@
 const db = require("../models");
 
 module.exports = {
+  createNewUser: (req, res) => {
+    db.User.findOrCreate({ 
+      where: { phone: req.body.phone }, 
+      defaults: { phone: req.body.phone }})
+    .then(([user, created]) => {
+      if(created) {
+        return res.json(user.dataValues)
+      } 
+      return res.json({ message: 'This phone number already exists in the system.' });
+    })
+    .catch(err => res.status(400).json({ message: err.errors[0].message }))
+  },
+  showAllUsers: (req, res) => {
+    db.User.findAll()
+      .then(users => {
+        return res.json(users)
+      })
+      .catch(err => res.status(400).json(err))
+  },
+
   // find: (req, res) =>{
   //   console.log(req.body)
   //   console.log(req.params.num)
@@ -15,19 +35,6 @@ module.exports = {
   //   })
   //   .catch(err =>{console.log(err)})
   // },
-  create: (req, res) =>{
-    db.User.findOrCreate({ 
-      where: { phone: req.body.phone }, 
-      defaults: { phone: req.body.phone }})
-    .then(([user, created]) => {
-      if(created) {
-        return res.json(user.dataValues)
-      } 
-      return res.json({ created });
-    })
-    .catch(err => res.status(400).json({ message: err.errors[0].message }))
-  }
-  //,
   // update: (req, res) =>{
 
   // },
