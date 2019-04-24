@@ -7,8 +7,7 @@ import Landing from './components/layout/Landing';
 import Header from './components/layout/Header';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import Signup from './components/authentication/Signup';
-import Login from './components/authentication/Login';
+
 
 class App extends Component {
   constructor(props) {
