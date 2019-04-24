@@ -12,7 +12,7 @@ const createNewUser = (req, res) => {
     } 
     return res.json({ message: 'This phone number already exists in the system.' });
   })
-  .catch(err => res.status(400).json({ message: err.errors }))
+  .catch(err => res.status(400).json({ message: err.errors[0].message }))
 }
 
 const showAllUsers = (req, res) => {
