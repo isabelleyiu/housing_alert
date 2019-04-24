@@ -7,6 +7,7 @@ class SignUp extends Component{
       phone: '',
       message: '',
       verificationCode: '',
+      isVerified: false
     }
   }
   handleChange = e => {
@@ -47,7 +48,8 @@ class SignUp extends Component{
     })
     .catch(err => console.log(err))
   }
-  verifyPhone = verificationCode => {
+  verifyPhone = e => {
+    e.preventDefault();
     fetch('api/verification/verify', {
       method: 'POST',
       headers: {
@@ -55,12 +57,15 @@ class SignUp extends Component{
       },
       body: JSON.stringify({
         phone: this.state.phone,
-        verificationCode: verificationCode,
+        verificationCode: this.state.verificationCode,
       })
     })
     .then(res => res.json())
     .then(verification => {
-      this.setState({ message: verification.message })
+      this.setState({ 
+        isVerified: verification.success,
+        message: verification.message
+       })
     })
     .catch(err => console.log(err))
   }
