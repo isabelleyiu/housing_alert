@@ -5,6 +5,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const authy = require('authy')(process.env.AUTHY_API_KEY);
 
+
 const textAllUserPhoneNumber = () => {
   db.User.findAll()
   .then(users => {
@@ -23,14 +24,14 @@ const textAllUserPhoneNumber = () => {
 
 // works here but invalid API key in user-controller
 const sendVerification = (req, res) => {
-  // console.log(req.body.phone)
+  console.log(req.body.phone)
   authy
     .phones()
-    .verification_start('4086935707', '1', 'sms', function(err, resp) {
+    .verification_start(req.body.phone, '1', 'sms', function(err, resp) {
       if (err) {
-      console.log(err);
+      res.status(400).json(err);
       }
-      console.log(resp.message);
+      res.json(resp.message);
     });
 }
 
@@ -38,24 +39,23 @@ const sendVerification = (req, res) => {
 const verifyUser = (req, res) => {
   const { phone, verificationCode } = req.body;
   authy.phones()
-  .verification_check(phone, '1', verificationCode, function (err, resp) {
-    if (err) {
-      // invalid token  
-     res.status(400).json(err);
-    }
-    if(resp.success) {
-      //update database, set user.isVerified to true
-    //   db.User.update(
-    //     { isVerified: true },
-    //     { where: { phone: req.body.phone }}
-    //   )
-    //   .then(updatedUser => {
-    //     res.json(updatedUser)
-    //   })
-    //   .catch(err => res.status(400).json({ message: err.errors[0].message }))
-    // }
-      res.json(resp)
-    }
+    .verification_check(phone, '1', verificationCode, function (err, resp) {
+      if (err) {
+        // invalid token  
+      res.status(400).json(err);
+      }
+      if(resp.success) {
+        db.User.update(
+          { isVerified: true },
+          { where: { phone: req.body.phone }}
+        )
+        .then(updatedUser => {
+          console.log(updatedUser)
+        })
+        .catch(err => console.log(err))
+        // res.status(400).json({ message: err.errors[0].message }
+      }
+      res.json(resp);
   });
 }
 
