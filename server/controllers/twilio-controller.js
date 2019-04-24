@@ -2,8 +2,8 @@ require('dotenv').config();
 const db = require("../models");
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
-const authy = require('authy')(process.env.AUTHY_API_KEY);
+const client = require('../models/node_modules/twilio')(accountSid, authToken);
+const authy = require('../models/node_modules/authy')(process.env.AUTHY_API_KEY);
 
 
 const textAllUserPhoneNumber = () => {
