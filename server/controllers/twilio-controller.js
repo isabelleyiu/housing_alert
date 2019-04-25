@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require("../models");
+const db = require('../models');
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
@@ -22,7 +22,6 @@ const textAllUserPhoneNumber = () => {
   });
 }
 
-// works here but invalid API key in user-controller
 const sendVerification = (req, res) => {
   console.log(req.body.phone)
   authy
