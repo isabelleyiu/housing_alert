@@ -1,15 +1,15 @@
 const router = require('express').Router();
 
-const userRoutes = require('./user');
+const phoneRoutes = require('./phone');
 const verificationRoutes = require('./verification');
-const profileRoutes = require('./profile');
+const userRoutes = require('./user');
 // const housingRoutes = require('./housings');
 
 
 // @route:  /api/
-router.use('/user', userRoutes);
+router.use('/phone', phoneRoutes);
 router.use('/verification', verificationRoutes);
-router.use('/profile', profileRoutes);
+router.use('/user', userRoutes);
 // router.use("/housing", housingRoutes);
 
 

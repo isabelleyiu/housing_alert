@@ -7,6 +7,6 @@ router.route('/start')
   .post(twilioController.sendVerification)
 
 router.route('/verify')
-  .post(twilioController.verifyUser)
+  .post(twilioController.verifyPhone)
 
 module.exports = router;

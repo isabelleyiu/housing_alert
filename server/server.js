@@ -11,9 +11,6 @@ const routes = require('./routes');
 const db = require('./models');
 
 // =========== APP CONFIG ===========
-// passport config
-// require('./config/passport')(passport);
-
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,6 +19,9 @@ app.use(express.urlencoded({ extended: false }));
 if(process.env.NODE_ENV === "production"){
   app.use(express.static("../client/build"));
 }
+
+// passport config
+// require('./config/passport')(passport);
 
 // app.session(passport({
 //   key: 'user_sid',

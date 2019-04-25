@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import SignUp from '../authentication/SignUp';
+import Register from '../authentication/Register';
 
 class Landing extends Component{
   render() {
     return (
       <div>
-        <SignUp />
+        <Register />
       </div>
     )
   }

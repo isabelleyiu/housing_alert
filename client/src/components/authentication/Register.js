@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class SignUp extends Component{
+class Register extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -21,12 +21,12 @@ class SignUp extends Component{
     this.sendVerification(this.state.phone)
   }
   savePhoneNumber = (phone) => {
-    fetch('api/user', {
+    fetch('api/phone', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({phone: phone})
+      body: JSON.stringify({ phone })
     })
     .then(res => res.json())
     .then(newNumber => {
@@ -40,7 +40,7 @@ class SignUp extends Component{
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({phone: phone})
+      body: JSON.stringify({ phone })
     })
     .then(res => res.json())
     .then(newNumber => {
@@ -99,4 +99,4 @@ class SignUp extends Component{
   }
 }
 
-export default SignUp;
+export default Register;

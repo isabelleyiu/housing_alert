@@ -21,10 +21,72 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha:  {
+          args: true,
+          msg: 'Please only enter letters for First Name'
+        }
+      }
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha:  {
+          args: true,
+          msg: 'Please only enter letters for Last Name'
+        }
+      }
+    },
+    householdSize: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isNumeric: {
+          args: true,
+          msg: 'Please enter a number for Household Size'
+        }
+      }
+    },
+    householdIncome: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isNumeric: {
+          args: true,
+          msg: 'Please enter a number for Household Income'
+        }
+      }
+    },
+    SRO: {
+      type: DataTypes.BOOLEAN
+    },
+    studio: {
+      type: DataTypes.BOOLEAN
+    },
+    oneBedroom: {
+      type: DataTypes.BOOLEAN
+    },
+    twoBedroom: {
+      type: DataTypes.BOOLEAN
     }
-  })
+  });
+
+  User.associate = (models) => {
+    User.hasOne(models.Phone, {
+      sourceKey: 'uuid',
+      foreignKey: 'userUUID',
+      onDelete: 'cascade'
+    })
+  }
+
   return User;
 }
+

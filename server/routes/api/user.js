@@ -1,18 +1,25 @@
 const router = require('express').Router();
 const userController = require('../../controllers/user-controller');
 
-// @route: /api/user
-router.route('/')
-  .get(userController.showAllUsers)
-  .post(userController.createNewUser)
-  .delete(userController.deleteUserByPhoneNumber);
+// /api/user
+router.route("/")
+  .get(userController.getAll)
+
+// /api/user/
+router.route('/signup')
+  .post(userController.signup)
+
+router.route('/login')
+  .post(userController.login)
+
+// PRIVATE /api/user/:uuid
+router.route('/:uuid')
+  // .get(userController.getUser)
+  .delete(userController.deleteProfile);
+  // .put(userController.update)
   
 
-// @route: /api/user/:phone
-// router.route('/:phone')
-  // .get(userController.findUserById)
-//   .put(userController.update)
-  
 
 
 module.exports = router;
+  
