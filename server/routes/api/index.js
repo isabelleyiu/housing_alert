@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const userRoutes = require('./users');
+const userRoutes = require('./user');
 const verificationRoutes = require('./verification');
 const profileRoutes = require('./profile');
 // const housingRoutes = require('./housings');
