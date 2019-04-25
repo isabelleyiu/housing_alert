@@ -24,17 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     isVerified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
-    },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    }
   })
-
-  User.associate = (models) => {
-    User.hasOne(models.Profile, {
-      foreignKey: "profileUUID",
-      onDelete: "cascade"
-    })
-  }
-
   return User;
 }
