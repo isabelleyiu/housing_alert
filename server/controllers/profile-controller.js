@@ -1,7 +1,7 @@
 const db = require('../models');
 // const passport = require('passport');
 const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 
 // @route   GET api/profile/
@@ -55,50 +55,48 @@ const signup = (req, res) => {
     .catch(err => res.status(400).json({ message: err.errors[0].message }))
 }
 
-// // @route   POST api/users/login
-// // @usage   Login user
-// // @access  Public
-// router.post('/login', (req, res) => {
-//   const { errors, isValid } = validateLogin(req.body);
-//   if(!isValid) {
-//     return res.status(400).json(errors);
-//   }
+// @route   POST api/profile/login
+// @usage   Login user
+// @access  Public
+const login = (req, res) => {
+  const { phone, password } = req.body;
 
-//   const { phone, password } = req.body;
+  db.Profile.findOne({ 
+    where: { phone }
+  })
+    .then(profile => {
+      if(!profile) {
+        return res.status(404).json({ message: 'Account not found' });
+      } 
+        const payload = { 
+          uuid: profile.uuid,
+          phone: profile.phone,
+          firstName: profile.firstName, 
+          lastName: profile.lastName,
+          email: profile.email,
+        };
 
-//   User.findOne({ phone })
-//     .then(user => {
-//       if(!user) {
-//         errors.phone = 'Account not found';
-//         return res.status(404).json({ errors });
-//       } else {
-//         const payload = { 
-//           id: user.id,
-//           phone: user.phone 
-//         };
-
-//         bcrypt.compare(password, user.password)
-//           .then(isMatch => {
-//             if(isMatch) {
-//               jwt.sign(payload, secretOrKey, { expiresIn: '1h'}, (err, token) => {
-//                 return res.json({
-//                   success: true,
-//                   token: `Bearer ${token}`
-//                 });
-//               })
-//             } else {
-//               errors.password = 'Password incorrect';
-//               return res.status(400).json({ errors });
-//             }
-//           })
-//       }
-//     });
-// });
+        bcrypt.compare(password, profile.password)
+          .then(isMatch => {
+            if(isMatch) {
+              jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h'}, (err, token) => {
+                return res.json({
+                  success: true,
+                  token: `Bearer ${token}`
+                });
+              })
+            } else {
+              return res.status(400).json({ message: 'Password incorrect'});
+            }
+          });
+    });
+}
 
 
 
 module.exports = {
   getAllProfiles,
-  signup
+  signup,
+  login,
 }
 
