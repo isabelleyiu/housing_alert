@@ -4,21 +4,38 @@ const bcrypt = require('bcryptjs');
 // const jwt = require('jsonwebtoken');
 
 
+// @route   GET api/profile/
+// @usage   get all user profiles
+// @access  Public
+const getAllProfiles = (req, res) => {
+  db.Profile.findAll()
+    .then(profiles => {
+      return res.json(profiles)
+    })
+    .catch(err => {
+      return res.status(400).json(err)
+    })
+}
+
+
 // @route   POST api/profile/signup
 // @usage   Signup user
 // @access  Public
 const signup = (req, res) => {
-  const { phone, password, confirmPassword, firstName, lastName, householdSize, householdIncome, studio, SRO, OneBedroom, TwoBedroom } = req.body;
+  const { phone, password, confirmPassword, email, firstName, lastName, householdSize, householdIncome, studio, SRO, oneBedroom, twoBedroom } = req.body;
 
   // validate password
+  const validate = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}$/;
+  if(!validate.test(password)) {
+    return res.json({ message: 'Password must be at least 6 characters, no more than 12 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.'})
+  }
 
   if(password !== confirmPassword) {
-    const err = new Error('Confirm Password Must match Password');
-    res.json({ message: err})
+    return res.json({ message: 'Confirm Password Must match Password' })
   }
 
   const newProfile = {
-    phone, password, firstName, lastName, householdSize, householdIncome, studio, SRO, OneBedroom, TwoBedroom 
+    phone, password, email, firstName, lastName, householdSize, householdIncome, studio, SRO, oneBedroom, twoBedroom 
   }
 
   bcrypt.hash(password, 10)
@@ -81,6 +98,7 @@ const signup = (req, res) => {
 
 
 module.exports = {
+  getAllProfiles,
   signup
 }
 
