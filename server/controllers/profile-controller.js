@@ -22,6 +22,10 @@ const getAllProfiles = (req, res) => {
 // @usage   Signup user
 // @access  Public
 const signup = (req, res) => {
+  // add logic, if user phone is not verified, have them verify phone before allowing them to create profile
+
+
+  // const { password, confirmPassword, ...data } = req.body;
   const { phone, password, confirmPassword, email, firstName, lastName, householdSize, householdIncome, studio, SRO, oneBedroom, twoBedroom } = req.body;
 
   // validate password
@@ -48,6 +52,22 @@ const signup = (req, res) => {
     .then(([profile, created]) => {
       if(created) {
         profile.dataValues.message = `Your profile has been successfully created`
+        
+        // link user profile to user phone table
+        db.User.findOne({
+          where: {phone: phone}
+        })
+          .then(user => {
+            user.update({
+              profileUUID: profile.dataValues.uuid
+            })
+            .then(() => console.log('user profile UUID updated'))
+            .catch(err => console.log(err));
+            
+         
+          })
+          .catch(err => console.log(err))
+
         return res.json(profile.dataValues);
       } 
       return res.json({ message: `A profile associate with phone number ${phone} already exists in the system.` });

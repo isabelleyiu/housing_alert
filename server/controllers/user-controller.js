@@ -2,17 +2,21 @@ const db = require("../models");
 
 
 const createNewUser = (req, res) => { 
+  const { phone } = req.body;
   db.User.findOrCreate({ 
-    where: { phone: req.body.phone }, 
-    defaults: { phone: req.body.phone }})
+    where: { phone }, 
+    defaults: { phone }})
   .then(([user, created]) => {
     if(created) {
-      user.dataValues.message = `Your number ${user.dataValues.phone} has been successfully added to our system. Please enter the verification code we text you to complete the registration process`
+      user.dataValues.message = `Thank you for registering your number! Please enter the verification code we texted to ${phone} to complete the registration process`
       return res.json(user.dataValues);
     } 
-    return res.json({ message: 'This phone number already exists in the system.' });
+    return res.json({ message: `Phone Number ${phone} already exists in the system.` });
   })
-  .catch(err => res.status(400).json({ message: err.errors[0].message }))
+  .catch(err => {
+    console.log(err)
+    return res.status(400).json({ message: 'Registration Failed...' })
+  })
 }
 
 const showAllUsers = (req, res) => {
