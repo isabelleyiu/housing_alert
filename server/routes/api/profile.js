@@ -12,10 +12,12 @@ router.route('/signup')
 router.route('/login')
   .post(profileController.login)
 
-// /api/profile/:id
-router.route('/signup')
+// PRIVATE /api/profile/:uuid
+router.route('/:uuid')
+  // .get(profileController.getProfile)
+  .delete(profileController.deleteProfile);
   // .put(profileController.update)
-  // .delete(profileController.delete);
+  
 
 
 

@@ -51,23 +51,12 @@ const signup = (req, res) => {
       defaults: newProfile})
     .then(([profile, created]) => {
       if(created) {
-        profile.dataValues.message = `Your profile has been successfully created`
-        
         // link user profile to user phone table
-        db.User.findOne({
-          where: {phone: phone}
-        })
-          .then(user => {
-            user.update({
-              profileUUID: profile.dataValues.uuid
-            })
-            .then(() => console.log('user profile UUID updated'))
-            .catch(err => console.log(err));
-            
-         
-          })
-          .catch(err => console.log(err))
+        db.User.update({ profileUUID: profile.dataValues.uuid }, { where: { phone }})
+          .then(() => console.log('user profile UUID updated'))
+          .catch(err => console.log(err));
 
+        profile.dataValues.message = `Your profile has been successfully created`;
         return res.json(profile.dataValues);
       } 
       return res.json({ message: `A profile associate with phone number ${phone} already exists in the system.` });
@@ -112,11 +101,24 @@ const login = (req, res) => {
     });
 }
 
+// @route   GET api/profile/:uuid
+// @usage   delete user profiles
+// @access  Private
+const deleteProfile = (req, res) => {
+  // check authorization
+
+  db.Profile.destroy({
+    where: { uuid: req.params.uuid}
+  })
+    .then(deletedUser => res.json({ message: 'Profile deleted' }))
+    .catch(err => res.status(404).json({ message: 'Profile not found' }))
+}
 
 
 module.exports = {
   getAllProfiles,
   signup,
   login,
+  deleteProfile
 }
 
