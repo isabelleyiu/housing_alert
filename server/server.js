@@ -1,3 +1,4 @@
+require('dotenv').config();
 // =========== APP SETUP ===========
 // dependencies
 const express = require('express');
@@ -21,18 +22,18 @@ if(process.env.NODE_ENV === "production"){
 }
 
 // passport config
-// require('./config/passport')(passport);
+require('./config/passport')(passport);
 
-// app.session(passport({
-//   key: 'user_sid',
-//   secret: 'hgfjgyadgasbdnasdjay7i6824843',
-//   resave: true,
-//   saveUninitialized: false,
-//   cookie: {
-//     expires: 6000000,
-//     httpOnly: false
-//   }
-// }))
+app.use(session({
+  key: 'user_sid',
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    expires: 6000000,
+    httpOnly: false
+  }
+}))
 
 // =========== APP INIT ===========
 

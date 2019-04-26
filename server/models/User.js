@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -85,6 +86,24 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'userUUID',
       onDelete: 'cascade'
     })
+  }
+
+  // hash password before inserting into db
+  User.beforeCreate((user, options, done) => {
+    const hashedPassword = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
+    user.password = hashedPassword
+  })
+
+  User.verifyPassword = function (password, hashedPassword, done, user) {
+    bcrypt.compare(password, hashedPassword)
+    .then(isMatch => {
+      if(isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
+    })
+    .catch(err => console.log(err))
   }
 
   return User;

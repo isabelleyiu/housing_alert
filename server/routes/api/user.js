@@ -14,7 +14,7 @@ router.route('/login')
 
 // PRIVATE /api/user/:uuid
 router.route('/:uuid')
-  // .get(userController.getUser)
+  .get(userController.showProfile)
   .delete(userController.deleteProfile);
   // .put(userController.update)
   

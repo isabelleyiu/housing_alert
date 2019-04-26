@@ -1,7 +1,6 @@
 const db = require('../models');
-// const passport = require('passport');
+const passport = require('passport');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 
 // @route   GET api/user/
@@ -23,10 +22,8 @@ const getAll = (req, res) => {
 // @access  Public
 const signup = (req, res) => {
   // add logic, if user phone is not verified, prompt them to resend code to verify phone
-
-
-  // const { password, confirmPassword, ...data } = req.body;
-  const { phone, password, confirmPassword, email, firstName, lastName, householdSize, householdIncome, studio, SRO, oneBedroom, twoBedroom } = req.body;
+  const { confirmPassword, ...newUser } = req.body;
+  const { password, phone } = req.body;
 
   // validate password
   const validate = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}$/;
@@ -37,31 +34,23 @@ const signup = (req, res) => {
   if(password !== confirmPassword) {
     return res.json({ message: 'Confirm Password Must match Password' })
   }
+    
+  db.User.findOrCreate({ 
+    where: { phone }, 
+    defaults: newUser})
+  .then(([user, created]) => {
+    if(created) {
+      // link user user to user phone table
+      db.Phone.update({ userUUID: user.dataValues.uuid }, { where: { phone }})
+        .then(() => console.log('User profile linked to phone'))
+        .catch(err => console.log(err));
 
-  const newUser = {
-    phone, password, email, firstName, lastName, householdSize, householdIncome, studio, SRO, oneBedroom, twoBedroom 
-  }
-
-  bcrypt.hash(password, 10)
-    .then(hashedPassWord => (newUser.password = hashedPassWord))
-    .catch(err => console.log(err))
-
-    db.User.findOrCreate({ 
-      where: { phone }, 
-      defaults: newUser})
-    .then(([user, created]) => {
-      if(created) {
-        // link user user to user phone table
-        db.Phone.update({ userUUID: user.dataValues.uuid }, { where: { phone }})
-          .then(() => console.log('User profile linked to phone'))
-          .catch(err => console.log(err));
-
-        user.dataValues.message = `Your user profile has been successfully created`;
-        return res.json(user.dataValues);
-      } 
-      return res.json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
-    })
-    .catch(err => res.status(400).json({ message: err.errors[0].message }))
+      user.dataValues.message = `Your user profile has been successfully created`;
+      return res.json(user.dataValues);
+    } 
+    return res.json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
+  })
+  .catch(err => res.status(400).json({ message: err.errors[0].message }))
 }
 
 // @route   POST api/user/login
@@ -70,38 +59,53 @@ const signup = (req, res) => {
 const login = (req, res) => {
   const { phone, password } = req.body;
 
-  db.User.findOne({ 
-    where: { phone }
-  })
-    .then(user => {
-      if(!user) {
-        return res.status(404).json({ message: 'User account not found' });
-      } 
-        const payload = { 
-          uuid: user.uuid,
-          phone: user.phone,
-          firstName: user.firstName, 
-          lastName: user.lastName,
-          email: user.email,
-        };
+  if(!phone && password) {
+    return res.status(400).json({ message: 'Phone Number and Password are required to login'});
+  }
 
-        bcrypt.compare(password, user.password)
-          .then(isMatch => {
-            if(isMatch) {
-              jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h'}, (err, token) => {
-                return res.json({
-                  success: true,
-                  token: `Bearer ${token}`
-                });
-              })
-            } else {
-              return res.status(400).json({ message: 'Password incorrect'});
-            }
-          });
-    });
+  // passport.authenticate('local', { failureRedirect: '/login' }, function(req, res) {
+  //   res.redirect('/');
+  // })
+
 }
+  // db.User.findOne({ 
+  //   where: { phone }
+  // })
+  //   .then(user => {
+  //     if(!user) { 
+  //       return res.status(401).json({ message: 'User account not found' });
+  //     } 
+
+      // console.log(user)
+      // bcrypt.compare(password, user.dataValues.password)
+      //   .then(isMatch => {
+      //     if(isMatch) {
+      //       req.session.user_sid = user.dataValues.uuid;
+      //       return res.json({ message: 'Login success'})
+      //     } else {
+      //       return res.status(401).json({ message: 'Password incorrect'});
+      //     }
+      //   });
+    // });
+
 
 // @route   GET api/user/:uuid
+// @usage   show user users
+// @access  Private
+const showProfile = (req, res) => {
+  // check authorization
+  // if(!req.isAuthenticated()) {
+  //   return res.status(403).json({ message: 'You are not authorized to view profile' });
+  // }
+
+  db.User.findOne({
+    where: { uuid: req.session.user_sid}
+  })
+    .then(user => res.json(user))
+    .catch(err => res.status(404).json({ message: 'User not found' }))
+}
+
+// @route   DELETE api/user/:uuid
 // @usage   delete user users
 // @access  Private
 const deleteProfile = (req, res) => {
@@ -119,6 +123,7 @@ module.exports = {
   getAll,
   signup,
   login,
+  showProfile,
   deleteProfile,
 }
 
