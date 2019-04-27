@@ -56,37 +56,29 @@ const signup = (req, res) => {
 // @route   POST api/user/login
 // @usage   Login user
 // @access  Public
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { phone, password } = req.body;
 
   if(!phone && password) {
     return res.status(400).json({ message: 'Phone Number and Password are required to login'});
   }
 
-  // passport.authenticate('local', { failureRedirect: '/login' }, function(req, res) {
-  //   res.redirect('/');
-  // })
+  passport.authenticate('local', function(err, user, info) {
+      if (err) return res.status(400).json(err);
+      if (!user) {
+          return res.status(403).json({ message: 'Login failed. Your Phone or Password is incorrect' });
+      }
+
+      // Manually establish the session...
+      req.login(user, (err) => {
+        if(err) return res,json({ message: 'Login failed...'});
+      });
+      return res.json({ message: 'Logged in success' })
+    
+  })(req, res, next);
 
 }
-  // db.User.findOne({ 
-  //   where: { phone }
-  // })
-  //   .then(user => {
-  //     if(!user) { 
-  //       return res.status(401).json({ message: 'User account not found' });
-  //     } 
 
-      // console.log(user)
-      // bcrypt.compare(password, user.dataValues.password)
-      //   .then(isMatch => {
-      //     if(isMatch) {
-      //       req.session.user_sid = user.dataValues.uuid;
-      //       return res.json({ message: 'Login success'})
-      //     } else {
-      //       return res.status(401).json({ message: 'Password incorrect'});
-      //     }
-      //   });
-    // });
 
 
 // @route   GET api/user/:uuid

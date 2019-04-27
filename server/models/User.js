@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
 const moment = require('moment')
-;
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     uuid: {

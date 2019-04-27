@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const userController = require('../../controllers/user-controller');
+const passport = require('passport');
 
 // /api/user
 router.route("/")

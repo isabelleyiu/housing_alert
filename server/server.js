@@ -25,14 +25,13 @@ if(process.env.NODE_ENV === "production"){
 require('./config/passport')(passport);
 
 app.use(session({
-  key: 'user_sid',
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: false,
-  cookie: {
-    expires: 6000000,
-    httpOnly: false
-  }
+  // cookie: {
+  //   expires: 6000000,
+  //   httpOnly: false
+  // }
 }))
 
 // =========== APP INIT ===========
@@ -52,3 +51,4 @@ db.sequelize.sync()
     console.log(`Buzzed. Housing Alert is running on port ${PORT}`);
   });
 })
+.catch(() => console.log('Database connection failed...'))
