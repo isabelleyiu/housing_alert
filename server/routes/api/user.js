@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const userController = require('../../controllers/user-controller');
+const { authenticate } = userController;
 const passport = require('passport');
 
 // /api/user
@@ -15,9 +16,9 @@ router.route('/login')
 
 // PRIVATE /api/user/:uuid
 router.route('/:uuid')
-  .get(userController.showProfile)
-  .delete(userController.deleteProfile);
-  // .put(userController.update)
+  .get(authenticate, userController.showProfile)
+  .delete(authenticate, userController.deleteProfile)
+  .patch(authenticate, userController.updateProfile)
   
 
 

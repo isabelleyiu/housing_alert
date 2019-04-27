@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 // @route   GET api/user/
 // @usage   get all users
 // @access  Public
-const getAll = (req, res) => {
+const getAll = (req, res, next) => {
   db.User.findAll()
     .then(users => {
       return res.json(users)
@@ -16,11 +16,10 @@ const getAll = (req, res) => {
     })
 }
 
-
 // @route   POST api/user/signup
 // @usage   Signup user profile
 // @access  Public
-const signup = (req, res) => {
+const signup = (req, res, next) => {
   // add logic, if user phone is not verified, prompt them to resend code to verify phone
   const { confirmPassword, ...newUser } = req.body;
   const { password, phone } = req.body;
@@ -45,8 +44,13 @@ const signup = (req, res) => {
         .then(() => console.log('User profile linked to phone'))
         .catch(err => console.log(err));
 
-      user.dataValues.message = `Your user profile has been successfully created`;
-      return res.json(user.dataValues);
+      // user.dataValues.message = `Your user profile has been successfully created`;
+      // return res.json(user.dataValues);
+
+      req.login(user.dataValues, (err) => {
+        if(err) return res,json({ message: 'Login failed...'});
+      });
+      return res.json({ message: `Welcome ${user.dataValues.firstName}. Your user profile has been successfully created` })
     } 
     return res.json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
   })
@@ -79,43 +83,44 @@ const login = (req, res, next) => {
 
 }
 
+const authenticate = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.status(403).json({message: 'Access denied, please log in'});
+  }
+  next();
+}
 
 
 // @route   GET api/user/:uuid
 // @usage   show user users
 // @access  Private
-const showProfile = (req, res) => {
-  // check authorization
-  // if(!req.isAuthenticated()) {
-  //   return res.status(403).json({ message: 'You are not authorized to view profile' });
-  // }
-
-  db.User.findOne({
-    where: { uuid: req.session.user_sid}
-  })
-    .then(user => res.json(user))
-    .catch(err => res.status(404).json({ message: 'User not found' }))
+const showProfile = (req, res, next) => {
+  console.log(req.user)
+  return res.json(req.user.dataValues)
 }
 
 // @route   DELETE api/user/:uuid
 // @usage   delete user users
 // @access  Private
-const deleteProfile = (req, res) => {
-  // check authorization
-
+const deleteProfile = (req, res, next) => {
   db.User.destroy({
-    where: { uuid: req.params.uuid}
+    where: { uuid: req.user.dataValues.uuid}
   })
     .then(deletedUser => res.json({ message: 'User deleted' }))
     .catch(err => res.status(404).json({ message: 'User not found' }))
 }
 
+const updateProfile = (req, res, next) => {
+  
+}
 
 module.exports = {
   getAll,
   signup,
   login,
+  authenticate,
   showProfile,
   deleteProfile,
+  updateProfile
 }
 
