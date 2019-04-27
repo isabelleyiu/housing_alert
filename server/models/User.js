@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
-
+const moment = require('moment')
+;
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     uuid: {
@@ -45,6 +46,23 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Please only enter letters for Last Name'
         }
       }
+    },
+    DOB: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      set: function calculateAge(birthday) {
+        this.setDataValue('DOB', birthday); 
+        this.setDataValue('age', moment().diff(moment(birthday, 'YYYYMMDD'), 'years'));
+       },
+      validate: {
+        isDate:  {
+          args: true,
+          msg: 'Please enter date in YYYY-MM-DD format'
+        }
+      }
+    },
+    age : {
+      type: DataTypes.INTEGER
     },
     householdSize: {
       type: DataTypes.INTEGER,
@@ -93,18 +111,6 @@ module.exports = (sequelize, DataTypes) => {
     const hashedPassword = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
     user.password = hashedPassword
   })
-
-  User.verifyPassword = function (password, hashedPassword, done, user) {
-    bcrypt.compare(password, hashedPassword)
-    .then(isMatch => {
-      if(isMatch) {
-        return done(null, user);
-      } else {
-        return done(null, false);
-      }
-    })
-    .catch(err => console.log(err))
-  }
 
   return User;
 }
