@@ -3,11 +3,11 @@ const userController = require('../../controllers/user-controller');
 const { authenticate } = userController;
 const passport = require('passport');
 
-// /api/user
+// PUBLIC /api/user
 router.route("/")
   .get(userController.getAll)
 
-// /api/user/
+
 router.route('/signup')
   .post(userController.signup)
 

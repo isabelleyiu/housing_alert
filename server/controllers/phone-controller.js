@@ -41,34 +41,6 @@ const deletePhoneByPhoneNumber = (req, res) =>{
 }
 
 
-  // find: (req, res) =>{
-  //   console.log(req.body)
-  //   console.log(req.params.num)
-  //   db.Phone
-  //   .findOne({where: req.params.num})
-  //   .then(phoneNum =>{
-  //     console.log(phoneNum)
-  //     // true send true to app 
-  //     // show phone for for profile
-  //     // no phone found send false show landing page 
-      
-  //   })
-  //   .catch(err =>{console.log(err)})
-  // },
-  // update: (req, res) =>{
-
-  // },
-  // findAll: (req, res) =>{
-
-  // },
-  // updateAll: (req, res) =>{
-
-  // },
-  // deleteAll: (req, res) =>{
-
-  // }
-
-
 module.exports = {
   showAll,
   register,
