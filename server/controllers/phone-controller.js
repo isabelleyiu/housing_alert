@@ -15,7 +15,7 @@ const register = (req, res) => {
     defaults: { phone }})
   .then(([phone, created]) => {
     if(created) {
-      phone.dataValues.message = `Thank you for registering your number! Please enter the verification code we texted to ${phone.phone} to complete the registration process`
+      phone.dataValues.message = `A text message is sent to ${phone.phone}`
       return res.json(phone.dataValues);
     } 
     return res.json({ message: `Phone Number ${phone.phone} already exists in the system.` });

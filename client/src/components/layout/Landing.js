@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import Register from '../authentication/Register';
+import React, { Component } from 'react'
+import Hero from '../Hero';
 
 class Landing extends Component{
   render() {
     return (
       <div>
-        <Register />
+        <h1>Housing Alert</h1>
+        <Hero />
       </div>
     )
   }

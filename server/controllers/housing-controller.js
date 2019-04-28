@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cron = require('node-cron');
 const moment = require('moment');
-const { Housing } = require('../models');
+const db = require('../models');
 const twilioController = require('./twilio-controller');
 
 // schedule cron job for fetching housing data
@@ -18,7 +18,7 @@ const fetchHousingData = (req, res, next) => {
     const currentHousing = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()));
 
     currentHousing.forEach(housing => {
-      Housing.findOrCreate({ 
+      db.Housing.findOrCreate({ 
         where: { listingID: housing.listingID }, 
         defaults: housing 
       })
@@ -26,7 +26,7 @@ const fetchHousingData = (req, res, next) => {
         // if created -> text user about new housing
         if(created) {
           twilioController.textAllPhone(
-            `Housing Alert 🏠 🛎
+            `Housing Alert 🏠 🚨
             Building Name: ${housing.Building_Name}
             Address: ${housing.Building_Street_Address}, San Francisco
             Unit Type: ${housing.unitSummaries.general[0].unitType}
@@ -46,7 +46,7 @@ const fetchHousingData = (req, res, next) => {
 }
 
 const getAll = (req, res, next) => {
-  Housing.findAll()
+  db.Housing.findAll()
   .then(housings => {
     const filtered = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()))
     return res.json(filtered)
