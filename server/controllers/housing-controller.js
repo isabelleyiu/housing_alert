@@ -25,7 +25,7 @@ const fetchHousingData = (req, res, next) => {
         // if created -> text user about new housing
         console.log(created)
       })
-      .catch(err => console.log(err))
+      .catch(err => res.json(err))
     })
     next()
   })
@@ -34,8 +34,9 @@ const fetchHousingData = (req, res, next) => {
 
 const getAll = (req, res, next) => {
   Housing.findAll()
-  .then(housing => {
-    return res.json(housing)
+  .then(housings => {
+    const filtered = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()))
+    return res.json(filtered)
   })
   .catch(err => {
     return res.status(400).json(err)
