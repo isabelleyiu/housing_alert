@@ -9,6 +9,7 @@ class Register extends Component{
       phone: '',
       message: '',
       verificationCode: '',
+      isChecked: false,
       isVerified: false,
       show: false
     }
@@ -18,13 +19,23 @@ class Register extends Component{
       [e.target.name]: e.target.value
     });
   }
+  handleCheck = e => {
+    this.setState((prevState) => (
+      {isChecked: !prevState.isChecked}
+    ))
+  }
+  handleClose = () => {
+    this.setState({
+      show: false
+    });
+  }
   registerPhone = e => {
     e.preventDefault();
     this.savePhoneNumber(this.state.phone);
     this.sendVerification(this.state.phone);
     this.setState({
       show: true
-    })
+    });
   }
   savePhoneNumber = (phone) => {
     fetch('api/phone', {
@@ -88,23 +99,28 @@ class Register extends Component{
     return (
       <div className="register">
         <Form onSubmit={this.registerPhone} className="registerForm">
-          <Form.Label>Register Your Phone Number</Form.Label>
+          <Form.Label>Your next affordable housing is one text away</Form.Label>
           <Form.Control 
           name="phone" 
           size="sm" 
           type="text" 
-          placeholder="Enter Your Phone Number"
+          placeholder="Register Your Phone Number"
           onChange={this.handleChange} />
           
           <Form.Group controlId="formBasicChecbox">
             <Form.Check 
-            size="sm" 
+            name="isChecked"
+            className="smallText"
             type="checkbox" 
+            onChange={this.handleCheck}
             label="I hereby agree to receive text from Housing Alert" />
           </Form.Group>
           <Button 
           type="submit" 
-          variant="outline-primary">Submit</Button>
+          variant="outline-light"
+          disabled={!this.state.isChecked}
+          >Submit
+          </Button>
         </Form>
 
         <Modal show={this.state.show} onHide={this.handleClose}>

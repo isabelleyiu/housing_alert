@@ -1,5 +1,5 @@
 .hero {
-  background-image: url(https://images.unsplash.com/photo-1491295005076-7840bcf778ec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60);
+  background-image: url(https://images.unsplash.com/photo-1509422007420-a57adf7b7fdf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60);
   background-size: cover;
   background-repeat: no-repeat;
   text-align: center;
@@ -7,10 +7,11 @@
   min-height: 60vh;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   font-size: 1.5rem;
   color:white;
-  text-shadow:2px 2px grey;
+  text-shadow:1px 1px grey;
 }

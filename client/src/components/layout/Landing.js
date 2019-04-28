@@ -5,7 +5,6 @@ class Landing extends Component{
   render() {
     return (
       <div>
-        <h1>Housing Alert</h1>
         <Hero />
       </div>
     )

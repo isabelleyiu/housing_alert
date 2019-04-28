@@ -7,6 +7,7 @@ class Hero extends Component{
   render() {
     return (
       <Jumbotron className="hero">
+        <h1>Home Sweet Home</h1>
         <Register />
       </Jumbotron>
     )

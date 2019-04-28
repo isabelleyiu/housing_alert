@@ -20,7 +20,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          {/* <Navbar /> */}
+          <Navbar />
           <Route exact path="/" component={ Landing } />
           {/* <Signup />
           <Login /> */}

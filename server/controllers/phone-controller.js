@@ -22,7 +22,7 @@ const register = (req, res) => {
   })
   .catch(err => {
     console.log(err)
-    return res.status(400).json({ message: 'Registration Failed...' })
+    return res.status(400).json({ message: 'Please enter a valid 10 digit US phone number' })
   })
 }
 
