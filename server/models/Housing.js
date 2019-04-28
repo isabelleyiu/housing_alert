@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       isUnique: true
     },
+    unitSummaries: {
+      type: DataTypes.JSONB
+    },
+    prioritiesDescriptor: {
+      type: DataTypes.JSONB
+    },
     listingID: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -74,24 +80,7 @@ module.exports = (sequelize, DataTypes) => {
     imageURL: {
       type: DataTypes.STRING
     }
-    // ,
-    // unitType: {
-    //   type: DataTypes.STRING
-    // },
-    // minMonthlyRent: {
-    //   type: DataTypes.INTEGER
-    // },
-    // maxMonthlyRent: {
-    //   type: DataTypes.INTEGER
-    // },
-    // minRentalMinIncome: {
-    //   type: DataTypes.INTEGER
-    // },
-    // maxRentalMinIncome: {
-    //   type: DataTypes.INTEGER
-    // },
   });
-
 
   return Housing;
 }

@@ -1,9 +1,9 @@
 const axios = require('axios');
 const cron = require('node-cron');
 const moment = require('moment');
-const db = require('../models');
+const { Housing } = require('../models');
 
-
+// schedule cron job for fetching housing data
 // cron.schedule('12***', () => {
   
 // },{
@@ -12,22 +12,28 @@ const db = require('../models');
 // });
 const fetchHousingData = (req, res, next) => {
   axios.get('https://housing.sfgov.org/api/v1/listings.json')
-  .then(res => {
-    let housings = res.data.listings;
+  .then(result => {
+    let housings = result.data.listings;
     const currentHousing = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()));
-    console.log(currentHousing)
-    
-    db.Housing.bulkCreate(
-      currentHousing)
-      .then(() => db.Housing.findAll())
-      .then(housing => console.log(housing))
+
+    currentHousing.forEach(housing => {
+      Housing.findOrCreate({ 
+        where: { listingID: housing.listingID }, 
+        defaults: housing 
+      })
+      .then(([housing, created]) => {
+        // if created -> text user about new housing
+        console.log(created)
+      })
       .catch(err => console.log(err))
+    })
+    next()
   })
-  .catch(err => res.status(400).json(err))
+  .catch(err => res.json(err))
 }
 
 const getAll = (req, res, next) => {
-  db.Housing.findAll()
+  Housing.findAll()
   .then(housing => {
     return res.json(housing)
   })
