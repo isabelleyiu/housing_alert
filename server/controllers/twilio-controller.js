@@ -6,20 +6,21 @@ const client = require('twilio')(accountSid, authToken);
 const authy = require('authy')(process.env.AUTHY_API_KEY);
 
 
-const textAllPhone = () => {
+const textAllPhone = (messageBody) => {
   db.Phone.findAll()
   .then(phones => {
     phones.forEach(phone => {
-      const message = client.messages.create({
-        body: 'Beep Beep! Housing Alert!',
-        from: process.env.TWILIO_PHONE,
-        to: `+1${phone.phone}`
-      })
-      .then(message =>  console.log(message.status))
-      .done();
+      if(phone.isVerified) {
+        client.messages.create({
+          body: messageBody,
+          from: process.env.TWILIO_PHONE,
+          to: `+1${phone.phone}`
+        })
+        .then(message =>  console.log(message.status))
+        .done();
+      }
     })
-    .catch(err => console.log(err))
-  });
+  }).catch(err => console.log(err))
 }
 
 const sendVerification = (req, res) => {
@@ -39,10 +40,8 @@ const verifyPhone = (req, res) => {
   const { phone, verificationCode } = req.body;
   authy.phones()
     .verification_check(phone, '1', verificationCode, function (err, resp) {
-      if (err) {
-        // invalid token  
-      res.status(400).json(err);
-      }
+      if (err) return res.status(400).json(err);
+      
       if(resp.success) {
         db.Phone.update(
           { isVerified: true },
