@@ -22,16 +22,16 @@ const getAll = (req, res, next) => {
 const signup = (req, res, next) => {
   // add logic, if user phone is not verified, prompt them to resend code to verify phone
   const { confirmPassword, ...newUser } = req.body;
-  const { password, phone } = req.body;
+  const { password, phone } = newUser;
 
   // validate password
   const validate = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}$/;
-  if(!validate.test(password)) {
-    return res.json({ message: 'Password must be at least 6 characters, no more than 12 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.'})
+  if(validate.test(req.body.password) === false) {
+    return res.json({ message: 'Password must be 6 to 12 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.'})
   }
 
   if(password !== confirmPassword) {
-    return res.json({ message: 'Confirm Password Must match Password' })
+    return res.json({ message: 'Confirm Password must match Password' })
   }
     
   db.User.findOrCreate({ 
@@ -47,14 +47,24 @@ const signup = (req, res, next) => {
       // user.dataValues.message = `Your user profile has been successfully created`;
       // return res.json(user.dataValues);
 
-      req.login(user.dataValues, (err) => {
-        if(err) return res,json({ message: 'Login failed...'});
+      req.login(user, (err) => {
+        if(err) { 
+          return res.status(403).json({ 
+            isLogin: false,
+            message: 'Login failed...'
+          });
+        } else {
+          const newUser = user.dataValues;
+          newUser.isLogin = true;
+          newUser.message = `Welcome ${newUser.firstName}. Your user profile has been successfully created`;
+          return res.json(newUser)
+        }
       });
-      return res.json({ message: `Welcome ${user.dataValues.firstName}. Your user profile has been successfully created` })
     } 
     return res.json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
   })
-  .catch(err => res.status(400).json({ message: err.errors[0].message }))
+  // err.errors[0].message
+  .catch(err => res.status(400).json({ message: err }))
 }
 
 // @route   POST api/user/login
@@ -80,7 +90,7 @@ const login = (req, res, next) => {
       req.login(user, (err) => {
         const { phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = user.dataValues;
         if(err) {
-          return res.json({ 
+          return res.status(403).json({ 
             isLogin: false,
             message: 'Login failed...'
           });

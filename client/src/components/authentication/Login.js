@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
+import './Login.css';
 
 class Login extends Component{
   constructor(props) {
