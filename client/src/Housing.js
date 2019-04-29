@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import moment from 'moment';
+import PropTypes from "prop-types";
 
 
 class Housing extends Component{
@@ -39,5 +40,10 @@ class Housing extends Component{
     )
   }
 }
+
+Housing.propTypes = {
+  housing: PropTypes.object
+}
+
 
 export default Housing;

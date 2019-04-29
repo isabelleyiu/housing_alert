@@ -70,15 +70,39 @@ const login = (req, res, next) => {
   passport.authenticate('local', function(err, user, info) {
       if (err) return res.status(400).json(err);
       if (!user) {
-          return res.status(403).json({ message: 'Login failed. Your Phone or Password is incorrect' });
+          return res.status(403).json({ 
+            isLogin: false,
+            message: 'Login failed. Your Phone or Password is incorrect'
+           });
       }
 
       // Manually establish the session...
       req.login(user, (err) => {
-        if(err) return res,json({ message: 'Login failed...'});
+        const { phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = user.dataValues;
+        if(err) {
+          return res.json({ 
+            isLogin: false,
+            message: 'Login failed...'
+          });
+        } else {
+          return res.json({ 
+            phone,
+            firstName,
+            lastName,
+            DOB,
+            age,
+            householdSize,
+            householdIncome,
+            SRO,
+            studio,
+            oneBedroom,
+            twoBedroom,
+            isLogin: true,
+            message: 'Logged in success' 
+          });
+        }
       });
-      return res.json({ message: 'Logged in success' })
-    
+     
   })(req, res, next);
 
 }

@@ -41,7 +41,6 @@ module.exports = function(passport) {
   // read cookie
   // once a user has been authenticated and serialized, we now find that user in the database on every request. This allows passport to have some useful methods on the request object like req.user (the current user logged in) and req.isAuthenticated() (returns true if the user is logged in or false if not)
   passport.deserializeUser((user, done) => {
-    console.log(user)
     db.User.findOne({ where: { uuid: user.uuid }})
       .then(user => {
         done(null, user);

@@ -17,8 +17,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false
+      user: null
     }
+  }
+  loginUser = (user) => {
+    this.setState({
+      user: user
+    })
   }
   render() {
     return (
@@ -26,7 +31,8 @@ class App extends Component {
         <div className="App">
           <Navbar />
           <Route exact path="/" component={ Landing } />
-          <Route path="/login" component={ Login } />
+          <Route path="/login" 
+          render={(props) => <Login loginUser={this.loginUser} />} />
           <Route path="/about" component={ About } />
           <Route path="/housing" component={ HousingList } />
         </div>
