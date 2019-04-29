@@ -60,8 +60,9 @@ const signup = (req, res, next) => {
           return res.json(newUser)
         }
       });
-    } 
-    return res.json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
+    } else {
+      return res.status(403).json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
+    }
   })
   // err.errors[0].message
   .catch(err => res.status(400).json({ message: err }))

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const db = require('../models');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
@@ -57,8 +58,38 @@ const verifyPhone = (req, res) => {
   });
 }
 
+const handleIncomingSMS = (req, res) => {
+  const twiml = new MessagingResponse();
+  if(req.body.Body === 'home') {
+    twiml.message('Reply "register" to confirm your registration with Housing Alert');
+    res.writeHead(200, {'Content-Type': 'text/xml'});
+    res.end(twiml.toString());
+  } else if(req.body.Body === 'register') {
+    db.Phone.findOrCreate({ 
+      where: { phone: req.body.From.slice(2) }, 
+      defaults: { phone: req.body.From.slice(2), isVerified: true }})
+    .then(([phone, created]) => {
+      if(created) {
+        twiml.message('Welcome to Housing Alert. You have successfully signup for housing updates. Please visit our website to create a profile for custom experience.');
+        res.writeHead(200, {'Content-Type': 'text/xml'});
+        res.end(twiml.toString());
+      } else {
+        twiml.message('Sorry. An account associated with this number already exists.');
+        res.writeHead(200, {'Content-Type': 'text/xml'});
+        res.end(twiml.toString());
+      }
+    })
+    .catch(err => console.log(err))
+  } else {
+    twiml.message('Sorry. Something went wrong...Please make sure you texted the right command.');
+    res.writeHead(200, {'Content-Type': 'text/xml'});
+    res.end(twiml.toString());
+  }
+};
+
 module.exports = {
   textAllPhone,
   sendVerification,
   verifyPhone,
+  handleIncomingSMS
 }

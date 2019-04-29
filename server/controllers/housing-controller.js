@@ -26,15 +26,15 @@ const fetchHousingData = (req, res, next) => {
         // if created -> text user about new housing
         if(created) {
           twilioController.textAllPhone(
-            `Housing Alert 🏠 🚨
-            Building Name: ${housing.Building_Name}
-            Address: ${housing.Building_Street_Address}, San Francisco
-            Unit Type: ${housing.unitSummaries.general[0].unitType}
-            Rent: ${housing.unitSummaries.general[0].minMonthlyRent} 
-            Application Due: ${moment(housing.Application_Due_Date).format('dddd MMMM Do YYYY')}
-  
-            Reply with '1' to apply now
-            Reply with '0' to unsubscribe from all future notification`
+            `Housing Alert!
+             Building Name: ${housing.Building_Name}
+             Address: ${housing.Building_Street_Address}, San Francisco
+             Unit Type: ${housing.unitSummaries.general[0].unitType}
+             Rent: ${housing.unitSummaries.general[0].minMonthlyRent}
+             Application Due: ${moment(housing.Application_Due_Date).format('dddd MMMM Do YYYY')}
+
+             Reply 'apply' to apply now
+             Reply 'unsubscribe' to unsubscribe from all future notification`
           )}
         console.log(created)
       })
