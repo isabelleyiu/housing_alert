@@ -117,7 +117,7 @@ class Register extends Component{
           </Form.Group>
           <Button 
           type="submit" 
-          variant="outline-light"
+          variant="success"
           disabled={!this.state.isChecked}
           >Submit
           </Button>
