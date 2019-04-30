@@ -10,8 +10,8 @@ import Footer from './components/layout/Footer';
 // routes
 import Login from './components/authentication/Login';
 import Signup from './components/authentication/Signup';
-import Landing from './Landing';
-import About from './About';
+import Landing from './page/Landing';
+import About from './page/About';
 import HousingList from './HousingList';
 
 class App extends Component {
@@ -23,7 +23,7 @@ class App extends Component {
   }
   loginUser = (user) => {
     this.setState({
-      user: user
+      user
     })
   }
   render() {
@@ -32,12 +32,12 @@ class App extends Component {
         <div className="App">
           <Navbar />
           <Route exact path="/" component={ Landing } />
-          <Route path="/login" 
-          render={(props) => <Login loginUser={this.loginUser} />} />
           <Route path="/about" component={ About } />
           <Route path="/housing" component={ HousingList } />
           <Route path="/signup" 
           render={(props) => <Signup loginUser={this.loginUser} />} />
+          <Route path="/login" 
+          render={(props) => <Login loginUser={this.loginUser} />} />
         </div>
       </Router> 
       
