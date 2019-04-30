@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import HousingCard from './HousingCard';
+import HousingCard from '../HousingCard';
 import './Housing.css';
 
 class Housing extends Component{
@@ -15,12 +15,16 @@ class Housing extends Component{
       .then(data => data.json())
       .then(housings => {
         this.setState({
-          housings
+          housings, 
+          loading: false
         })
       })
       .catch(err => console.log(err))
   }
   render() {
+    if(this.state.loading) {
+      return <h1>Loading...</h1>
+    }
     return (
       <div>
         <h1 className="heading">Currently Available Affordable Housing</h1>
