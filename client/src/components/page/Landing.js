@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Jumbotron } from 'react-bootstrap';
 import './Landing.css';
 
-import Register from '../components/authentication/Register';
+import Register from '../authentication/Register';
 import About from './About';
 
 class Landing extends Component{

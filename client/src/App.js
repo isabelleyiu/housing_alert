@@ -8,11 +8,11 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
 // routes
-import Landing from './page/Landing';
-import About from './page/About';
-import Housing from './page/Housing';
-import Profile from './page/Profile';
-import NotFound from './page/NotFound';
+import Landing from './components/page/Landing';
+import About from './components/page/About';
+import Housing from './components/page/Housing';
+import Profile from './components/page/Profile';
+import NotFound from './components/page/NotFound';
 
 import Login from './components/authentication/Login';
 import Signup from './components/authentication/Signup';
