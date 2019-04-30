@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 class NavBar extends Component{
   render() {
@@ -9,10 +10,10 @@ class NavBar extends Component{
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link href="/about">About</Nav.Link>
-            <Nav.Link href="/housing">Housing</Nav.Link>
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <Nav.Link href="/login">Login</Nav.Link>
+          <Nav.Link><Link to="/about">About</Link></Nav.Link>
+          <Nav.Link><Link to="/housing">Housing</Link></Nav.Link>
+          <Nav.Link><Link to="/profile">Profile</Link></Nav.Link>
+          <Nav.Link><Link to="/login">Login</Link></Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

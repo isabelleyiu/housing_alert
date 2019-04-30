@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 
 // layouts
@@ -8,11 +8,15 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
 // routes
-import Login from './components/authentication/Login';
-import Signup from './components/authentication/Signup';
 import Landing from './page/Landing';
 import About from './page/About';
-import HousingList from './HousingList';
+import Housing from './page/Housing';
+import Profile from './page/Profile';
+import NotFound from './page/NotFound';
+
+import Login from './components/authentication/Login';
+import Signup from './components/authentication/Signup';
+import PrivateRoute from './components/authentication/PrivateRoute'
 
 class App extends Component {
   constructor(props) {
@@ -31,13 +35,18 @@ class App extends Component {
       <Router>
         <div className="App">
           <Navbar />
-          <Route exact path="/" component={ Landing } />
-          <Route path="/about" component={ About } />
-          <Route path="/housing" component={ HousingList } />
-          <Route path="/signup" 
-          render={(props) => <Signup loginUser={this.loginUser} />} />
-          <Route path="/login" 
-          render={(props) => <Login loginUser={this.loginUser} />} />
+          <Switch>
+            <Route exact path="/" component={ Landing } />
+            <Route path="/about" component={ About } />
+            <Route path="/housing" component={ Housing } />
+            <Route path="/signup" 
+            render={(props) => <Signup loginUser={this.loginUser} />} />
+            <Route path="/login" 
+            render={(props) => <Login loginUser={this.loginUser} />} />
+            {/* user was NOT pass to profile */}
+            <PrivateRoute path="/profile" component={ Profile } user={this.state.user} />
+            <Route component={ NotFound } />
+          </Switch>
         </div>
       </Router> 
       

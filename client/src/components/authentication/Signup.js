@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Card } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import './Signup.css';
 
 
@@ -19,7 +20,9 @@ class Signup extends Component{
       studio: false,
       oneBedroom: false,
       twoBedroom: false,
-      message: ''
+      message: '',
+      redirect: false,
+      show: false,
     }
   }
   handleChange = e => {
@@ -35,7 +38,6 @@ class Signup extends Component{
   signupUser = (e) => {
     const { message, ...user } = this.state;
     e.preventDefault();
-    console.log(user)
     fetch('api/user/signup', {
       method: 'POST',
       headers: {
@@ -50,6 +52,9 @@ class Signup extends Component{
       if(newUser.isLogin) {
         this.props.loginUser(newUser)
         // redirect login user to Housing
+        this.setState({
+          redirect: true
+        })
       } else {
         this.setState({
           message: newUser.message
@@ -59,11 +64,29 @@ class Signup extends Component{
     .catch(err => console.log(err))
   }
   render() {
+    // if(this.state.message) {
+    //   return <Modal
+    //   size="sm"
+    //   show={true}
+    //   onHide={this.handleClose}
+    //   aria-labelledby="example-modal-sizes-title-sm"
+    // >
+    //   <Modal.Header closeButton>
+    //     <Modal.Title id="example-modal-sizes-title-sm">
+    //       Small Modal
+    //     </Modal.Title>
+    //   </Modal.Header>
+    //   <Modal.Body>...</Modal.Body>
+    // </Modal>
+    // }
+    if(this.state.redirect) {
+      return <Redirect to="/housing" />
+    }
     return (
       <div className="signup-container">
       <Card>
           <Card.Body>
-          <Card.Title>{this.state.message? this.state.message: 'Tell us a little more about your household'}</Card.Title>
+          <Card.Title>Thank You for Registering with us. Tell us a little more about your household</Card.Title>
         <Form className="signup-form">
           <Form.Label>Phone Number</Form.Label>
           <Form.Control 
@@ -71,7 +94,7 @@ class Signup extends Component{
             name="phone" 
             size="sm" 
             type="text" 
-            placeholder="Your Phone Number (This will be your Login ID)"
+            placeholder="Your phone number will be used as your Login ID"
             onChange={this.handleChange} />
 
           <Form.Label>Password</Form.Label>  
@@ -80,7 +103,7 @@ class Signup extends Component{
             name="password" 
             size="sm" 
             type="password" 
-            placeholder="Password must contain at least one lowercase letter, one uppercase letter, and one numeric value"
+            placeholder="At least 1 lowercase letter, 1 uppercase letter, and 1 numeric value"
             onChange={this.handleChange} />
           
           <Form.Label>Confirm Password</Form.Label>
@@ -116,7 +139,7 @@ class Signup extends Component{
             name="DOB" 
             size="sm" 
             type="text" 
-            placeholder="Your birthday YYYY-MM-DD"
+            placeholder="YYYY-MM-DD"
             onChange={this.handleChange} /> 
 
           <Form.Label>Household Size</Form.Label>
@@ -134,7 +157,7 @@ class Signup extends Component{
             name="householdIncome" 
             size="sm" 
             type="text" 
-            placeholder="Annual Household Income. This will help us determine your eligibility"
+            placeholder="This will help us determine your eligibility"
             onChange={this.handleChange} /> 
           
           <Form.Label className="housing-input">What type of housing are you looking for?</Form.Label>
@@ -171,7 +194,8 @@ class Signup extends Component{
               label="Two Bedroom" />
             </Form.Group>
           </div>
-         
+
+          {this.state.message? <p className="error">{this.state.message}</p> : null}
           <Button onClick={this.signupUser} type="submit" variant="success">Submit</Button>
         </Form>
         </Card.Body>

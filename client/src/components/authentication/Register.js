@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import './Register.css';
 
 class Register extends Component{
@@ -29,24 +30,28 @@ class Register extends Component{
       show: false
     });
   }
-  registerPhone = e => {
+  // registerPhone = e => {
+  //   e.preventDefault();
+  //   this.savePhoneNumber(this.state.phone);
+  //   this.sendVerification(this.state.phone);
+  //   this.setState({
+  //     show: true
+  //   });
+  // }
+  registerPhone = (e) => {
     e.preventDefault();
-    this.savePhoneNumber(this.state.phone);
-    this.sendVerification(this.state.phone);
-    this.setState({
-      show: true
-    });
-  }
-  savePhoneNumber = (phone) => {
     fetch('api/phone', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ phone })
+      body: JSON.stringify({ phone: this.state.phone })
     })
     .then(res => res.json())
     .then(newNumber => {
+      if(newNumber.created) {
+        this.sendVerification(this.state.phone);
+      }
       this.setState({ 
         message: newNumber.message,
         show: true
@@ -63,12 +68,6 @@ class Register extends Component{
       body: JSON.stringify({ phone })
     })
     .then(res => res.json())
-    // .then(newNumber => {
-    //   this.setState({ 
-    //     message: newNumber.message,
-    //     show: true
-    //   })
-    // })
     .catch(err => console.log(err))
   }
   verifyPhone = e => {
@@ -96,6 +95,9 @@ class Register extends Component{
     .catch(err => console.log(err))
   }
   render() {
+    if(this.state.isVerified) {
+      return <Redirect to="/signup" />
+    }
     return (
       <div className="register">
         <Form onSubmit={this.registerPhone} className="registerForm">
@@ -123,12 +125,12 @@ class Register extends Component{
           </Button>
         </Form>
 
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal size="lg" show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Please Verify Your Number</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          {this.state.message}
+          {this.state.message} 
           <Form>
             <Form.Control 
             name="verificationCode" 
@@ -142,7 +144,7 @@ class Register extends Component{
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
-            <Button variant="primary" type="submit" onClick={this.verifyPhone}>
+            <Button variant="success" type="submit" onClick={this.verifyPhone}>
               Submit
             </Button>
           </Modal.Footer>

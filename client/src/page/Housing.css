@@ -1,0 +1,13 @@
+.housing-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  background: #FFF1E0;
+  padding: 60px 60px;
+}
+
+.heading {
+  padding: 40px 40px;
+}

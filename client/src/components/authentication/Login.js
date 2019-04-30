@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
+import { Redirect } from 'react-router-dom';
 import './Login.css';
+
 
 class Login extends Component{
   constructor(props) {
@@ -9,7 +11,8 @@ class Login extends Component{
     this.state = {
       phone: '',
       password: '',
-      message: ''
+      message: '',
+      redirect: false,
     };
   }
   handleChange = e => {
@@ -35,6 +38,9 @@ class Login extends Component{
       if(user.isLogin) {
         this.props.loginUser(user);
         // redirect user to Housing
+        this.setState({
+          redirect: true
+        })
       } else {
         this.setState({
           message: user.message
@@ -44,6 +50,10 @@ class Login extends Component{
     .catch(err => console.log(err))
   }
   render() {
+    if(this.state.redirect) {
+      return <Redirect to="/housing" />
+    }
+
     return (
       <div className="login-container">
         <Card>

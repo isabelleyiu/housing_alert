@@ -20,3 +20,8 @@
   flex-direction: column;
   align-items: center;
 }
+
+.error {
+  color: red;
+  font-size: 1.5rem;
+}

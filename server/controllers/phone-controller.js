@@ -15,10 +15,15 @@ const register = (req, res) => {
     defaults: { phone }})
   .then(([phone, created]) => {
     if(created) {
-      phone.dataValues.message = `A text message is sent to ${phone.phone}`
+      phone.dataValues.message = `A text message is sent to ${phone.phone}`;
+      phone.dataValues.created = created;
       return res.json(phone.dataValues);
-    } 
-    return res.json({ message: `Phone Number ${phone.phone} already exists in the system.` });
+    } else {
+      return res.json({ 
+        message: `Phone Number ${phone.phone} already exists in the system.`,
+        created: created
+      });
+    }
   })
   .catch(err => {
     console.log(err)

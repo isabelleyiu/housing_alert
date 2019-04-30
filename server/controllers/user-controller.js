@@ -61,7 +61,10 @@ const signup = (req, res, next) => {
         }
       });
     } else {
-      return res.status(403).json({ message: `An user profile associate with phone number ${phone} already exists in the system.` });
+      return res.status(403).json({ 
+        created: false,
+        message: `An user profile associate with phone number ${phone} already exists in the system.` 
+      });
     }
   })
   // err.errors[0].message
