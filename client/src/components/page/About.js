@@ -11,7 +11,7 @@ class About extends Component{
         <h5>Let us do all the hard work for you.</h5>
         <IconContext.Provider value={{ color: "green", fontSize: "4rem", className: "global-class-name" }}>
           <div>
-            <FaSms />
+            <FaSms style={{height: "200px", width: "200px"}}/>
           </div>
         </IconContext.Provider>
         
