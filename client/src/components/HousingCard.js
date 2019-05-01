@@ -3,7 +3,6 @@ import { Card, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import moment from 'moment';
 import PropTypes from "prop-types";
 
-
 class HousingCard extends Component{
   constructor(props) {
     super(props);
@@ -21,13 +20,13 @@ class HousingCard extends Component{
 
     if(Tenure === "Re-rental") {
       if(minMonthlyRent === null && maxMonthlyRent === null){
-        rent = `${minPercentIncome}% of Monthly Income`;
+        rent = `${minPercentIncome}% of Income`;
       } else if(minPercentIncome !== maxPercentIncome) {
-        rent = `${minPercentIncome}% - ${maxPercentIncome}% of Monthly Income`;
+        rent = `${minPercentIncome}% - ${maxPercentIncome}% of Income`;
       } else if(minMonthlyRent !== maxMonthlyRent) {
-        rent = `$${minMonthlyRent} - $${maxMonthlyRent} per month`
+        rent = `$${minMonthlyRent} - $${maxMonthlyRent}`
       } else {
-        rent = `$${minMonthlyRent} per month`;
+        rent = `$${minMonthlyRent}`;
     }
   }
     
@@ -45,23 +44,21 @@ class HousingCard extends Component{
     
     return (
       <div>
-        <Card style={{ width: "18rem" }}>
+        <Card style={{ width: "24rem", marginBottom: "100px"}}>
           <Card.Img variant="top" src={ imageURL } style={{ height: "300px" }} />
-          <Card.Body>
+          <Card.Body style={{ height: "600px"}}>
             <Card.Title>{ Building_Name }</Card.Title>
             <Card.Text>
-              
             </Card.Text>
             <ListGroup className="list-group-flush">
             <ListGroupItem>Address: { Building_Street_Address }, San Francisco, CA { Building_Zip_Code }</ListGroupItem>
             <ListGroupItem>Tenure: { Tenure }</ListGroupItem>
             <ListGroupItem>Unit Type: { unitType }</ListGroupItem>
-            <ListGroupItem>{rent? 'Rent': 'Price'}: {rent? rent: price}</ListGroupItem>
+            <ListGroupItem>{rent? 'Monthly Rent': 'Price'}: {rent? rent: price}</ListGroupItem>
             <ListGroupItem>Application Due: { moment(Application_Due_Date).format('MMMM Do YYYY, h:mm a') }</ListGroupItem>
             </ListGroup>
             <Button variant="success">Apply</Button>
           </Card.Body>
-
         </Card>
       </div>
     )
