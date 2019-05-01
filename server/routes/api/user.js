@@ -4,15 +4,14 @@ const { authenticate } = userController;
 const passport = require('passport');
 
 // PUBLIC /api/user
-router.route("/")
+router.route('/')
   .get(userController.getAll)
-
-
-router.route('/signup')
   .post(userController.signup)
 
 router.route('/login')
   .post(userController.login)
+router.route('/logout')
+  .get(userController.logout)
 
 // PRIVATE /api/user/:uuid
 router.route('/:uuid')

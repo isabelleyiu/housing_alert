@@ -38,7 +38,7 @@ class Signup extends Component{
   signupUser = (e) => {
     const { message, ...user } = this.state;
     e.preventDefault();
-    fetch('api/user/signup', {
+    fetch('api/user/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

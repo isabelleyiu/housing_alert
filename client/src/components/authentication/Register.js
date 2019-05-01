@@ -12,7 +12,9 @@ class Register extends Component{
       verificationCode: '',
       isChecked: false,
       isVerified: false,
-      show: false
+      show: false,
+      redirectToSignup: false,
+      redirectToProfile: false
     }
   }
   handleChange = e => {
@@ -30,14 +32,6 @@ class Register extends Component{
       show: false
     });
   }
-  // registerPhone = e => {
-  //   e.preventDefault();
-  //   this.savePhoneNumber(this.state.phone);
-  //   this.sendVerification(this.state.phone);
-  //   this.setState({
-  //     show: true
-  //   });
-  // }
   registerPhone = (e) => {
     e.preventDefault();
     fetch('api/phone', {
@@ -49,8 +43,19 @@ class Register extends Component{
     })
     .then(res => res.json())
     .then(newNumber => {
-      if(newNumber.created) {
+      if(newNumber.created || (newNumber.isVerified === false)) {
         this.sendVerification(this.state.phone);
+      } else {
+        // sms user verified their phone, visiting our web for the first time
+        if(newNumber.userUUID === null) {
+          this.setState({
+            redirectToSignup: true
+          })
+        } else {
+          this.setState({
+            redirectToProfile: true
+          })
+        }
       }
       this.setState({ 
         message: newNumber.message,
@@ -84,19 +89,32 @@ class Register extends Component{
     })
     .then(res => res.json())
     .then(verification => {
-      this.setState({ 
-        isVerified: verification.success,
-        message: verification.message,
-        verificationCode: '',
-        phone: '',
-        show: false
-       })
+      if(verification.success) {
+        this.setState({ 
+          isVerified: verification.success,
+          message: verification.message,
+          verificationCode: '',
+          phone: '',
+          show: false,
+          redirectToSignup: true
+         })
+      } else {
+        this.setState({ 
+          message: verification.message,
+          verificationCode: '',
+          phone: ''
+         })
+      }
     })
     .catch(err => console.log(err))
   }
   render() {
-    if(this.state.isVerified) {
+    if(this.state.redirectToSignup) {
       return <Redirect to="/signup" />
+    }
+    
+    if(this.state.redirectToProfile) {
+      return <Redirect to="/profile" />
     }
     return (
       <div className="register">
@@ -106,7 +124,7 @@ class Register extends Component{
           name="phone" 
           size="sm" 
           type="text" 
-          placeholder="Register Your Phone Number"
+          placeholder="Enter Your Phone Number"
           onChange={this.handleChange} />
           
           <Form.Group controlId="formBasicChecbox">
