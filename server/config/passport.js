@@ -31,17 +31,16 @@ module.exports = function(passport) {
   ));
   
   
-  
+  // only run if verifyCallback returns (null, user), run once per session
   // create cookie
   // store user.uuid with the session
   passport.serializeUser((user, done) => {
-    done(null, user.dataValues)
+    done(null, user.dataValues.uuid)
   }) 
   
   // read cookie
-  // once a user has been authenticated and serialized, we now find that user in the database on every request. This allows passport to have some useful methods on the request object like req.user (the current user logged in) and req.isAuthenticated() (returns true if the user is logged in or false if not)
-  passport.deserializeUser((user, done) => {
-    db.User.findOne({ where: { uuid: user.uuid }})
+  passport.deserializeUser((uuid, done) => {
+    db.User.findOne({ where: { uuid: uuid }})
       .then(user => {
         done(null, user);
       })

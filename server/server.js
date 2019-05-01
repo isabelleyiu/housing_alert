@@ -4,6 +4,10 @@ require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const session  = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const cookieParser = require('cookie-parser');
+const housingController = require('./controllers/housing-controller');
+const cron = require('node-cron');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +17,7 @@ const db = require('./models');
 
 // =========== APP CONFIG ===========
 // middleware
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -25,13 +30,18 @@ if(process.env.NODE_ENV === "production"){
 require('./config/passport')(passport);
 
 app.use(session({
+  // use store to persis session in deployment for new build
+  store: new SequelizeStore({
+    db: db,
+    table: 'Session'
+  }),
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: false,
-  // cookie: {
-  //   expires: 6000000,
-  //   httpOnly: false
-  // }
+  cookie: {
+    _expires: 30 * 60 * 1000,
+    httpOnly: true
+  }
 }))
 
 // =========== APP INIT ===========
@@ -42,6 +52,14 @@ app.use(passport.session());
 
 // routes
 app.use(routes);
+
+// schedule cron job for fetching housing data
+// cron.schedule('* * * * *', () => {
+//   housingController.fetchHousingData();
+// },{
+//   scheduled: true,
+//   timezone: "America/Los_Angeles"
+// });
 
 // =========== APP LAUNCH ===========
 
