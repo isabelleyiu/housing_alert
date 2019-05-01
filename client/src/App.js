@@ -27,14 +27,27 @@ class App extends Component {
   }
   loginUser = (user) => {
     this.setState({
-      user
+      user: user
     })
+  }
+  logoutUser = () => {
+    fetch('api/user/logout')
+      .then(res => res.json())
+      .then(res => {
+        if(res.isLogin === false) {
+          this.setState({
+            user: null
+          })
+        }
+      })
+      .catch(err => console.log(err))
+    
   }
   render() {
     return (
       <Router>
         <div className="App">
-          <Navbar />
+          <Navbar isLogin={this.state.user} logoutUser={this.logoutUser}/>
           <Switch>
             <Route exact path="/" component={ Landing } />
             <Route path="/about" component={ About } />

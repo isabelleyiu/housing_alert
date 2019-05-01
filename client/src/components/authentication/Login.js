@@ -34,7 +34,6 @@ class Login extends Component{
     })
     .then(res => res.json())
     .then(user => {
-      console.log(user)
       if(user.isLogin) {
         this.props.loginUser(user);
         // redirect user to Housing
@@ -51,14 +50,14 @@ class Login extends Component{
   }
   render() {
     if(this.state.redirect) {
-      return <Redirect to="/housing" />
+      return <Redirect to="/profile" />
     }
 
     return (
       <div className="login-container">
         <Card>
           <Card.Body>
-          <Card.Title>{this.state.message? this.state.message: 'Welcome Back'}</Card.Title>
+          <Card.Title>Welcome Back</Card.Title>
           <Form class="login-form" onSubmit={this.handleSubmit} >
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Phone Number</Form.Label>
@@ -72,6 +71,7 @@ class Login extends Component{
               <Form.Label>Password</Form.Label>
               <Form.Control onChange={this.handleChange} name="password" type="password" placeholder="Password" />
             </Form.Group>
+            {this.state.message? <p style={{color: "red"}}>{this.state.message}</p> : null}
             <Button variant="success" type="submit">
               Submit
             </Button>

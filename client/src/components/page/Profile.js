@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
+import { Col, Image } from 'react-bootstrap';
 
 class Profile extends Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      
-    };
-  }
-  componentDidMount = () => {
-  }
   render() {
     return (
       <div>
-       <h1>User Profile</h1>
+       <Col xs={6} md={4}>
+        <Image src="holder.js/171x180" roundedCircle />
+       </Col>
+       <h1>{this.props.user.firstName} {this.props.user.lastName}</h1>
+
       </div>
     )
   }

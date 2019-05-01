@@ -92,7 +92,8 @@ const login = (req, res, next) => {
 
       // Manually establish the session...
       req.login(user, (err) => {
-        const { phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = user.dataValues;
+        // console.log('req.login: ', req.user)
+        const { phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = req.user.dataValues;
         if(err) {
           return res.status(403).json({ 
             isLogin: false,
@@ -118,7 +119,15 @@ const login = (req, res, next) => {
       });
      
   })(req, res, next);
+}
 
+const logout = (req, res, next) => {
+  req.logout();
+  req.session.destroy();
+  res.json({
+    isLogin: req.isAuthenticated(),
+    message: 'Logout success'
+  })
 }
 
 const authenticate = (req, res, next) => {
@@ -133,7 +142,7 @@ const authenticate = (req, res, next) => {
 // @usage   show user users
 // @access  Private
 const showProfile = (req, res, next) => {
-  console.log(req.user)
+  // retrieve deserialized user via req.user
   return res.json(req.user.dataValues)
 }
 
@@ -156,6 +165,7 @@ module.exports = {
   getAll,
   signup,
   login,
+  logout,
   authenticate,
   showProfile,
   deleteProfile,

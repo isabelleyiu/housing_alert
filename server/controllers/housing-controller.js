@@ -1,17 +1,10 @@
 const axios = require('axios');
-const cron = require('node-cron');
 const moment = require('moment');
 const db = require('../models');
 const twilioController = require('./twilio-controller');
 
-// schedule cron job for fetching housing data
-// cron.schedule('12***', () => {
-  
-// },{
-//   scheduled: true,
-//   timezone: "America/Los_Angeles"
-// });
-const fetchHousingData = (req, res, next) => {
+// move into util
+const fetchHousingData = () => {
   axios.get('https://housing.sfgov.org/api/v1/listings.json')
   .then(result => {
     let housings = result.data.listings;
@@ -38,11 +31,10 @@ const fetchHousingData = (req, res, next) => {
           )}
         console.log(created)
       })
-      .catch(err => res.json(err))
+      .catch(err => console.log(err))
     })
-    next()
   })
-  .catch(err => res.json(err))
+  .catch(err => console.log(err))
 }
 
 const getAll = (req, res, next) => {
