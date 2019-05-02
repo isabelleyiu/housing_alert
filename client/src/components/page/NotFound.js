@@ -1,8 +1,11 @@
 import React from 'react';
+import { IoIosAlert } from "react-icons/io";
+import './NotFound.css';
 
 const NotFound = () => (
-  <div>
-    <h1>Page Not Found 😢</h1>
+  <div className="not-found">
+    <h1>Page Not Found</h1>
+    <IoIosAlert style={{height: "200px", width: "200px"}}/>
   </div>
 )
 
