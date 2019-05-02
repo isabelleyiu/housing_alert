@@ -87,8 +87,9 @@ class App extends Component {
             render={(props) => <Signup loginUser={this.loginUser} />} />
             <Route path="/login" 
             render={(props) => <Login loginUser={this.loginUser} />} />
-            {/* user was NOT pass to profile */}
             <PrivateRoute path="/profile" component={ Profile } user={this.state.user} updateUserInfo={this.updateUserInfo}/>
+            {/* <Route path="/profile" 
+            render={(props) => <Profile user={this.state.user} updateUserInfo={this.updateUserInfo}/>} /> */}
             <Route component={ NotFound } />
           </Switch>
         </div>
