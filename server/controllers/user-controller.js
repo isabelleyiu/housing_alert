@@ -130,10 +130,14 @@ const logout = (req, res, next) => {
   })
 }
 
-const authenticate = (req, res, next) => {
+const isAuthenticate = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.status(403).json({message: 'Access denied, please log in'});
+    return res.status(403).json({
+      isLogin: false,
+      message: 'Access denied, please log in'
+    });
   }
+  req.user.dataValues.isLogin = true;
   next();
 }
 
@@ -166,7 +170,7 @@ module.exports = {
   signup,
   login,
   logout,
-  authenticate,
+  isAuthenticate,
   showProfile,
   deleteProfile,
   updateProfile

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 
 // layouts
@@ -25,6 +25,22 @@ class App extends Component {
       user: null
     }
   }
+  componentWillMount = () => {
+    fetch('/api/user/isAuthenticate')
+    .then(res => res.json())
+      .then(res => {
+        if(res.isLogin === false) {
+          this.setState({
+            user: null
+          })
+        } else {
+          this.setState({
+            user: res
+          })
+        }
+      })
+      .catch(err => console.log(err))
+  }
   loginUser = (user) => {
     this.setState({
       user: user
@@ -41,7 +57,6 @@ class App extends Component {
         }
       })
       .catch(err => console.log(err))
-    
   }
   render() {
     return (
