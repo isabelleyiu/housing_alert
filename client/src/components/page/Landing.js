@@ -4,6 +4,7 @@ import './Landing.css';
 
 import Register from '../authentication/Register';
 import About from './About';
+import Footer from '../layout/Footer';
 
 class Landing extends Component{
   render() {
@@ -14,6 +15,7 @@ class Landing extends Component{
           <Register />
         </Jumbotron>
         <About />
+        <Footer />
       </div>
     )
   }
