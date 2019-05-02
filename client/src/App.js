@@ -58,6 +58,22 @@ class App extends Component {
       })
       .catch(err => console.log(err))
   }
+  updateUserInfo = newInfo => {
+    fetch('api/verification/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newInfo)
+    })
+    .then(res => res.json())
+    .then(res => {
+      if(res.isUpdated) {
+        // do somehting
+        console.log('User info updated')
+      }
+    })
+  }
   render() {
     return (
       <Router>
@@ -72,7 +88,7 @@ class App extends Component {
             <Route path="/login" 
             render={(props) => <Login loginUser={this.loginUser} />} />
             {/* user was NOT pass to profile */}
-            <PrivateRoute path="/profile" component={ Profile } user={this.state.user} />
+            <PrivateRoute path="/profile" component={ Profile } user={this.state.user} updateUserInfo={this.updateUserInfo}/>
             <Route component={ NotFound } />
           </Switch>
         </div>

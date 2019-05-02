@@ -143,7 +143,7 @@ const isAuthenticate = (req, res, next) => {
 
 
 // @route   GET api/user/:uuid
-// @usage   show user users
+// @usage   show user profile
 // @access  Private
 const showProfile = (req, res, next) => {
   // retrieve deserialized user via req.user
@@ -151,7 +151,7 @@ const showProfile = (req, res, next) => {
 }
 
 // @route   DELETE api/user/:uuid
-// @usage   delete user users
+// @usage   delete user profile
 // @access  Private
 const deleteProfile = (req, res, next) => {
   db.User.destroy({
@@ -161,8 +161,31 @@ const deleteProfile = (req, res, next) => {
     .catch(err => res.status(404).json({ message: 'User not found' }))
 }
 
+// @route   PATCH api/user/:uuid
+// @usage   update user profile
+// @access  Private
 const updateProfile = (req, res, next) => {
-  
+  const newInfo = req.body;
+  db.User.findOne({
+    where: {uuid: req.user.dataValues.uuid}
+  })
+  .then(user => {
+    for(let key in req.body) {
+      user[key] = req.body[key];
+    }
+    user.save({fields: ['firstName', 'lastName', 'DOB', 'householdSize', 'householdIncome', 'SRO', 'studio', 'oneBedroom', 'twoBedroom']})
+      .then(() => {
+        return res.json({
+          isUpdated: true
+        })
+      })
+      .catch(err => {
+        return res.status(400).json(err)
+      })
+  })
+  .catch(err => console.log(err))
+
+   // if phone was updated, update db.Phone
 }
 
 module.exports = {
