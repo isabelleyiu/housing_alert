@@ -17,17 +17,38 @@ const fetchHousingData = () => {
       })
       .then(([housing, created]) => {
         // if created -> text user about new housing
+        const { unitType, minMonthlyRent, maxMonthlyRent, minPercentIncome, maxPercentIncome, minPriceWithParking, maxPriceWithParking, minPriceWithoutParking,maxPriceWithoutParking } = housing.unitSummaries.general[0];
+        const { Tenure } = housing;
+        
+        let rent = null;
+        let price = null;
+        
+        if(Tenure === "Re-rental") {
+          if(minMonthlyRent === null && maxMonthlyRent === null){
+            rent = `${minPercentIncome}% of Income`;
+          } else if(minPercentIncome !== maxPercentIncome) {
+            rent = `${minPercentIncome}% - ${maxPercentIncome}% of Income`;
+          } else if(minMonthlyRent !== maxMonthlyRent) {
+            rent = `$${minMonthlyRent} - $${maxMonthlyRent}`
+          } else {
+            rent = `$${minMonthlyRent}`;
+        }
+      }
+        
+        if(Tenure === "Resale") {
+          if(minPriceWithParking !== maxPriceWithParking) {
+            price = `$${minPriceWithParking} - $${maxPriceWithParking}`;
+          } else if(minPriceWithParking) {
+            price = `$${minPriceWithParking}`;
+          } else if(minPriceWithoutParking !== maxPriceWithoutParking){
+            price = `$${minPriceWithoutParking} - $${maxPriceWithoutParking}`;
+          } else {
+            price = `$${minPriceWithoutParking}`;
+          }
+        }
         if(created) {
           twilioController.textAllPhone(
-            `Housing Alert!
-             Building Name: ${housing.Building_Name}
-             Address: ${housing.Building_Street_Address}, San Francisco
-             Unit Type: ${housing.unitSummaries.general[0].unitType}
-             Rent: ${housing.unitSummaries.general[0].minMonthlyRent}
-             Application Due: ${moment(housing.Application_Due_Date).format('dddd MMMM Do YYYY')}
-
-             Reply 'apply' to apply now
-             Reply 'unsubscribe' to unsubscribe from all future notification`
+            `Housing Alert! Building Name: ${housing.Building_Name} Address: ${housing.Building_Street_Address}, San Francisco Unit Type: ${unitType} Tenure: ${Tenure} Rent/Price: ${rent || price} Application Due: ${moment(housing.Application_Due_Date).format('dddd MMMM Do YYYY')} Reply 'apply' to apply now. Reply 'unsubscribe' to unsubscribe from all future notification`
           )}
         console.log(created)
       })
