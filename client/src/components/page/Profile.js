@@ -11,19 +11,18 @@ class Profile extends Component{
       message: ''
     };
   }
-  // componentDidUpdate() {
-  //   if(prevProps.user !== this.props.user) {
-      
-  //   }
-  // }
   editMode = () => {
     this.setState({
       isEditing: true
     })
   }
   handleChange = e => {
-    let name = e.target.name;
-    let value = e.target.value;
+    // const name = e.target.name;
+    // const value = e.target.value;
+    const target = e.target;
+    const value = target.type === 'checkbox' ? (target.checked) : target.value;
+    const name = target.name;
+
     this.setState(prevState => {
       return {
         updatedUser : {
@@ -66,6 +65,7 @@ class Profile extends Component{
           <h4><strong>Date of Birth: </strong><span>{this.props.user.DOB}</span></h4>
           <h4><strong>Household Size: </strong><span>{this.props.user.householdSize}</span></h4>
           <h4><strong>Household Income: </strong><span>{this.props.user.householdIncome}</span></h4>
+
           <div>
             <Button onClick={this.editMode}>Edit</Button>
             <Button>Delete</Button>
@@ -129,6 +129,45 @@ class Profile extends Component{
             defaultValue={this.props.user.householdIncome}
             placeholder="This will help us determine your eligibility"
             onChange={this.handleChange} /> 
+
+          <Form.Label className="housing-input">You are looking for: </Form.Label>
+          <div className="checkboxes">
+            <Form.Group controlId="formBasicChecbox">
+              <Form.Check 
+              name="SRO"
+              type="checkbox" 
+              onChange={this.handleChange}
+              checked={this.props.user.SRO}
+              label="SRO" />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicChecbox">
+              <Form.Check 
+              name="studio"
+              type="checkbox" 
+              onChange={this.handleChange}
+              checked={this.props.user.studio}
+              label="Studio" />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicChecbox">
+              <Form.Check 
+              name="oneBedroom"
+              type="checkbox" 
+              onChange={this.handleChange}
+              checked={this.props.user.oneBedroom}
+              label="One Bedroom" />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicChecbox">
+              <Form.Check 
+              name="twoBedroom"
+              type="checkbox" 
+              onChange={this.handleChange}
+              checked={this.props.user.twoBedroom}
+              label="Two Bedroom" />
+            </Form.Group>
+          </div>
           
           <Button onClick={this.handleCancel} type="submit" variant="success">Cancel</Button>
           <Button onClick={this.handleSubmit} type="submit" variant="success">Submit</Button>
