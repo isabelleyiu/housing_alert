@@ -3,6 +3,7 @@ import { Card, Form, Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { Redirect } from 'react-router-dom';
 import './Login.css';
+import { IoLogoGoogle } from "react-icons/io";
 
 
 class Login extends Component{
@@ -36,7 +37,7 @@ class Login extends Component{
     .then(user => {
       if(user.isLogin) {
         this.props.loginUser(user);
-        // redirect user to Housing
+        
         this.setState({
           redirect: true
         })
@@ -75,6 +76,7 @@ class Login extends Component{
             <Button variant="success" type="submit">
               Submit
             </Button>
+            <div><Button variant="danger" onClick={this.props.googleSignIn} style={{width: "94px", marginTop: "20px"}}><IoLogoGoogle />Login</Button></div>
           </Form>
           </Card.Body>
         </Card>

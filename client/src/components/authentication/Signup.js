@@ -47,8 +47,6 @@ class Signup extends Component{
     })
     .then(res => res.json())
     .then(newUser => {
-      // update App user
-      console.log(newUser)
       if(newUser.isLogin) {
         this.props.loginUser(newUser)
         // redirect login user to Housing
@@ -64,21 +62,6 @@ class Signup extends Component{
     .catch(err => console.log(err))
   }
   render() {
-    // if(this.state.message) {
-    //   return <Modal
-    //   size="sm"
-    //   show={true}
-    //   onHide={this.handleClose}
-    //   aria-labelledby="example-modal-sizes-title-sm"
-    // >
-    //   <Modal.Header closeButton>
-    //     <Modal.Title id="example-modal-sizes-title-sm">
-    //       Small Modal
-    //     </Modal.Title>
-    //   </Modal.Header>
-    //   <Modal.Body>...</Modal.Body>
-    // </Modal>
-    // }
     if(this.state.redirect) {
       return <Redirect to="/housing" />
     }

@@ -15,7 +15,7 @@ class About extends Component{
             <span><strong>Step 1: </strong> Enter your phone number above to register with Housing Alert.</span>
           </div>
           <div>
-            <IoIosColorWand style={{height: "150x", width: "150px"}}/>
+            <IoIosColorWand style={{height: "150px", width: "150px"}}/>
             <span><strong>Step 2: </strong> That's it. You will receive a text message from us when there's new affordable housing release</span>
           </div>
           <div>

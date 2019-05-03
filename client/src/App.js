@@ -22,8 +22,47 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      isGoogleLogin: null
     }
+  }
+  componentDidMount() {
+    window.gapi.load('auth2', () => {
+      window.gapi.auth2.init({
+        clientId: '471876448199-rbr3jioupfcqkgvgisrbflvgb5q1q7ns.apps.googleusercontent.com'
+      })
+        .then(() => {
+          this.auth = window.gapi.auth2.getAuthInstance();
+          const googleUserInfo = this.auth.currentUser.get().getBasicProfile() || null;
+          this.setState({
+            isGoogleLogin: this.auth.isSignedIn.get(),
+            user: googleUserInfo
+          })
+          this.auth.isSignedIn.listen(this.onAuthChange);
+          // console.log(this.auth.isSignedIn.get())
+          // console.log(this.auth.currentUser.get().getBasicProfile())
+        })
+    });
+  }  
+  onAuthChange = () => {
+    this.setState({
+      isGoogleLogin: this.auth.isSignedIn.get()
+    })
+  }
+  googleSignIn = () => {
+    this.auth.signIn()
+      .then(() => {
+        const googleUserInfo = this.auth.currentUser.get().getBasicProfile();
+        this.setState({
+          isGoogleLogin: this.auth.isSignedIn.get(),
+          user: googleUserInfo
+        })
+        return <Redirect to="/profile" />
+        // console.log(this.auth.currentUser.get().getBasicProfile())
+        // const googleUserProfile = this.auth.currentUser.get().getBasicProfile();
+        // this.loginUser(googleUserProfile)
+      })
+      .catch(err => console.log(err))
   }
   componentWillMount = () => {
     fetch('/api/user/isAuthenticate')
@@ -47,7 +86,10 @@ class App extends Component {
     })
   }
   logoutUser = () => {
-    fetch('api/user/logout')
+    if(this.state.isGoogleLogin) {
+      this.auth.signOut()
+    } else {
+      fetch('api/user/logout')
       .then(res => res.json())
       .then(res => {
         if(res.isLogin === false) {
@@ -57,6 +99,7 @@ class App extends Component {
         }
       })
       .catch(err => console.log(err))
+    }
   }
   updateUserInfo = newInfo => {
     fetch('api/verification/verify', {
@@ -78,7 +121,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Navbar isLogin={this.state.user} logoutUser={this.logoutUser}/>
+          <Navbar isLogin={this.state.user} loginUser={this.loginUser} logoutUser={this.logoutUser}/>
           <Switch>
             <Route exact path="/" component={ Landing } />
             <Route path="/about" component={ About } />
@@ -86,7 +129,11 @@ class App extends Component {
             <Route path="/signup" 
             render={(props) => <Signup loginUser={this.loginUser} />} />
             <Route path="/login" 
-            render={(props) => <Login loginUser={this.loginUser} />} />
+            render={(props) => 
+              <Login 
+                loginUser={this.loginUser} 
+                googleSignIn={this.googleSignIn}/>} 
+            />
             <PrivateRoute path="/profile" component={ Profile } user={this.state.user} updateUserInfo={this.updateUserInfo}/>
             {/* <Route path="/profile" 
             render={(props) => <Profile user={this.state.user} updateUserInfo={this.updateUserInfo}/>} /> */}

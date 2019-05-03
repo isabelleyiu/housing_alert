@@ -3,6 +3,7 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaHome } from "react-icons/fa";
 
+
 class NavBar extends Component{
   render() {
     return (

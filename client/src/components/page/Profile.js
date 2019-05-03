@@ -6,8 +6,17 @@ class Profile extends Component{
   constructor(props) {
     super(props);
     this.state = {
-
-      isEditing: false
+      user : {
+        'firstName': '',
+        'lastName': '',
+        'DOB': '',
+        'householdSize': '',
+        'householdIncome': ''
+      },
+      isEditing: false,
+      updatedUser: {
+        
+      }
     };
   }
   
