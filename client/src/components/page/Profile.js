@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import { Form, Card, Image, Col, Button } from 'react-bootstrap';
 import './Profile.css';
+import profilePic from './lego.jpg';
 
 class Profile extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      updatedUser : {},
+      user: {},
+      updatedUser: {},
       isEditing: false,
       message: ''
     };
+  }
+  componentWillMount() {
+    this.setState({
+      user: this.props.user
+    })
   }
   editMode = () => {
     this.setState({
@@ -17,18 +24,20 @@ class Profile extends Component{
     })
   }
   handleChange = e => {
-    // const name = e.target.name;
-    // const value = e.target.value;
-    const target = e.target;
-    const value = target.type === 'checkbox' ? (target.checked) : target.value;
-    const name = target.name;
+    console.log(e.target.checked)
+    const value = e.target.type === 'checkbox' ? (e.target.checked) : e.target.value;
+    const name = e.target.name;
 
     this.setState(prevState => {
       return {
         updatedUser : {
           ...prevState.updatedUser,
           [name]: value
-        }
+        },
+        user : {
+          ...prevState.updatedUser,
+          [name]: value
+        },
       }
     })
   }
@@ -56,19 +65,29 @@ class Profile extends Component{
   renderUserProfile = () => {
     return (
       <div className="user-card-container">
-        {/* <Col xs={6} md={4}>
-          <Image src="./lego.jpg" roundedCircle />
-        </Col> */}
+        <Col xs={6} md={4}>
+          <Image src={`${profilePic}`} thumbnail width="100px" height="100px" />
+        </Col>
         <h1>{this.props.user.firstName} {this.props.user.lastName}</h1>
-          <h4><strong>First Name: </strong><span>{this.props.user.firstName}</span></h4>
-          <h4><strong>Last Name: </strong><span>{this.props.user.lastName}</span></h4>
-          <h4><strong>Date of Birth: </strong><span>{this.props.user.DOB}</span></h4>
-          <h4><strong>Household Size: </strong><span>{this.props.user.householdSize}</span></h4>
-          <h4><strong>Household Income: </strong><span>{this.props.user.householdIncome}</span></h4>
+          <h5><strong>First Name: </strong><span>{this.props.user.firstName}</span></h5>
+          <h5><strong>Last Name: </strong><span>{this.props.user.lastName}</span></h5>
+          <h5><strong>Date of Birth: </strong><span>{this.props.user.DOB}</span></h5>
+          <h5><strong>Household Size: </strong><span>{this.props.user.householdSize}</span></h5>
+          <h5><strong>Household Income: </strong><span>{this.props.user.householdIncome}</span></h5>
 
           <div>
+            <h5>Looking for:</h5>
+            <ul>
+              {this.props.user.SRO? <li>SRO</li> : null}
+              {this.props.user.studio? <li>Studio</li> : null}
+              {this.props.user.oneBedroom? <li>One Bedroom</li> : null}
+              {this.props.user.twoBedroom? <li>Two Bedroom</li> : null}
+            </ul>
+          </div>
+          <div className="profile-buttons">
             <Button onClick={this.editMode}>Edit</Button>
-            <Button>Delete</Button>
+            {/* <Button variant="danger" onClick={this.optoutSMS}>Opt-out for SMS</Button>
+            <Button variant="danger" onClick={this.deleteProfile}>Delete</Button> */}
           </div>
       </div>
     )
@@ -137,7 +156,7 @@ class Profile extends Component{
               name="SRO"
               type="checkbox" 
               onChange={this.handleChange}
-              checked={this.props.user.SRO}
+              checked={this.state.user.SRO}
               label="SRO" />
             </Form.Group>
 
@@ -146,7 +165,7 @@ class Profile extends Component{
               name="studio"
               type="checkbox" 
               onChange={this.handleChange}
-              checked={this.props.user.studio}
+              checked={this.state.user.studio}
               label="Studio" />
             </Form.Group>
 
@@ -155,7 +174,7 @@ class Profile extends Component{
               name="oneBedroom"
               type="checkbox" 
               onChange={this.handleChange}
-              checked={this.props.user.oneBedroom}
+              checked={this.state.user.oneBedroom}
               label="One Bedroom" />
             </Form.Group>
 
@@ -164,13 +183,13 @@ class Profile extends Component{
               name="twoBedroom"
               type="checkbox" 
               onChange={this.handleChange}
-              checked={this.props.user.twoBedroom}
+              checked={this.state.user.twoBedroom}
               label="Two Bedroom" />
             </Form.Group>
+
           </div>
-          
-          <Button onClick={this.handleCancel} type="submit" variant="success">Cancel</Button>
           <Button onClick={this.handleSubmit} type="submit" variant="success">Submit</Button>
+          <Button style={{marginRight: "10px"}} onClick={this.handleCancel} type="submit" variant="success">Cancel</Button>
         </Form>
         </Card.Body>
         </Card>
