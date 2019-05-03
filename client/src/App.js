@@ -101,40 +101,47 @@ class App extends Component {
       .catch(err => console.log(err))
     }
   }
-  updateUserInfo = newInfo => {
-    fetch('api/verification/verify', {
-      method: 'POST',
+  updateUserProfile = updatedInfo => {
+    fetch(`api/user/${this.state.user.uuid}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(newInfo)
+      body: JSON.stringify(updatedInfo)
     })
     .then(res => res.json())
-    .then(res => {
-      if(res.isUpdated) {
-        // do somehting
-        console.log('User info updated')
-      }
+    .then(updatedUser => {
+      console.log(updatedUser)
+      this.setState({
+        user: updatedUser
+      })
     })
+    .catch(err => console.log(err))
   }
   render() {
     return (
       <Router>
         <div className="App">
-          <Navbar isLogin={this.state.user} loginUser={this.loginUser} logoutUser={this.logoutUser}/>
+          <Navbar 
+          isLogin={this.state.user} 
+          logoutUser={this.logoutUser}/>
           <Switch>
             <Route exact path="/" component={ Landing } />
             <Route path="/about" component={ About } />
             <Route path="/housing" component={ Housing } />
+            
             <Route path="/signup" 
-            render={(props) => <Signup loginUser={this.loginUser} />} />
+            render={(props) => 
+            <Signup loginUser={this.loginUser} />} />
+
             <Route path="/login" 
             render={(props) => 
-              <Login 
-                loginUser={this.loginUser} 
-                googleSignIn={this.googleSignIn}/>} 
+            <Login loginUser={this.loginUser} 
+              googleSignIn={this.googleSignIn}/>} 
             />
-            <PrivateRoute path="/profile" component={ Profile } user={this.state.user} updateUserInfo={this.updateUserInfo}/>
+
+            <PrivateRoute path="/profile" component={ Profile } user={this.state.user} updateUserProfile={this.updateUserProfile}/>
+
             {/* <Route path="/profile" 
             render={(props) => <Profile user={this.state.user} updateUserInfo={this.updateUserInfo}/>} /> */}
             <Route component={ NotFound } />

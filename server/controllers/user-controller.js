@@ -93,7 +93,7 @@ const login = (req, res, next) => {
       // Manually establish the session...
       req.login(user, (err) => {
         // console.log('req.login: ', req.user)
-        const { phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = req.user.dataValues;
+        const { uuid, phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = req.user.dataValues;
         if(err) {
           return res.status(403).json({ 
             isLogin: false,
@@ -101,6 +101,7 @@ const login = (req, res, next) => {
           });
         } else {
           return res.json({ 
+            uuid,
             phone,
             firstName,
             lastName,
@@ -174,10 +175,8 @@ const updateProfile = (req, res, next) => {
       user[key] = req.body[key];
     }
     user.save({fields: ['firstName', 'lastName', 'DOB', 'householdSize', 'householdIncome', 'SRO', 'studio', 'oneBedroom', 'twoBedroom']})
-      .then(() => {
-        return res.json({
-          isUpdated: true
-        })
+      .then(updatedProfile => {
+        return res.json(updatedProfile)
       })
       .catch(err => {
         return res.status(400).json(err)
