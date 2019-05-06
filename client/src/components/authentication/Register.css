@@ -1,8 +1,10 @@
 .register {
   display: flex;
-  /* flex-direction: row;
-  justify-content: center; */
-  
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background: #FFF1E0; */
+  /* min-height: 80vh; */
 }
 
 .smallText {

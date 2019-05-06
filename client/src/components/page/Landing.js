@@ -15,7 +15,6 @@ class Landing extends Component{
           <Register />
         </Jumbotron>
         <About />
-        <Footer />
       </div>
     )
   }

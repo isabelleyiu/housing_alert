@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IconContext } from "react-icons";
-import { IoIosPhonePortrait, IoMdPerson, IoMdText, IoIosColorWand, IoIosHome } from "react-icons/io";
+import { IoIosPhonePortrait, IoMdPerson, IoMdText, IoIosColorWand, IoIosHome, IoIosArrowRoundDown } from "react-icons/io";
 import './About.css';
 
 class About extends Component{
@@ -10,6 +10,7 @@ class About extends Component{
         <h3>Sit back and Relex</h3>
         <h5>Let us do all the hard work for you.</h5>
         <IconContext.Provider className="icon-container" value={{ color: "green", fontSize: "4rem"}}>
+        <IoIosArrowRoundDown style={{height: "30px", width: "30px"}}/>
           <div style={{marginTop: "40px", marginBottom: "40px"}}>
             <IoIosPhonePortrait style={{height: "150px", width: "150px"}}/>
             <span><strong>Step 1: </strong> Enter your phone number above to register with Housing Alert.</span>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Card, Image, Col, Button } from 'react-bootstrap';
 import './Profile.css';
-import profilePic from './lego.jpg';
+import profilePic from './isabelle.png';
 
 class Profile extends Component{
   constructor(props) {
@@ -42,6 +42,7 @@ class Profile extends Component{
     })
   }
   handleCancel = e => {
+    e.preventDefault();
     this.setState({
       updateUser: {},
       isEditing: false
@@ -62,11 +63,18 @@ class Profile extends Component{
       isEditing: false
     })
   }
+  optoutSMS = e => {
+    e.preventDefault();
+    fetch(`api/phone/${this.state.user.uuid}`)
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
   renderUserProfile = () => {
     return (
       <div className="user-card-container">
         <Col xs={6} md={4}>
-          <Image src={`${profilePic}`} thumbnail width="100px" height="100px" />
+          <Image src={`${profilePic}`} roundedCircle width="200px" height="200px" />
         </Col>
         <h1>{this.props.user.firstName} {this.props.user.lastName}</h1>
           <h5><strong>First Name: </strong><span>{this.props.user.firstName}</span></h5>
@@ -97,7 +105,7 @@ class Profile extends Component{
       <div>
       <Card>
           <Card.Body>
-          <Card.Title>What would you need to update?</Card.Title>
+          <Card.Title>What would you like to update?</Card.Title>
         <Form>
           <Form.Label>First Name</Form.Label>
           <Form.Control 
@@ -188,8 +196,12 @@ class Profile extends Component{
             </Form.Group>
 
           </div>
-          <Button onClick={this.handleSubmit} type="submit" variant="success">Submit</Button>
-          <Button style={{marginRight: "10px"}} onClick={this.handleCancel} type="submit" variant="success">Cancel</Button>
+          <div>
+            <Button style={{marginRight: "10px"}} onClick={this.handleSubmit} type="submit" variant="success">Submit</Button>
+            <Button onClick={this.handleCancel} type="submit" variant="success">Cancel</Button>
+          </div>
+          
+          <Button onClick={this.optoutSMS} type="submit" variant="danger">Opt-out of SMS</Button>
         </Form>
         </Card.Body>
         </Card>

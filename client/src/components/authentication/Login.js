@@ -59,7 +59,7 @@ class Login extends Component{
         <Card>
           <Card.Body>
           <Card.Title>Welcome Back</Card.Title>
-          <Form class="login-form" onSubmit={this.handleSubmit} >
+          <Form className="login-form" onSubmit={this.handleSubmit} >
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control onChange={this.handleChange} name="phone" type="text" placeholder="Enter phone number" />

@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import './App.css';
 
 // layouts
-import Header from './components/layout/Header';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
@@ -14,6 +13,7 @@ import Housing from './components/page/Housing';
 import Profile from './components/page/Profile';
 import NotFound from './components/page/NotFound';
 
+import Register from './components/authentication/Register';
 import Login from './components/authentication/Login';
 import Signup from './components/authentication/Signup';
 import PrivateRoute from './components/authentication/PrivateRoute'
@@ -23,26 +23,40 @@ class App extends Component {
     super(props);
     this.state = {
       user: null,
-      isGoogleLogin: null
+      isGoogleLogin: null,
+      googleUser: null
     }
   }
-  componentDidMount() {
-    window.gapi.load('auth2', () => {
-      window.gapi.auth2.init({
-        clientId: '471876448199-rbr3jioupfcqkgvgisrbflvgb5q1q7ns.apps.googleusercontent.com'
-      })
-        .then(() => {
-          this.auth = window.gapi.auth2.getAuthInstance();
-          const googleUserInfo = this.auth.currentUser.get().getBasicProfile() || null;
+  componentDidMount = () => {
+    fetch('/api/user/auth/check')
+    .then(res => res.json())
+      .then(res => {
+        if(res.isLogin) {
           this.setState({
-            isGoogleLogin: this.auth.isSignedIn.get(),
-            user: googleUserInfo
+            user: res
           })
-          this.auth.isSignedIn.listen(this.onAuthChange);
-          // console.log(this.auth.isSignedIn.get())
-          // console.log(this.auth.currentUser.get().getBasicProfile())
+        } else {
+          this.setState({
+            user: null
+          })
+        }
+      })
+      .catch(err => console.log(err))
+
+      window.gapi.load('auth2', () => {
+        window.gapi.auth2.init({
+          clientId: '471876448199-rbr3jioupfcqkgvgisrbflvgb5q1q7ns.apps.googleusercontent.com'
         })
-    });
+          .then(() => {
+            this.auth = window.gapi.auth2.getAuthInstance();
+            const googleUserInfo = this.auth.currentUser.get().getBasicProfile() || null;
+            this.setState({
+              isGoogleLogin: this.auth.isSignedIn.get(),
+              user: googleUserInfo
+            })
+            this.auth.isSignedIn.listen(this.onAuthChange);
+          })
+      });
   }  
   onAuthChange = () => {
     this.setState({
@@ -55,28 +69,8 @@ class App extends Component {
         const googleUserInfo = this.auth.currentUser.get().getBasicProfile();
         this.setState({
           isGoogleLogin: this.auth.isSignedIn.get(),
-          user: googleUserInfo
+          googleUser: googleUserInfo
         })
-        return <Redirect to="/profile" />
-        // console.log(this.auth.currentUser.get().getBasicProfile())
-        // const googleUserProfile = this.auth.currentUser.get().getBasicProfile();
-        // this.loginUser(googleUserProfile)
-      })
-      .catch(err => console.log(err))
-  }
-  componentWillMount = () => {
-    fetch('/api/user/isAuthenticate')
-    .then(res => res.json())
-      .then(res => {
-        if(res.isLogin === false) {
-          this.setState({
-            user: null
-          })
-        } else {
-          this.setState({
-            user: res
-          })
-        }
       })
       .catch(err => console.log(err))
   }
@@ -119,6 +113,9 @@ class App extends Component {
     .catch(err => console.log(err))
   }
   render() {
+    if(this.isGoogleLogin) {
+      return <Redirect to="/profile" />
+    }
     return (
       <Router>
         <div className="App">
@@ -129,6 +126,7 @@ class App extends Component {
             <Route exact path="/" component={ Landing } />
             <Route path="/about" component={ About } />
             <Route path="/housing" component={ Housing } />
+            <Route path="/register" component={ Register } />
             
             <Route path="/signup" 
             render={(props) => 
@@ -141,11 +139,9 @@ class App extends Component {
             />
 
             <PrivateRoute path="/profile" component={ Profile } user={this.state.user} updateUserProfile={this.updateUserProfile}/>
-
-            {/* <Route path="/profile" 
-            render={(props) => <Profile user={this.state.user} updateUserInfo={this.updateUserInfo}/>} /> */}
             <Route component={ NotFound } />
           </Switch>
+          <Footer />
         </div>
       </Router> 
       
