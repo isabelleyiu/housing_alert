@@ -48,9 +48,19 @@ const deletePhoneByPhoneNumber = (req, res) =>{
   })
 }
 
+const optoutSMS = (req, res) =>{
+  db.Phone.update(
+    { isVerified: false },
+    { where: { userUUID: req.user.uuid } }
+  ).then(updatedPhone => {
+     return res.json({message: 'You have successfully opt out for SMS'})
+  }).catch(err => console.log(err))
+}
+
 
 module.exports = {
   showAll,
   register,
   deletePhoneByPhoneNumber,
+  optoutSMS
 }
