@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaHome } from "react-icons/fa";
-
+import Cookie from 'js-cookie';
 
 class NavBar extends Component{
   render() {
@@ -15,7 +15,7 @@ class NavBar extends Component{
           <Nav.Link><Link to="/about" style={{color: "inherit", textDecoration: "none"}}>About</Link></Nav.Link>
           <Nav.Link><Link to="/housing" style={{color: "inherit", textDecoration: "none"}}>Housing</Link></Nav.Link>
           <Nav.Link><Link to="/profile" style={{color: "inherit", textDecoration: "none"}}>Profile</Link></Nav.Link>
-          {this.props.isLogin?  <Button variant="dark" onClick={this.props.logoutUser}>Logout</Button> :  <Button variant="dark"><Link to="/login" style={{color: "inherit", textDecoration: "none"}}>Login</Link></Button>}
+          {Cookie.get('isAuthenticated')?  <Button variant="dark" onClick={this.props.logoutUser}>Logout</Button> :  <Button variant="dark"><Link to="/login" style={{color: "inherit", textDecoration: "none"}}>Login</Link></Button>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
