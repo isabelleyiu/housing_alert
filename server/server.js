@@ -8,6 +8,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const cookieParser = require('cookie-parser');
 const housingController = require('./controllers/housing-controller');
 const cron = require('node-cron');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
