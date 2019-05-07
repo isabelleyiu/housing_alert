@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import Cookie from 'js-cookie';
 import './App.css';
 
 // layouts
@@ -77,39 +78,10 @@ class App extends Component {
               user: null
             })
           }
-          console.log(res);
         })
         .catch(err => console.log(err))
     }
   }
-  // getCurrentUserProfile = () => {
-  //   fetch('api/user/profile')
-  //     .then(res => res.json())
-  //     .then(profile => {
-  //       if (profile.isLogin) {
-  //         this.setState({
-  //           user: profile
-  //         })
-  //       }
-  //     });
-  // }
-  // updateUserProfile = updatedInfo => {
-  //   fetch(`api/user/${this.state.user.uuid}`, {
-  //     method: 'PATCH',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(updatedInfo)
-  //   })
-  //     .then(res => res.json())
-  //     .then(updatedUser => {
-  //       console.log(updatedUser)
-  //       this.setState({
-  //         user: updatedUser
-  //       })
-  //     })
-  //     .catch(err => console.log(err))
-  // }
   render() {
     if (this.isGoogleLogin) {
       return <Redirect to="/profile" />
@@ -136,7 +108,7 @@ class App extends Component {
                   googleSignIn={this.googleSignIn} />}
             />
 
-            <PrivateRoute path="/profile" component={Profile} user={this.state.user} updateUserProfile={this.updateUserProfile} />
+            <PrivateRoute path="/profile" component={Profile} user={this.state.user} updateUserProfile={this.updateUserProfile} logoutUser={this.logoutUser} />
             <Route component={NotFound} />
           </Switch>
           <Footer />

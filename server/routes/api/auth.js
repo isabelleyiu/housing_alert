@@ -7,6 +7,6 @@ router.route('/')
   .post(authController.login)
 // PRIVATE /api/auth
 router.route('/')
-  .get(auth, authController.logout)
+  .get(authController.logout)
 
 module.exports = router;

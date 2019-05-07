@@ -26,7 +26,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     return (Cookie.get('isAuthenticated') ?
       <Component {...props}
         user={rest.user}
-        updateUserProfile={rest.updateUserProfile} />
+        updateUserProfile={rest.updateUserProfile}
+        logoutUser={rest.logoutUser}
+      />
       : <Redirect to='/login' />)
   }
   }

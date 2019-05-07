@@ -8,52 +8,54 @@ const showAll = (req, res) => {
     .catch(err => res.status(400).json(err))
 }
 
-const register = (req, res) => { 
+const register = (req, res) => {
   const { phone } = req.body;
-  db.Phone.findOrCreate({ 
-    where: { phone }, 
-    defaults: { phone }})
-  .then(([phone, created]) => {
-    if(created) {
-      // if it's a new phone, save it to db
-      phone.dataValues.message = `A text message is sent to ${phone.phone}`;
-      phone.dataValues.created = created;
-      
-      // if phone exists, check if phone has been verified
-      // if phone exitsts && isVerified === false --> returning user that hasnt verify
-      if(phone.dataValues.isVerified === false) {
-        phone.dataValues.message = `Please verify your number ${phone.phone}`;
+  db.Phone.findOrCreate({
+    where: { phone },
+    defaults: { phone }
+  })
+    .then(([phone, created]) => {
+      const formattedNumber = `(${phone.phone.slice(0, 3)}) ${phone.phone.slice(3, 6)}-${phone.phone.slice(6)}`
+      if (created) {
+        // created === true && isVerified === false
+        // if it's a new phone, save it to db
+        phone.dataValues.message = `A text message is sent to ${formattedNumber}`;
         phone.dataValues.created = created;
-      } 
-    }
-    return res.json(phone.dataValues);
-  })
-  .catch(err => {
-    console.log(err)
-    return res.status(400).json({ message: 'Please enter a valid 10 digit US phone number 4151234567' })
-  })
+      } else {
+        // created === false && isVerified === false --> returning user that hasnt verify
+        if (phone.dataValues.isVerified === false) {
+          phone.dataValues.message = `A text message is sent to ${formattedNumber}`;
+          phone.dataValues.created = created;
+        }
+      }
+      return res.json(phone.dataValues);
+    })
+    .catch(err => {
+      console.log(err)
+      return res.status(400).json({ message: 'Please enter a valid 10 digit US phone number 4151234567' })
+    })
 }
 
 
 
-const deletePhoneByPhoneNumber = (req, res) =>{
+const deletePhoneByPhoneNumber = (req, res) => {
   db.Phone.destroy(
     { where: { phone: req.body.phone } }
   ).then(deletedPhone => {
-    if(deletedPhone === 1) {
-      return res.json({ message: 'Success. Your phone number has been removed from the system'});
-    } else if(deletedPhone === 0) {
-      return res.json({ message: 'Sorry. We were not able to located your number in our system'});
+    if (deletedPhone === 1) {
+      return res.json({ message: 'Success. Your phone number has been removed from the system' });
+    } else if (deletedPhone === 0) {
+      return res.json({ message: 'Sorry. We were not able to located your number in our system' });
     }
   })
 }
 
-const optoutSMS = (req, res) =>{
+const optoutSMS = (req, res) => {
   db.Phone.update(
     { isVerified: false },
     { where: { userUUID: req.user.uuid } }
   ).then(updatedPhone => {
-     return res.json({message: 'You have successfully opt out for SMS'})
+    return res.json({ message: 'You have successfully opt out for SMS' })
   }).catch(err => console.log(err))
 }
 

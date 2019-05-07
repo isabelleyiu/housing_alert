@@ -22,7 +22,8 @@ class Profile extends Component {
           user: profile,
           loading: false
         })
-      });
+      })
+      .catch(err => console.log(err))
   }
   editMode = () => {
     this.setState({
@@ -69,7 +70,7 @@ class Profile extends Component {
     })
   }
   updateUserProfile = updatedInfo => {
-    fetch(`api/user/${this.state.user.uuid}`, {
+    fetch('api/user/profile', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -80,6 +81,20 @@ class Profile extends Component {
       .then(updatedUser => {
         this.setState({
           user: updatedUser
+        })
+      })
+      .catch(err => console.log(err))
+  }
+  deleteUserProfile = () => {
+    this.props.logoutUser();
+    fetch('api/user/profile', {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(deletedUser => {
+        this.setState({
+          user: null,
+          message: deletedUser.message
         })
       })
       .catch(err => console.log(err))
@@ -115,8 +130,7 @@ class Profile extends Component {
         </div>
         <div className="profile-buttons">
           <Button onClick={this.editMode}>Edit</Button>
-          {/* <Button variant="danger" onClick={this.optoutSMS}>Opt-out for SMS</Button>
-            <Button variant="danger" onClick={this.deleteProfile}>Delete</Button> */}
+          <Button variant="danger" onClick={this.deleteUserProfile}>Delete</Button>
         </div>
       </div>
     )

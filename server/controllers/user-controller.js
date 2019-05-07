@@ -53,10 +53,10 @@ const signup = (req, res, next) => {
             });
           } else {
             // save userUUID to Session 
-            req.session.userUUID = req.session.passport.user;
-            req.session.save();
-            res.cookie('sid', req.session.id, { expires: 1 / 48 });
-            res.cookie('isAuthenticated', true, { expires: 1 / 48 });
+            // req.session.userUUID = req.session.passport.user;
+            // req.session.save();
+            res.cookie('sid', req.session.id);
+            res.cookie('isAuthenticated', true);
             const newUser = user.dataValues;
             newUser.isLogin = true;
             newUser.message = `Welcome ${newUser.firstName}. Your user profile has been successfully created`;
@@ -83,18 +83,21 @@ const showProfile = (req, res, next) => {
   return res.json(req.user.dataValues)
 }
 
-// @route   DELETE api/user/:uuid
+// @route   DELETE api/user/profile
 // @usage   delete user profile
 // @access  Private
 const deleteProfile = (req, res, next) => {
   db.User.destroy({
     where: { uuid: req.user.dataValues.uuid }
   })
-    .then(deletedUser => res.json({ message: 'User deleted' }))
+    .then(deletedUser => {
+      console.log(deletedUser)
+      res.json({ message: 'User deleted' })
+    })
     .catch(err => res.status(404).json({ message: 'User not found' }))
 }
 
-// @route   PATCH api/user/:uuid
+// @route   PATCH api/user/profile
 // @usage   update user profile
 // @access  Private
 const updateProfile = (req, res, next) => {
