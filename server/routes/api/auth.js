@@ -5,7 +5,6 @@ const auth = require('../../middlewares/auth');
 // PUBLIC /api/auth
 router.route('/')
   .post(authController.login)
-
 // PRIVATE /api/auth
 router.route('/')
   .get(auth, authController.logout)

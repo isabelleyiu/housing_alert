@@ -1,7 +1,7 @@
 const db = require('../models');
 const passport = require('passport');
 
-// @route   POST api/auth/login
+// @route   POST api/auth/
 // @usage   Login user
 // @access  Public
 const login = (req, res, next) => {
@@ -10,7 +10,6 @@ const login = (req, res, next) => {
   if (!phone && password) {
     return res.status(400).json({ message: 'Phone Number and Password are required to login' });
   }
-
   passport.authenticate('local', function (err, user, info) {
     if (err) return res.status(400).json(err);
     if (!user) {
@@ -22,7 +21,6 @@ const login = (req, res, next) => {
 
     // Manually establish the session...
     req.login(user, (err) => {
-      // console.log('req.login: ', req.user)
       const { uuid, phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = req.user.dataValues;
       if (err) {
         return res.status(403).json({
@@ -30,6 +28,12 @@ const login = (req, res, next) => {
           message: 'Login failed...'
         });
       } else {
+        // save userUUID to Session 
+        // req.session.userUUID = req.session.passport.user;
+        // req.session.save();
+        // console.log(req.session.passport.user)
+        res.cookie('sid', req.session.id);
+        res.cookie('isAuthenticated', true);
         return res.json({
           uuid,
           phone,
@@ -48,20 +52,22 @@ const login = (req, res, next) => {
         });
       }
     });
-
   })(req, res, next);
 }
 
 const logout = (req, res, next) => {
-  req.logout();
+  res.clearCookie('sid');
+  res.clearCookie('isAuthenticated');
   req.session.destroy();
-  res.json({
+  req.logout();
+  return res.json({
     isLogin: req.isAuthenticated(),
     message: 'Logout success'
   })
 }
 
+
 module.exports = {
   login,
-  logout,
+  logout
 }

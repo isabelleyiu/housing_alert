@@ -3,7 +3,7 @@ require('dotenv').config();
 // dependencies
 const express = require('express');
 const passport = require('passport');
-const session  = require('express-session');
+const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const cookieParser = require('cookie-parser');
 const housingController = require('./controllers/housing-controller');
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // deploy
-if(process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
   app.use(express.static("../client/build"));
 }
 
@@ -37,7 +37,7 @@ app.use(session({
   }),
   secret: process.env.SESSION_SECRET,
   resave: true,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
     _expires: 30 * 60 * 1000,
     httpOnly: true
@@ -48,7 +48,7 @@ app.use(session({
 
 // LOGIN
 app.use(passport.initialize());
-app.use(passport.session()); 
+app.use(passport.session());
 
 // routes
 app.use(routes);
@@ -64,9 +64,9 @@ app.use(routes);
 // =========== APP LAUNCH ===========
 
 db.sequelize.sync()
-.then(() => { 
-  app.listen(PORT, () => {
-    console.log(`Buzzed. Housing Alert is running on port ${PORT}`);
-  });
-})
-.catch(() => console.log('Database connection failed...'))
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Buzzed. Housing Alert is running on port ${PORT}`);
+    });
+  })
+  .catch(() => console.log('Database connection failed...'))

@@ -52,6 +52,11 @@ const signup = (req, res, next) => {
               message: 'Login failed...'
             });
           } else {
+            // save userUUID to Session 
+            req.session.userUUID = req.session.passport.user;
+            req.session.save();
+            res.cookie('sid', req.session.id, { expires: 1 / 48 });
+            res.cookie('isAuthenticated', true, { expires: 1 / 48 });
             const newUser = user.dataValues;
             newUser.isLogin = true;
             newUser.message = `Welcome ${newUser.firstName}. Your user profile has been successfully created`;
@@ -70,7 +75,7 @@ const signup = (req, res, next) => {
 }
 
 
-// @route   GET api/user/:uuid
+// @route   GET api/user/profile
 // @usage   show user profile
 // @access  Private
 const showProfile = (req, res, next) => {

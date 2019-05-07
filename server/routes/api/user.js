@@ -9,8 +9,10 @@ router.route('/')
 
 // PRIVATE /api/user/:uuid
 router.route('/:uuid')
-  .get(auth, userController.showProfile)
   .delete(auth, userController.deleteProfile)
   .patch(auth, userController.updateProfile);
+
+router.route('/profile')
+  .get(auth, userController.showProfile)
 
 module.exports = router;
