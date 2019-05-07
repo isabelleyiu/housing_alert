@@ -28,12 +28,12 @@ require('./config/passport')(passport);
 
 app.use(session({
   // use store to persis session in deployment for new build
-  store: new SequelizeStore({
-    db: db,
-    table: 'Session'
-  }),
+  // store: new SequelizeStore({
+  //   db: db,
+  //   table: 'Session'
+  // }),
   secret: process.env.SESSION_SECRET,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: {
     _expires: 30 * 60 * 1000,
