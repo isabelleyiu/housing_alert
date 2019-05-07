@@ -4,11 +4,12 @@
   "description": "One Paragraph of project description goes here",
   "main": "server.js",
   "scripts": {
-    "client-install": "cd ../client && npm install",
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "cd ../client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "client-install": "cd client && npm install",
+    "start": "nodemon server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",

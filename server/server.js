@@ -21,10 +21,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// deploy
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../client/build"));
-}
 
 // passport config
 require('./config/passport')(passport);
@@ -60,6 +56,17 @@ app.use(routes);
 //   scheduled: true,
 //   timezone: "America/Los_Angeles"
 // });
+
+// deploy
+if (process.env.NODE_ENV === "production") {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  // Handle React routing, return all requests to React app
+  app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  });
+}
+
 
 // =========== APP LAUNCH ===========
 
