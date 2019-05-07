@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "client-install": "cd client && npm install",
-    "start": "nodemon server/server.js",
+    "start": "node server/server.js",
     "server": "nodemon server/server.js",
     "client": "cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
