@@ -11,7 +11,7 @@ class Profile extends Component {
       updatedUser: {},
       isEditing: false,
       message: '',
-      loading: true
+      loading: true,
     };
   }
   componentWillMount() {
@@ -99,11 +99,20 @@ class Profile extends Component {
       })
       .catch(err => console.log(err))
   }
-  optoutSMS = e => {
+  toggleSMS = e => {
     e.preventDefault();
-    fetch(`api/phone/${this.state.user.uuid}`)
+    fetch(`api/phone/sms`)
       .then(res => res.json())
-      .then(res => console.log(res))
+      .then(res => {
+        this.setState(prevState => {
+          return (
+            {
+              message: res.message,
+              user: { ...prevState.user, phone: { ...prevState.user.phone, isVerified: res.isVerified } }
+            }
+          )
+        })
+      })
       .catch(err => console.log(err))
   }
   renderUserProfile = () => {
@@ -129,7 +138,7 @@ class Profile extends Component {
           </ul>
         </div>
         <div className="profile-buttons">
-          <Button onClick={this.editMode}>Edit</Button>
+          <Button onClick={this.editMode} style={{ marginRight: "10px" }}>Edit</Button>
           <Button variant="danger" onClick={this.deleteUserProfile}>Delete</Button>
         </div>
       </div>
@@ -231,12 +240,30 @@ class Profile extends Component {
                 </Form.Group>
 
               </div>
+              {this.state.message ? <p style={{ color: "red" }}>{this.state.message}</p> : null}
               <div>
-                <Button style={{ marginRight: "10px" }} onClick={this.handleSubmit} type="submit" variant="success">Submit</Button>
-                <Button onClick={this.handleCancel} type="submit" variant="success">Cancel</Button>
-              </div>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  onClick={this.handleSubmit}
+                  type="submit"
+                  variant="success"
+                >Submit</Button>
 
-              {/* <Button onClick={this.optoutSMS} type="submit" variant="danger">Opt-out of SMS</Button> */}
+                <Button
+                  onClick={this.handleCancel}
+                  type="submit"
+                  variant="success"
+                >Cancel</Button>
+              </div>
+              <Button
+                onClick={this.toggleSMS}
+                type="submit"
+                variant="danger"
+                style={{ marginTop: "10px", width: "200px" }}
+              >{this.state.user.phone.isVerified ? "OPT-OUT for SMS" : "OPT-IN for SMS"}
+              </Button>
+
+
             </Form>
           </Card.Body>
         </Card>
