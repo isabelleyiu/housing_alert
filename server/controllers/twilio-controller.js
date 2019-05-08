@@ -66,7 +66,7 @@ const handleIncomingSMS = (req, res) => {
 
   switch (inboundSMS) {
     case 'housing alert':
-      twiml.message('Welcome to Housing Alert. Reply "register" to confirm your registration.');
+      twiml.message('Welcome to Housing Alert.\nReply "register" to confirm your registration.');
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
       break;
@@ -82,7 +82,7 @@ const handleIncomingSMS = (req, res) => {
             res.end(twiml.toString());
           } else {
             twiml.message('An account associated with this number already exists.');
-            res.writeHead(400, { 'Content-Type': 'text/xml' });
+            res.writeHead(200, { 'Content-Type': 'text/xml' });
             res.end(twiml.toString());
           }
         })
@@ -95,16 +95,20 @@ const handleIncomingSMS = (req, res) => {
 
           filtered.forEach(housing => {
             const housingInfo = formatHousingResult(housing);
-            twiml.message(housingInfo);
-            res.writeHead(200, { 'Content-Type': 'text/xml' });
-            res.end(twiml.toString());
+            client.messages.create({
+              body: housingInfo,
+              from: process.env.TWILIO_PHONE,
+              to: incomingNumber
+            })
+              .then(message => console.log(message.status))
+              .done();
           });
         })
         .catch(err => console.log(err))
       break;
     default:
       twiml.message('Something went wrong...Please make sure you texted the right command.');
-      res.writeHead(400, { 'Content-Type': 'text/xml' });
+      res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
   }
 };

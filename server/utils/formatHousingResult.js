@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = (housing) => {
   const { unitType, minMonthlyRent, maxMonthlyRent, minPercentIncome, maxPercentIncome, minPriceWithParking, maxPriceWithParking, minPriceWithoutParking, maxPriceWithoutParking } = housing.unitSummaries.general[0];
   const { Tenure, Building_Name, Building_Street_Address, Application_Due_Date } = housing;
@@ -29,5 +31,5 @@ module.exports = (housing) => {
     }
   }
 
-  return `Housing Alert!%0aBuilding Name: ${Building_Name}%0aAddress: ${Building_Street_Address}, San Francisco%0aUnit Type: ${unitType}%0aTenure: ${Tenure}%0aRent/Price: ${rent || price}%0aApplication Due: ${moment(Application_Due_Date).format('dddd MMMM Do YYYY')}%0aReply 'apply' to apply now.%0aReply 'unsubscribe' to unsubscribe from all future notification`;
+  return `Housing Alert!\nBuilding Name: ${Building_Name}\nAddress: ${Building_Street_Address}, San Francisco\nUnit Type: ${unitType}\nTenure: ${Tenure}\nRent/Price: ${rent || price}\nApplication Due: ${moment(Application_Due_Date).format('dddd MMMM Do YYYY')}\nReply 'apply' to apply now.\nReply 'unsubscribe' to unsubscribe from all future notification`;
 }
