@@ -26,7 +26,6 @@ const textAllPhone = (messageBody) => {
 }
 
 const sendVerification = (req, res) => {
-  console.log(req.body.phone)
   authy
     .phones()
     .verification_start(req.body.phone, '1', 'sms', function (err, resp) {
@@ -64,52 +63,66 @@ const handleIncomingSMS = (req, res) => {
   const incomingNumber = req.body.From;
   const inboundSMS = req.body.Body;
 
-  switch (inboundSMS) {
-    case 'housing alert':
-      twiml.message('Welcome to Housing Alert.\nReply "register" to confirm your registration.');
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      res.end(twiml.toString());
-      break;
-    case 'register':
-      db.Phone.findOrCreate({
-        where: { phone: incomingNumber.slice(2) },
-        defaults: { phone: incomingNumber.slice(2), isVerified: true }
-      })
-        .then(([phone, created]) => {
-          if (created) {
-            twiml.message('You have successfully signup for housing updates. Visit https://housing-alert.herokuapp.com to create a profile for custom experience.');
-            res.writeHead(200, { 'Content-Type': 'text/xml' });
-            res.end(twiml.toString());
-          } else {
-            twiml.message('An account associated with this number already exists.');
-            res.writeHead(200, { 'Content-Type': 'text/xml' });
-            res.end(twiml.toString());
-          }
-        })
-        .catch(err => console.log(err))
-      break;
-    case 'home':
-      db.Housing.findAll()
-        .then(housings => {
-          const filtered = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()));
+  const housingAlertRegex = /housing\s*alert/ig;
+  const registerRegex = /register/ig;
+  const homeRegex = /home/ig;
+  const unsubscribeRegex = /unsubscribe/ig;
 
-          filtered.forEach(housing => {
-            const housingInfo = formatHousingResult(housing);
-            client.messages.create({
-              body: housingInfo,
-              from: process.env.TWILIO_PHONE,
-              to: incomingNumber
-            })
-              .then(message => console.log(message.status))
-              .done();
-          });
-        })
-        .catch(err => console.log(err))
-      break;
-    default:
-      twiml.message('Something went wrong...Please make sure you texted the right command.');
+  if (housingAlertRegex.test(inboundSMS)) {
+    twiml.message('Welcome to Housing Alert.\nReply "register" to confirm your registration.');
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    res.end(twiml.toString());
+  }
+  else if (registerRegex.test(inboundSMS)) {
+    db.Phone.findOrCreate({
+      where: { phone: incomingNumber.slice(2) },
+      defaults: { phone: incomingNumber.slice(2), isVerified: true }
+    })
+      .then(([phone, created]) => {
+        if (created) {
+          twiml.message('You have successfully signup for housing updates. Visit https://housing-alert.herokuapp.com/signup to create a profile for custom experience.');
+          res.writeHead(200, { 'Content-Type': 'text/xml' });
+          res.end(twiml.toString());
+        } else {
+          twiml.message('An account associated with this number already exists.');
+          res.writeHead(200, { 'Content-Type': 'text/xml' });
+          res.end(twiml.toString());
+        }
+      })
+      .catch(err => console.log(err))
+  }
+  else if (homeRegex.test(inboundSMS)) {
+    db.Housing.findAll()
+      .then(housings => {
+        const filtered = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()));
+
+        filtered.forEach(housing => {
+          const housingInfo = formatHousingResult(housing);
+          client.messages.create({
+            body: housingInfo,
+            from: process.env.TWILIO_MESSAGING_SERVICES_SID,
+            to: incomingNumber
+          })
+            .then(message => console.log(message.status))
+            .done();
+        });
+      })
+      .catch(err => console.log(err))
+  }
+  else if (unsubscribeRegex.test(inboundSMS)) {
+    db.Phone.update(
+      { isVerified: false },
+      { where: { phone: incomingNumber.slice(2) } }
+    ).then(updatedPhone => {
+      twiml.message('Thank you for using Housing Alert. You have successfully unsubscribed from our service');
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       res.end(twiml.toString());
+    }).catch(err => console.log(err))
+  }
+  else {
+    twiml.message('Something went wrong...Please make sure you texted the right command.');
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    res.end(twiml.toString());
   }
 };
 

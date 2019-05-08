@@ -9,7 +9,5 @@ router.route('/start')
 router.route('/verify')
   .post(twilioController.verifyPhone)
 
-router.route('/sms')
-.post(twilioController.handleIncomingSMS)
 
 module.exports = router;

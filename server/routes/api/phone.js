@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const phoneController = require('../../controllers/phone-controller');
-const userController = require('../../controllers/user-controller');
+const twilioController = require('../../controllers/twilio-controller');
 
 // @route: /api/phone
 router.route('/')
@@ -9,8 +9,9 @@ router.route('/')
   .delete(phoneController.deletePhoneByPhoneNumber)
 
 // router.route('/:uuid')
-//   .get(auth, phoneController.optoutSMS)
-
-
+//  
+router.route('/sms')
+  .post(twilioController.handleIncomingSMS)
+  .get(phoneController.toggleSMSoption)
 
 module.exports = router;

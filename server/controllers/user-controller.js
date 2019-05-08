@@ -42,9 +42,6 @@ const signup = (req, res, next) => {
           .then(() => console.log('User profile linked to phone'))
           .catch(err => console.log(err));
 
-        // user.dataValues.message = `Your user profile has been successfully created`;
-        // return res.json(user.dataValues);
-
         req.login(user, (err) => {
           if (err) {
             return res.status(403).json({
@@ -52,9 +49,6 @@ const signup = (req, res, next) => {
               message: 'Login failed...'
             });
           } else {
-            // save userUUID to Session 
-            // req.session.userUUID = req.session.passport.user;
-            // req.session.save();
             res.cookie('sid', req.session.id);
             res.cookie('isAuthenticated', true);
             const newUser = user.dataValues;
@@ -80,7 +74,16 @@ const signup = (req, res, next) => {
 // @access  Private
 const showProfile = (req, res, next) => {
   // retrieve deserialized user via req.user
-  return res.json(req.user.dataValues)
+  // retrieve user's phone table
+  db.Phone.findOne({
+    where: { userUUID: req.user.dataValues.uuid }
+  })
+    .then(phone => {
+      req.user.dataValues.phone = phone
+      return res.json(req.user.dataValues)
+    })
+    .catch(err => console.log(err))
+
 }
 
 // @route   DELETE api/user/profile

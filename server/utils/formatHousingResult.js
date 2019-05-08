@@ -31,5 +31,5 @@ module.exports = (housing) => {
     }
   }
 
-  return `Housing Alert!\nBuilding Name: ${Building_Name}\nAddress: ${Building_Street_Address}, San Francisco\nUnit Type: ${unitType}\nTenure: ${Tenure}\nRent/Price: ${rent || price}\nApplication Due: ${moment(Application_Due_Date).format('dddd MMMM Do YYYY')}\nReply 'apply' to apply now.\nReply 'unsubscribe' to unsubscribe from all future notification`;
+  return `-- HOUSING ALERT --\nBuilding Name: ${Building_Name}\nAddress: ${Building_Street_Address}, San Francisco\nUnit Type: ${unitType}\nTenure: ${Tenure}\nRent/Price: ${rent || price}\nApplication Due: ${moment(Application_Due_Date).format('dddd MMMM Do YYYY')}\nReply 'apply' to apply now.\nReply 'unsubscribe' to unsubscribe from all future notification`;
 }

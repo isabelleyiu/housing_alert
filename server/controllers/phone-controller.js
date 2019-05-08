@@ -50,13 +50,47 @@ const deletePhoneByPhoneNumber = (req, res) => {
   })
 }
 
-const optoutSMS = (req, res) => {
-  db.Phone.update(
-    { isVerified: false },
-    { where: { userUUID: req.user.uuid } }
-  ).then(updatedPhone => {
-    return res.json({ message: 'You have successfully opt out for SMS' })
-  }).catch(err => console.log(err))
+const toggleSMSoption = (req, res) => {
+  db.Phone.findOne({
+    where: { phone: req.user.phone }
+  })
+    .then(phone => {
+      if (phone.isVerified) {
+        phone.isVerified = false;
+        phone.save()
+          .then(updatedPhone => {
+            res.json({
+              success: true,
+              isVerified: updatedPhone.isVerified,
+              message: 'You have successfully opt-out for SMS'
+            })
+          })
+          .catch(err => console.log(err))
+      } else {
+        phone.isVerified = true;
+        phone.save()
+          .then(updatedPhone => {
+            res.json({
+              success: true,
+              isVerified: updatedPhone.isVerified,
+              message: 'You have successfully opt-in for SMS'
+            })
+          })
+          .catch(err => console.log(err))
+      }
+
+    })
+  // db.Phone.update(
+  //   { isVerified: false },
+  //   { where: { phone: req.user.phone } }
+  // ).then(updatedPhone => {
+  //   console.log(updatedPhone)
+
+  //   return res.json({
+  //     success: true,
+  //     message: 'You have successfully opt out for SMS'
+  //   })
+  // }).catch(err => console.log(err))
 }
 
 
@@ -64,5 +98,5 @@ module.exports = {
   showAll,
   register,
   deletePhoneByPhoneNumber,
-  optoutSMS
+  toggleSMSoption
 }
