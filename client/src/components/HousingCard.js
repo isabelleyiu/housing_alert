@@ -1,36 +1,48 @@
 import React, { Component } from 'react';
 import { Card, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import moment from 'moment';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 class HousingCard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
   render() {
-    const { Building_Name, Building_Street_Address, Building_Zip_Code, imageURL, Tenure, unitSummaries, Application_Due_Date, listingID } = this.props.housing;
+    const {
+      Building_Name,
+      Building_Street_Address,
+      Building_Zip_Code,
+      imageURL,
+      Tenure,
+      unitSummaries,
+      Application_Due_Date,
+      listingID
+    } = this.props.housing;
 
-    const { unitType, minMonthlyRent, maxMonthlyRent, minPercentIncome, maxPercentIncome, minPriceWithParking, maxPriceWithParking, minPriceWithoutParking, maxPriceWithoutParking } = unitSummaries.general[0];
+    const {
+      unitType,
+      minMonthlyRent,
+      maxMonthlyRent,
+      minPercentIncome,
+      maxPercentIncome,
+      minPriceWithParking,
+      maxPriceWithParking,
+      minPriceWithoutParking,
+      maxPriceWithoutParking
+    } = unitSummaries.general[0];
     let rent = null;
     let price = null;
 
-    if (Tenure === "Re-rental") {
+    if (Tenure === 'Re-rental') {
       if (minMonthlyRent === null && maxMonthlyRent === null) {
         rent = `${minPercentIncome}% of Income`;
       } else if (minPercentIncome !== maxPercentIncome) {
         rent = `${minPercentIncome}% - ${maxPercentIncome}% of Income`;
       } else if (minMonthlyRent !== maxMonthlyRent) {
-        rent = `$${minMonthlyRent} - $${maxMonthlyRent}`
+        rent = `$${minMonthlyRent} - $${maxMonthlyRent}`;
       } else {
         rent = `$${minMonthlyRent}`;
       }
     }
 
-    if (Tenure === "Resale") {
+    if (Tenure === 'Resale') {
       if (minPriceWithParking !== maxPriceWithParking) {
         price = `$${minPriceWithParking} - $${maxPriceWithParking}`;
       } else if (minPriceWithParking) {
@@ -44,36 +56,43 @@ class HousingCard extends Component {
 
     return (
       <div>
-        <Card style={{ width: "24rem", marginBottom: "100px" }}>
-          <Card.Img variant="top" src={imageURL} style={{ height: "300px" }} />
-          <Card.Body style={{ height: "600px" }}>
+        <Card className="width margin-top-bottom">
+          <Card.Img variant="top" src={imageURL} style={{ height: '300px' }} />
+          <Card.Body style={{ height: '600px' }}>
             <Card.Title>{Building_Name}</Card.Title>
-            <Card.Text>
-            </Card.Text>
+            <Card.Text />
             <ListGroup className="list-group-flush">
-              <ListGroupItem>Address: {Building_Street_Address}, San Francisco, CA {Building_Zip_Code}</ListGroupItem>
+              <ListGroupItem>
+                Address: {Building_Street_Address}, San Francisco, CA{' '}
+                {Building_Zip_Code}
+              </ListGroupItem>
               <ListGroupItem>Tenure: {Tenure}</ListGroupItem>
               <ListGroupItem>Unit Type: {unitType}</ListGroupItem>
-              <ListGroupItem>{rent ? 'Monthly Rent' : 'Price'}: {rent ? rent : price}</ListGroupItem>
-              <ListGroupItem>Application Due: {moment(Application_Due_Date).format('MMMM Do YYYY, h:mm a')}</ListGroupItem>
+              <ListGroupItem>
+                {rent ? 'Monthly Rent' : 'Price'}: {rent ? rent : price}
+              </ListGroupItem>
+              <ListGroupItem>
+                Application Due:{' '}
+                {moment(Application_Due_Date).format('MMMM Do YYYY, h:mm a')}
+              </ListGroupItem>
             </ListGroup>
             <Button variant="success">
               <a
-                target='_blank'
+                target="_blank"
                 href={`https://housing.sfgov.org/listings/${listingID}`}
-                style={{ color: "inherit", textDecoration: "none" }}
-              >Apply</a>
+                style={{ color: 'inherit', textDecoration: 'none' }}>
+                Apply
+              </a>
             </Button>
           </Card.Body>
         </Card>
-      </div >
-    )
+      </div>
+    );
   }
 }
 
 HousingCard.propTypes = {
   housing: PropTypes.object
-}
-
+};
 
 export default HousingCard;

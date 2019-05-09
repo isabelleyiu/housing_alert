@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { Redirect } from 'react-router-dom';
-import './Login.css';
 import { IoLogoGoogle } from "react-icons/io";
 
 
@@ -53,7 +52,7 @@ class Login extends Component {
       return <Redirect to="/profile" />
     }
     return (
-      <div className="login-container">
+      <div className="background padding-all-around">
         <Card>
           <Card.Body>
             <Card.Title>Welcome Back</Card.Title>

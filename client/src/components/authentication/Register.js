@@ -117,7 +117,7 @@ class Register extends Component{
       return <Redirect to="/profile" />
     }
     return (
-      <div className="register">
+      <div className="center-content">
         <Form onSubmit={this.registerPhone} className="registerForm">
           <Form.Label>Your next affordable housing is one text away</Form.Label>
           <Form.Control 

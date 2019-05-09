@@ -3,7 +3,7 @@ import HousingCard from '../HousingCard';
 import Loading from '../Loading';
 import './Housing.css';
 
-class Housing extends Component{
+class Housing extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,30 +16,29 @@ class Housing extends Component{
       .then(data => data.json())
       .then(housings => {
         this.setState({
-          housings, 
+          housings,
           loading: false
-        })
+        });
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
   render() {
-    if(this.state.loading) {
-      return <Loading />
+    if (this.state.loading) {
+      return <Loading />;
     }
     return (
       <div>
-        <h1 className="heading">Currently Available Affordable Housing</h1>
-        
-        <div className="housing-container">
+        <h1 className="padding-all-around-sm">
+          Currently Available Affordable Housing
+        </h1>
+
+        <div className="background wrap-around padding-all-around-sm">
           {this.state.housings.map(housing => (
-            <HousingCard 
-              key={housing.uuid}
-              housing={{...housing}}
-            />
+            <HousingCard key={housing.uuid} housing={{ ...housing }} />
           ))}
         </div>
       </div>
-    )
+    );
   }
 }
 
