@@ -80,7 +80,7 @@ const handleIncomingSMS = (req, res) => {
     })
       .then(([phone, created]) => {
         if (created) {
-          twiml.message('You have successfully signup for housing updates. Visit https://housing-alert.herokuapp.com/signup to create a profile for custom experience.');
+          twiml.message('Thank you! You will hear from us when there\'s new release of affordable housing. Or simply text "home" to us anytime to find out what is available. Visit https://housing-alert.herokuapp.com/signup to create a profile for custom experience.');
           res.writeHead(200, { 'Content-Type': 'text/xml' });
           res.end(twiml.toString());
         } else {

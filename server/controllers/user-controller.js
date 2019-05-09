@@ -49,8 +49,8 @@ const signup = (req, res, next) => {
               message: 'Login failed...'
             });
           } else {
-            res.cookie('sid', req.session.id);
-            res.cookie('isAuthenticated', true);
+            res.cookie('sid', req.session.id, { maxAge: 30 * 60 * 1000 });
+            res.cookie('isAuthenticated', true, { maxAge: 30 * 60 * 1000 });
             const newUser = user.dataValues;
             newUser.isLogin = true;
             newUser.message = `Welcome ${newUser.firstName}. Your user profile has been successfully created`;

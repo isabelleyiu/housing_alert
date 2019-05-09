@@ -11,29 +11,30 @@ const login = (req, res, next) => {
     return res.status(400).json({ message: 'Phone Number and Password are required to login' });
   }
   passport.authenticate('local', function (err, user, info) {
-    if (err) return res.status(400).json(err);
+    if (err) {
+      console.log(err)
+      return res.status(400).json(err);
+    }
     if (!user) {
       return res.status(403).json({
         isLogin: false,
         message: 'Login failed. Your Phone or Password is incorrect'
       });
     }
-
+    
     // Manually establish the session...
     req.login(user, (err) => {
-      const { uuid, phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = req.user.dataValues;
+      const { uuid, phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = user.dataValues;
       if (err) {
+        console.log(user)
+        console.log(err)
         return res.status(403).json({
           isLogin: false,
           message: 'Login failed...'
         });
       } else {
-        // save userUUID to Session 
-        // req.session.userUUID = req.session.passport.user;
-        // req.session.save();
-        // console.log(req.session.passport.user)
-        res.cookie('sid', req.session.id);
-        res.cookie('isAuthenticated', true);
+        res.cookie('sid', req.session.id, { maxAge: 30 * 60 * 1000 });
+        res.cookie('isAuthenticated', true, { maxAge: 30 * 60 * 1000 });
         return res.json({
           uuid,
           phone,
