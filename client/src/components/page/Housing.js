@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import HousingCard from '../HousingCard';
 import Loading from '../Loading';
-import './Housing.css';
 
 class Housing extends Component {
   constructor(props) {

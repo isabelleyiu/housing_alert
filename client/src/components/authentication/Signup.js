@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, Card } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
-import './Signup.css';
+
 
 class Signup extends Component {
   constructor(props) {

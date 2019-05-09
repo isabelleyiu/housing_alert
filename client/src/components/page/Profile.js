@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Form, Card, Image, Col, Button } from 'react-bootstrap';
-import './Profile.css';
 import profilePic from './isabelle.png';
 
 class Profile extends Component {

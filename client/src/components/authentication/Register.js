@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
-import './Register.css';
 
 class Register extends Component{
   constructor(props) {

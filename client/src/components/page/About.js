@@ -7,7 +7,6 @@ import {
   IoIosHome,
   IoIosArrowRoundDown
 } from 'react-icons/io';
-import './About.css';
 
 class About extends Component {
   render() {
