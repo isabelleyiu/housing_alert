@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, Form, Card } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -68,14 +67,14 @@ class Signup extends Component {
       <div className="background padding-all-around">
         <Card>
           <Card.Body>
-            <Card.Title className="margin-bottom-med">
+            <Card.Title className="margin-bottom-md">
               Thank You for Registering with us. Tell us a little more about
               your household
             </Card.Title>
             <Form>
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 size="sm"
                 name="phone"
                 type="text"
@@ -85,7 +84,7 @@ class Signup extends Component {
 
               <Form.Label>Password</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="password"
                 size="sm"
                 type="password"
@@ -95,7 +94,7 @@ class Signup extends Component {
 
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="confirmPassword"
                 size="sm"
                 type="password"
@@ -105,7 +104,7 @@ class Signup extends Component {
 
               <Form.Label>First Name</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="firstName"
                 size="sm"
                 type="text"
@@ -115,7 +114,7 @@ class Signup extends Component {
 
               <Form.Label>Last Name</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="lastName"
                 size="sm"
                 type="text"
@@ -125,7 +124,7 @@ class Signup extends Component {
 
               <Form.Label>Date of Birth</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="DOB"
                 size="sm"
                 type="text"
@@ -135,7 +134,7 @@ class Signup extends Component {
 
               <Form.Label>Household Size</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="householdSize"
                 size="sm"
                 type="number"
@@ -145,7 +144,7 @@ class Signup extends Component {
 
               <Form.Label>Annual Household Income</Form.Label>
               <Form.Control
-                className="margin-bottom-small"
+                className="margin-bottom-sm"
                 name="householdIncome"
                 size="sm"
                 type="text"
@@ -153,10 +152,10 @@ class Signup extends Component {
                 onChange={this.handleChange}
               />
 
-              <Form.Label className="margin-top-small margin-bottom-small">
+              <Form.Label className="margin-top-small margin-bottom-sm">
                 What type of housing are you looking for?
               </Form.Label>
-              <div className="center-content  margin-bottom-small">
+              <div className="center-content  margin-bottom-sm">
                 <Form.Group controlId="formBasicChecbox">
                   <Form.Check
                     name="SRO"

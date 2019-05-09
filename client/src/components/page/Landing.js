@@ -8,7 +8,7 @@ class Landing extends Component {
   render() {
     return (
       <div>
-        <Jumbotron className="hero">
+        <Jumbotron className="hero center-content white-text title">
           <h1>Home Sweet Home</h1>
           <Register />
         </Jumbotron>

@@ -56,7 +56,7 @@ class HousingCard extends Component {
 
     return (
       <div>
-        <Card className="width margin-top-bottom">
+        <Card className="width margin-top-bottom-md">
           <Card.Img variant="top" src={imageURL} style={{ height: '300px' }} />
           <Card.Body style={{ height: '600px' }}>
             <Card.Title>{Building_Name}</Card.Title>

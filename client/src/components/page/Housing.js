@@ -27,11 +27,11 @@ class Housing extends Component {
     }
     return (
       <div>
-        <h1 className="padding-all-around-sm">
+        <h1 className="padding-all-around-md">
           Currently Available Affordable Housing
         </h1>
 
-        <div className="background wrap-around padding-all-around-sm">
+        <div className="background wrap-around padding-all-around-md">
           {this.state.housings.map(housing => (
             <HousingCard key={housing.uuid} housing={{ ...housing }} />
           ))}

@@ -11,11 +11,11 @@ import {
 class About extends Component {
   render() {
     return (
-      <div className="background padding-top-bottom">
+      <div className="background padding-top-bottom-md">
         <h3>Sit back and Relex</h3>
         <h5>Let us do all the hard work for you.</h5>
         <IoIosArrowRoundDown className="small-icon" />
-        <div className="margin-top-bottom">
+        <div className="margin-top-bottom-md">
           <IoIosPhonePortrait className="big-icon" />
           <span>
             <strong>Step 1: </strong> Enter your phone number above to register

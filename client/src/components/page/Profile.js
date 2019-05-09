@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Card, Image, Col, Button } from 'react-bootstrap';
-import profilePic from './isabelle.png';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import defaultProfilePic from './defaultProfilePic.jpg';
+import Loading from '../Loading';
 
 class Profile extends Component {
   constructor(props) {
@@ -118,50 +120,68 @@ class Profile extends Component {
   };
   renderUserProfile = () => {
     return (
-      <div className="background center-content padding-top-bottom">
-        <Col xs={6} md={4}>
-          <Image
-            src={`${profilePic}`}
-            roundedCircle
-            width="200px"
-            height="200px"
-          />
-        </Col>
-        <h1>
-          {this.state.user.firstName} {this.state.user.lastName}
-        </h1>
-        <h5>
-          <strong>First Name: </strong>
-          <span>{this.state.user.firstName}</span>
-        </h5>
-        <h5>
-          <strong>Last Name: </strong>
-          <span>{this.state.user.lastName}</span>
-        </h5>
-        <h5>
-          <strong>Date of Birth: </strong>
-          <span>{this.state.user.DOB}</span>
-        </h5>
-        <h5>
-          <strong>Household Size: </strong>
-          <span>{this.state.user.householdSize}</span>
-        </h5>
-        <h5>
-          <strong>Household Income: </strong>
-          <span>{this.state.user.householdIncome}</span>
-        </h5>
+      <div className="background  padding-top-bottom-md">
+        <div className="center-content">
+          <Col xs={6} md={4}>
+            <Image
+              src={`${defaultProfilePic}`}
+              roundedCircle
+              width="200px"
+              height="200px"
+            />
+          </Col>
+          <h1>
+            {this.state.user.firstName} {this.state.user.lastName}
+          </h1>
+          <h5>
+            <strong>First Name: </strong>
+            <span>{this.state.user.firstName}</span>
+          </h5>
+          <h5>
+            <strong>Last Name: </strong>
+            <span>{this.state.user.lastName}</span>
+          </h5>
+          <h5>
+            <strong>Date of Birth: </strong>
+            <span>{this.state.user.DOB}</span>
+          </h5>
+          <h5>
+            <strong>Household Size: </strong>
+            <span>{this.state.user.householdSize}</span>
+          </h5>
+          <h5>
+            <strong>Household Income: </strong>
+            <span>{this.state.user.householdIncome}</span>
+          </h5>
 
-        <div>
-          <h5>Looking for:</h5>
-          <ul>
-            {this.state.user.SRO ? <li>SRO</li> : null}
-            {this.state.user.studio ? <li>Studio</li> : null}
-            {this.state.user.oneBedroom ? <li>One Bedroom</li> : null}
-            {this.state.user.twoBedroom ? <li>Two Bedroom</li> : null}
-          </ul>
+          <div>
+            <h5>Looking for:</h5>
+            <div>
+              {this.state.user.SRO ? (
+                <p className="disable-listStyle">
+                  <IoIosAddCircleOutline /> SRO
+                </p>
+              ) : null}
+              {this.state.user.studio ? (
+                <p className="disable-listStyle">
+                  <IoIosAddCircleOutline /> Studio
+                </p>
+              ) : null}
+              {this.state.user.oneBedroom ? (
+                <p className="disable-listStyle">
+                  <IoIosAddCircleOutline /> One Bedroom
+                </p>
+              ) : null}
+              {this.state.user.twoBedroom ? (
+                <p className="disable-listStyle">
+                  <IoIosAddCircleOutline /> Two Bedroom
+                </p>
+              ) : null}
+            </div>
+          </div>
         </div>
-        <div className="wrap-around">
-          <Button onClick={this.editMode} style={{ marginRight: '10px' }}>
+        <div>
+          <Button onClick={this.editMode} className="margin-right-xs">
             Edit
           </Button>
           <Button variant="danger" onClick={this.deleteUserProfile}>
@@ -180,7 +200,7 @@ class Profile extends Component {
             <Form>
               <Form.Label>First Name</Form.Label>
               <Form.Control
-                className="form-input"
+                className="margin-bottom-sm"
                 name="firstName"
                 size="sm"
                 type="text"
@@ -191,7 +211,7 @@ class Profile extends Component {
 
               <Form.Label>Last Name</Form.Label>
               <Form.Control
-                className="form-input"
+                className="margin-bottom-sm"
                 name="lastName"
                 size="sm"
                 type="text"
@@ -202,7 +222,7 @@ class Profile extends Component {
 
               <Form.Label>Date of Birth</Form.Label>
               <Form.Control
-                className="form-input"
+                className="margin-bottom-sm"
                 name="DOB"
                 size="sm"
                 type="text"
@@ -213,7 +233,7 @@ class Profile extends Component {
 
               <Form.Label>Household Size</Form.Label>
               <Form.Control
-                className="form-input"
+                className="margin-bottom-sm"
                 name="householdSize"
                 size="sm"
                 type="number"
@@ -224,7 +244,7 @@ class Profile extends Component {
 
               <Form.Label>Annual Household Income</Form.Label>
               <Form.Control
-                className="form-input"
+                className="margin-bottom-sm"
                 name="householdIncome"
                 size="sm"
                 type="text"
@@ -234,9 +254,9 @@ class Profile extends Component {
               />
 
               <Form.Label className="housing-input">
-                You are looking for:{' '}
+                You are looking for:
               </Form.Label>
-              <div className="checkboxes">
+              <div className="center-content">
                 <Form.Group controlId="formBasicChecbox">
                   <Form.Check
                     name="SRO"
@@ -278,11 +298,11 @@ class Profile extends Component {
                 </Form.Group>
               </div>
               {this.state.message ? (
-                <p style={{ color: 'red' }}>{this.state.message}</p>
+                <p className="error">{this.state.message}</p>
               ) : null}
               <div>
                 <Button
-                  style={{ marginRight: '10px' }}
+                  className="margin-right-xs"
                   onClick={this.handleSubmit}
                   type="submit"
                   variant="success">
@@ -313,7 +333,7 @@ class Profile extends Component {
   };
   render() {
     if (this.state.loading) {
-      return <h1>...Loading</h1>;
+      return <Loading />;
     } else if (this.state.isEditing) {
       return this.renderEditForm();
     }

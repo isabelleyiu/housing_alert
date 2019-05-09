@@ -11,7 +11,7 @@ import './App.css';
 // layouts
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-
+import Loading from './components/Loading';
 // routes
 import Landing from './components/page/Landing';
 import About from './components/page/About';
@@ -112,7 +112,7 @@ class App extends Component {
   };
   render() {
     if (this.state.loading) {
-      return <h1>...Loading</h1>;
+      return <Loading />;
     }
     if (this.isGoogleLogin) {
       return <Redirect to="/profile" />;
@@ -152,8 +152,8 @@ class App extends Component {
             />
             <Route component={NotFound} />
           </Switch>
-          <Footer />
         </div>
+        <Footer />
       </Router>
     );
   }
