@@ -8,11 +8,13 @@ const login = (req, res, next) => {
   const { phone, password } = req.body;
 
   if (!phone && password) {
-    return res.status(400).json({ message: 'Phone Number and Password are required to login' });
+    return res
+      .status(400)
+      .json({ message: 'Phone Number and Password are required to login' });
   }
-  passport.authenticate('local', function (err, user, info) {
+  passport.authenticate('local', function(err, user, info) {
     if (err) {
-      console.log(err)
+      console.log(err);
       return res.status(400).json(err);
     }
     if (!user) {
@@ -21,13 +23,24 @@ const login = (req, res, next) => {
         message: 'Login failed. Your Phone or Password is incorrect'
       });
     }
-    
+
     // Manually establish the session...
-    req.login(user, (err) => {
-      const { uuid, phone, firstName, lastName, DOB, age, householdSize, householdIncome, SRO, studio, oneBedroom, twoBedroom } = user.dataValues;
+    req.login(user, err => {
+      const {
+        uuid,
+        phone,
+        firstName,
+        lastName,
+        DOB,
+        age,
+        householdSize,
+        householdIncome,
+        SRO,
+        studio,
+        oneBedroom,
+        twoBedroom
+      } = user.dataValues;
       if (err) {
-        console.log(user)
-        console.log(err)
         return res.status(403).json({
           isLogin: false,
           message: 'Login failed...'
@@ -54,7 +67,7 @@ const login = (req, res, next) => {
       }
     });
   })(req, res, next);
-}
+};
 
 const logout = (req, res, next) => {
   res.clearCookie('sid');
@@ -64,11 +77,10 @@ const logout = (req, res, next) => {
   return res.json({
     isLogin: req.isAuthenticated(),
     message: 'Logout success'
-  })
-}
-
+  });
+};
 
 module.exports = {
   login,
   logout
-}
+};

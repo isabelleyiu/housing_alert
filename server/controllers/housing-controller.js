@@ -6,10 +6,13 @@ const formatHousingResult = require('../utils/formatHousingResult');
 
 // move into util
 const fetchHousingData = () => {
-  axios.get('https://housing.sfgov.org/api/v1/listings.json')
+  axios
+    .get('https://housing.sfgov.org/api/v1/listings.json')
     .then(result => {
       let housings = result.data.listings;
-      const currentHousing = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()));
+      const currentHousing = housings.filter(housing =>
+        moment(housing.Application_Due_Date).isSameOrAfter(Date.now())
+      );
 
       currentHousing.forEach(housing => {
         db.Housing.findOrCreate({
@@ -18,30 +21,32 @@ const fetchHousingData = () => {
         })
           .then(([housing, created]) => {
             // if created -> text user about new housing
-            const housingInfo = formatHousingResult(housing)
+            const housingInfo = formatHousingResult(housing);
             if (created) {
               twilioController.textAllPhone(housingInfo);
             }
-            console.log(created)
+            console.log(created);
           })
-          .catch(err => console.log(err))
-      })
+          .catch(err => console.log(err));
+      });
     })
-    .catch(err => console.log(err))
-}
+    .catch(err => console.log(err));
+};
 
 const getAll = (req, res, next) => {
   db.Housing.findAll()
     .then(housings => {
-      const filtered = housings.filter(housing => moment(housing.Application_Due_Date).isSameOrAfter(Date.now()))
-      return res.json(filtered)
+      const filtered = housings.filter(housing =>
+        moment(housing.Application_Due_Date).isSameOrAfter(Date.now())
+      );
+      return res.json(filtered);
     })
     .catch(err => {
-      return res.status(400).json(err)
-    })
-}
+      return res.status(400).json(err);
+    });
+};
 
 module.exports = {
   fetchHousingData,
-  getAll,
-}
+  getAll
+};
