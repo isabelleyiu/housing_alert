@@ -15,38 +15,40 @@ class About extends Component {
         <h3>Sit back and Relex</h3>
         <h5>Let us do all the hard work for you.</h5>
         <IoIosArrowRoundDown className="small-icon" />
-        <div className="margin-top-bottom-md">
-          <IoIosPhonePortrait className="big-icon" />
-          <span>
-            <strong>Step 1: </strong> Enter your phone number above to register
-            with Housing Alert.
-          </span>
-        </div>
-        <div>
-          <IoIosColorWand className="big-icon" />
-          <span>
-            <strong>Step 2: </strong> That's it. You will receive a text message
-            from us when there's new affordable housing release
-          </span>
-        </div>
-        <div>
-          <IoMdText className="big-icon" />
-          <span>
-            <strong>Step 3: </strong> Reply to our text message to apply.
-          </span>
-        </div>
-        <div>
+        <div className="margin-top-small">
+          <div>
+            <IoIosPhonePortrait className="big-icon" />
+            <span className="steps-text">
+              <strong>Step 1: </strong> Enter your phone number above or text
+              "housing alert" to 415-200-2988 to register your number.
+            </span>
+          </div>
+          {/* <div>
           <IoMdPerson className="big-icon" />
           <span>
             <strong>Optional: </strong>Create a profile with us for custom
             experience and one-click apply option
           </span>
-        </div>
-        <div>
-          <IoIosHome className="big-icon" />
-          <span>
-            <strong>Step 4:</strong> Home Sweet Home
-          </span>
+        </div> */}
+          <div>
+            <IoIosColorWand className="big-icon" />
+            <span className="steps-text">
+              <strong>Step 2: </strong> That's it. You will receive text message
+              from us when there's new affordable housing!
+            </span>
+          </div>
+          <div>
+            <IoMdText className="big-icon" />
+            <span className="steps-text">
+              <strong>Step 3: </strong> Reply to our text message to apply.
+            </span>
+          </div>
+          <div>
+            <IoIosHome className="big-icon" />
+            <span className="steps-text">
+              <strong>Step 4: </strong> Home Sweet Home
+            </span>
+          </div>
         </div>
       </div>
     );

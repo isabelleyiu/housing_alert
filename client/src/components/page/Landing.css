@@ -1,0 +1,29 @@
+@media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  h5 {
+    font-size: 0.8rem;
+  }
+
+  .big-icon {
+    display: block;
+    margin: 0 auto;
+    height: 80px;
+    width: 80px;
+    color: green;
+  }
+
+  .title {
+    font-size: 0.8rem;
+  }
+
+  .steps-text {
+    font-size: 0.8rem;
+  }
+}
