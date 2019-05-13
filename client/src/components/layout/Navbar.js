@@ -23,11 +23,11 @@ class NavBar extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link>
+            {/* <Nav.Link>
               <Link to="/about" style={navBarLink}>
                 About
               </Link>
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link>
               <Link to="/housing" style={navBarLink}>
                 Housing

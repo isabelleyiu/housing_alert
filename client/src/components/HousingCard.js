@@ -79,6 +79,7 @@ class HousingCard extends Component {
             <Button variant="success">
               <a
                 target="_blank"
+                rel="noopener noreferrer"
                 href={`https://housing.sfgov.org/listings/${listingID}`}
                 style={{ color: 'inherit', textDecoration: 'none' }}>
                 Apply

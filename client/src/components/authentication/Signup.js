@@ -88,7 +88,7 @@ class Signup extends Component {
                 name="password"
                 size="sm"
                 type="password"
-                placeholder="At least 1 lowercase letter, 1 uppercase letter, and 1 numeric value"
+                placeholder="6 to 12 characters with at least 1 lowercase letter, 1 uppercase letter, and 1 numeric value"
                 onChange={this.handleChange}
               />
 
