@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-class Register extends Component{
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,24 +14,22 @@ class Register extends Component{
       show: false,
       redirectToSignup: false,
       redirectToProfile: false
-    }
+    };
   }
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-  }
+  };
   handleCheck = e => {
-    this.setState((prevState) => (
-      {isChecked: !prevState.isChecked}
-    ))
-  }
+    this.setState(prevState => ({ isChecked: !prevState.isChecked }));
+  };
   handleClose = () => {
     this.setState({
       show: false
     });
-  }
-  registerPhone = (e) => {
+  };
+  registerPhone = e => {
     e.preventDefault();
     fetch('api/phone', {
       method: 'POST',
@@ -40,30 +38,27 @@ class Register extends Component{
       },
       body: JSON.stringify({ phone: this.state.phone })
     })
-    .then(res => res.json())
-    .then(newNumber => {
-      if(newNumber.created || (newNumber.isVerified === false)) {
-        this.sendVerification(this.state.phone);
-      } else {
-        // sms user verified their phone, visiting our web for the first time
-        if(newNumber.userUUID === null) {
+      .then(res => res.json())
+      .then(newNumber => {
+        if (newNumber.created || newNumber.isVerified === false) {
+          this.sendVerification(this.state.phone);
+        } else if (!newNumber.userUUID) {
           this.setState({
             redirectToSignup: true
-          })
+          });
         } else {
           this.setState({
             redirectToProfile: true
-          })
+          });
         }
-      }
-      this.setState({ 
-        message: newNumber.message,
-        show: true
+        this.setState({
+          message: newNumber.message,
+          show: true
+        });
       })
-    })
-    .catch(err => console.log(err))
-  }
-  sendVerification = (phone) => {
+      .catch(err => console.log(err));
+  };
+  sendVerification = phone => {
     fetch('api/verification/start', {
       method: 'POST',
       headers: {
@@ -71,9 +66,9 @@ class Register extends Component{
       },
       body: JSON.stringify({ phone })
     })
-    .then(res => res.json())
-    .catch(err => console.log(err))
-  }
+      .then(res => res.json())
+      .catch(err => console.log(err));
+  };
   verifyPhone = e => {
     e.preventDefault();
     fetch('api/verification/verify', {
@@ -83,62 +78,64 @@ class Register extends Component{
       },
       body: JSON.stringify({
         phone: this.state.phone,
-        verificationCode: this.state.verificationCode,
+        verificationCode: this.state.verificationCode
       })
     })
-    .then(res => res.json())
-    .then(verification => {
-      if(verification.success) {
-        this.setState({ 
-          isVerified: verification.success,
-          message: verification.message,
-          verificationCode: '',
-          phone: '',
-          show: false,
-          redirectToSignup: true
-         })
-      } else {
-        this.setState({ 
-          message: verification.message,
-          verificationCode: '',
-          phone: ''
-         })
-      }
-    })
-    .catch(err => console.log(err))
-  }
+      .then(res => res.json())
+      .then(verification => {
+        if (verification.success) {
+          this.setState({
+            isVerified: verification.success,
+            message: verification.message,
+            verificationCode: '',
+            phone: '',
+            show: false,
+            redirectToSignup: true
+          });
+        } else {
+          this.setState({
+            message: verification.message,
+            verificationCode: '',
+            phone: ''
+          });
+        }
+      })
+      .catch(err => console.log(err));
+  };
   render() {
-    if(this.state.redirectToSignup) {
-      return <Redirect to="/signup" />
+    if (this.state.redirectToSignup) {
+      return <Redirect to="/signup" />;
     }
-    
-    if(this.state.redirectToProfile) {
-      return <Redirect to="/profile" />
+
+    if (this.state.redirectToProfile) {
+      return <Redirect to="/profile" />;
     }
     return (
       <div className="center-content">
         <Form onSubmit={this.registerPhone} className="registerForm">
           <Form.Label>Your next affordable housing is one text away</Form.Label>
-          <Form.Control 
-          name="phone" 
-          size="sm" 
-          type="text" 
-          placeholder="Enter Your Phone Number"
-          onChange={this.handleChange} />
-          
+          <Form.Control
+            name="phone"
+            size="sm"
+            type="text"
+            placeholder="Enter Your Phone Number"
+            onChange={this.handleChange}
+          />
+
           <Form.Group controlId="formBasicChecbox">
-            <Form.Check 
-            name="isChecked"
-            className="smallText"
-            type="checkbox" 
-            onChange={this.handleCheck}
-            label="I hereby agree to receive text from Housing Alert" />
+            <Form.Check
+              name="isChecked"
+              className="smallText"
+              type="checkbox"
+              onChange={this.handleCheck}
+              label="I hereby agree to receive text from Housing Alert"
+            />
           </Form.Group>
-          <Button 
-          type="submit" 
-          variant="success"
-          disabled={!this.state.isChecked}
-          >Submit
+          <Button
+            type="submit"
+            variant="success"
+            disabled={!this.state.isChecked}>
+            Submit
           </Button>
         </Form>
 
@@ -147,15 +144,16 @@ class Register extends Component{
             <Modal.Title>Please Verify Your Number</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          {this.state.message} 
-          <Form>
-            <Form.Control 
-            name="verificationCode" 
-            size="sm" 
-            type="text" 
-            placeholder="Enter Your Verification Code"
-            onChange={this.handleChange} />
-          </Form>
+            {this.state.message}
+            <Form>
+              <Form.Control
+                name="verificationCode"
+                size="sm"
+                type="text"
+                placeholder="Enter Your Verification Code"
+                onChange={this.handleChange}
+              />
+            </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
@@ -167,7 +165,7 @@ class Register extends Component{
           </Modal.Footer>
         </Modal>
       </div>
-    )
+    );
   }
 }
 
