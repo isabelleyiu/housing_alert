@@ -1,6 +1,9 @@
 # Housing Alert
 
-One Paragraph of project description goes here
+Housing alert is a web app and sms-based free service that aims to close the digital divide by making the process of finding and applying to affordable housing accessible for people who don’t have internet service or don’t know how to use the internet. 
+
+
+https://housing-alert.herokuapp.com
 
 ## Getting Started
 
