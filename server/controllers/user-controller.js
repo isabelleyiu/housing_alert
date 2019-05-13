@@ -1,17 +1,17 @@
 const db = require('../models');
-
+const twilioController = require('./twilio-controller');
 // @route   GET api/user/
 // @usage   get all users
 // @access  Public
 const getAll = (req, res, next) => {
   db.User.findAll()
     .then(users => {
-      return res.json(users)
+      return res.json(users);
     })
     .catch(err => {
-      return res.status(400).json(err)
-    })
-}
+      return res.status(400).json(err);
+    });
+};
 
 // @route   POST api/user/
 // @usage   Signup user profile
@@ -24,11 +24,14 @@ const signup = (req, res, next) => {
   // validate password
   const validate = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}$/;
   if (validate.test(req.body.password) === false) {
-    return res.json({ message: 'Password must be 6 to 12 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.' })
+    return res.json({
+      message:
+        'Password must be 6 to 12 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.'
+    });
   }
 
   if (password !== confirmPassword) {
-    return res.json({ message: 'Confirm Password must match Password' })
+    return res.json({ message: 'Confirm Password must match Password' });
   }
 
   db.User.findOrCreate({
@@ -38,11 +41,14 @@ const signup = (req, res, next) => {
     .then(([user, created]) => {
       if (created) {
         // link user user to user phone table
-        db.Phone.update({ userUUID: user.dataValues.uuid }, { where: { phone } })
-          .then(() => console.log('User profile linked to phone'))
+        db.Phone.update(
+          { userUUID: user.dataValues.uuid },
+          { where: { phone } }
+        )
+          .then(updatedPhone => console.log(updatedPhone))
           .catch(err => console.log(err));
 
-        req.login(user, (err) => {
+        req.login(user, err => {
           if (err) {
             return res.status(403).json({
               isLogin: false,
@@ -53,8 +59,10 @@ const signup = (req, res, next) => {
             res.cookie('isAuthenticated', true, { maxAge: 30 * 60 * 1000 });
             const newUser = user.dataValues;
             newUser.isLogin = true;
-            newUser.message = `Welcome ${newUser.firstName}. Your user profile has been successfully created`;
-            return res.json(newUser)
+            newUser.message = `Welcome ${
+              newUser.firstName
+            }. Your user profile has been successfully created`;
+            return res.json(newUser);
           }
         });
       } else {
@@ -65,9 +73,8 @@ const signup = (req, res, next) => {
       }
     })
     // err.errors[0].message
-    .catch(err => res.status(400).json({ message: err }))
-}
-
+    .catch(err => res.status(400).json({ message: err }));
+};
 
 // @route   GET api/user/profile
 // @usage   show user profile
@@ -79,12 +86,11 @@ const showProfile = (req, res, next) => {
     where: { userUUID: req.user.dataValues.uuid }
   })
     .then(phone => {
-      req.user.dataValues.phone = phone
-      return res.json(req.user.dataValues)
+      req.user.dataValues.phone = phone;
+      return res.json(req.user.dataValues);
     })
-    .catch(err => console.log(err))
-
-}
+    .catch(err => console.log(err));
+};
 
 // @route   DELETE api/user/profile
 // @usage   delete user profile
@@ -94,11 +100,11 @@ const deleteProfile = (req, res, next) => {
     where: { uuid: req.user.dataValues.uuid }
   })
     .then(deletedUser => {
-      console.log(deletedUser)
-      res.json({ message: 'User deleted' })
+      console.log(deletedUser);
+      res.json({ message: 'User deleted' });
     })
-    .catch(err => res.status(404).json({ message: 'User not found' }))
-}
+    .catch(err => res.status(404).json({ message: 'User not found' }));
+};
 
 // @route   PATCH api/user/profile
 // @usage   update user profile
@@ -112,24 +118,36 @@ const updateProfile = (req, res, next) => {
       for (let key in req.body) {
         user[key] = req.body[key];
       }
-      user.save({ fields: ['firstName', 'lastName', 'DOB', 'householdSize', 'householdIncome', 'SRO', 'studio', 'oneBedroom', 'twoBedroom'] })
+      user
+        .save({
+          fields: [
+            'firstName',
+            'lastName',
+            'DOB',
+            'householdSize',
+            'householdIncome',
+            'SRO',
+            'studio',
+            'oneBedroom',
+            'twoBedroom'
+          ]
+        })
         .then(updatedProfile => {
-          return res.json(updatedProfile)
+          return res.json(updatedProfile);
         })
         .catch(err => {
-          return res.status(400).json(err)
-        })
+          return res.status(400).json(err);
+        });
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
 
   // if phone was updated, update db.Phone
-}
+};
 
 module.exports = {
   getAll,
   signup,
   showProfile,
   deleteProfile,
-  updateProfile,
-}
-
+  updateProfile
+};
