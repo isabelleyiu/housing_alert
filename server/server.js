@@ -19,20 +19,20 @@ const db = require('./models');
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.enable('trust proxy');
 // passport config
 require('./config/passport')(passport);
 
 app.use(
   session({
-    // use store to persis session in deployment for new build
-    // store: new SequelizeStore({
-    //   db: db,
-    //   table: 'Session'
-    // }),
+    store: new SequelizeStore({
+      db: db,
+      table: 'Session'
+    }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    proxy: true,
     cookie: {
       maxAge: 30 * 60 * 1000,
       secure: process.env.NODE_ENV === 'production'
