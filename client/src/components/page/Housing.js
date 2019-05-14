@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import HousingCard from '../HousingCard';
 import Loading from '../Loading';
 import { Button } from 'react-bootstrap';
+import { truncate } from 'fs';
 
 class Housing extends Component {
   constructor(props) {
@@ -43,7 +44,13 @@ class Housing extends Component {
   filterByEligibility = () => {
     if (this.state.filtered) {
       this.fetchAllHousing();
+      this.setState({
+        loading: true
+      });
     } else {
+      this.setState({
+        loading: true
+      });
       fetch('/api/housing/eligible', {
         method: 'POST',
         headers: {
@@ -70,7 +77,8 @@ class Housing extends Component {
           });
           this.setState({
             housings: filteredByUnitType,
-            filtered: true
+            filtered: true,
+            loading: false
           });
         })
         .catch(err => console.log(err));
