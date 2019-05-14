@@ -129,7 +129,7 @@ const handleIncomingSMS = (req, res) => {
       .catch(err => console.log(err));
   } else if (housingAlertRegex.test(inboundSMS)) {
     twiml.message(
-      'Welcome to Housing Alert.\nReply "register" to confirm your registration.'
+      'Welcome to Housing Alert.\nReply "Register" to confirm your registration.'
     );
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
@@ -154,7 +154,7 @@ const handleIncomingSMS = (req, res) => {
         } else {
           // check if user's household info is already in database
           twiml.message(
-            'Thank you! Your number is registered. Text "home" anytime to see what affordable housing is available. Visit https://housing-alert.herokuapp.com/signup to create a profile for custom experience.'
+            'Thank you! Your number is registered. Text "home" anytime to see what affordable housing is available. Visit our web to create a profile for custom experience. https://housing-alert.herokuapp.com/signup'
           );
           res.writeHead(200, { 'Content-Type': 'text/xml' });
           res.end(twiml.toString());
