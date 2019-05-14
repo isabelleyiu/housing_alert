@@ -31,17 +31,20 @@ class Register extends Component {
   };
   registerPhone = e => {
     e.preventDefault();
+
+    const formatNumber = this.state.phone.match(/\d/g).join('');
+
     fetch('api/phone', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ phone: this.state.phone })
+      body: JSON.stringify({ phone: formatNumber })
     })
       .then(res => res.json())
       .then(newNumber => {
         if (newNumber.created || newNumber.isVerified === false) {
-          this.sendVerification(this.state.phone);
+          this.sendVerification(newNumber.phone);
         } else if (!newNumber.userUUID) {
           this.setState({
             redirectToSignup: true
@@ -71,13 +74,16 @@ class Register extends Component {
   };
   verifyPhone = e => {
     e.preventDefault();
+
+    const formatNumber = this.state.phone.match(/\d/g).join('');
+
     fetch('api/verification/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        phone: this.state.phone,
+        phone: formatNumber,
         verificationCode: this.state.verificationCode
       })
     })

@@ -34,6 +34,17 @@ const textAllPhone = messageBody => {
     .catch(err => console.log(err));
 };
 
+const sendSMS = (outboundNumber, messageBody) => {
+  client.messages
+    .create({
+      body: messageBody,
+      from: process.env.TWILIO_PHONE,
+      to: `+1${outboundNumber}`
+    })
+    .then(message => console.log(message.status))
+    .done();
+};
+
 const sendVerification = (req, res) => {
   authy
     .phones()
@@ -58,7 +69,11 @@ const verifyPhone = (req, res) => {
           { where: { phone: req.body.phone } }
         )
           .then(updatedPhone => {
-            console.log(updatedPhone);
+            // console.log(updatedPhone);
+            sendSMS(
+              phone,
+              'Thank you for registering with Housing Alert. You\'ll receive notifications from us when new affordable housing is released. Or text "home" to this number anytime to see all the currently available affordable housing.'
+            );
           })
           .catch(err => console.log(err));
         // res.status(400).json({ message: err.errors[0].message }
@@ -178,6 +193,7 @@ const handleIncomingSMS = (req, res) => {
 
 module.exports = {
   textAllPhone,
+  sendSMS,
   sendVerification,
   verifyPhone,
   handleIncomingSMS
