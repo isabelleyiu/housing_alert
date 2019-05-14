@@ -26,7 +26,7 @@ class HousingCard extends Component {
   getGeocode = async () => {
     const { Building_Street_Address, Building_Zip_Code } = this.props.housing;
 
-    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
+    Geocode.setApiKey('AIzaSyCt1a2aohx-NonwFex5Xt5vK9mgOI7t2f4');
 
     const response = await Geocode.fromAddress(
       `${Building_Street_Address}, San Francisco, CA ${Building_Zip_Code}`
@@ -184,5 +184,5 @@ HousingCard.propTypes = {
 };
 
 export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
+  apiKey: 'AIzaSyCt1a2aohx-NonwFex5Xt5vK9mgOI7t2f4'
 })(HousingCard);

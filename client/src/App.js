@@ -35,11 +35,11 @@ class App extends Component {
   }
   componentDidMount() {
     this.loadGapiAndAfterwardsInitAuth();
-    this.loadGoogleMap();
+    // this.loadGoogleMap();
   }
   loadGoogleMap = () => {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCt1a2aohx-NonwFex5Xt5vK9mgOI7t2f4`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
