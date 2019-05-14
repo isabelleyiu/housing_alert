@@ -36,22 +36,7 @@ class HousingCard extends Component {
       lat: response.results[0].geometry.location.lat,
       lng: response.results[0].geometry.location.lng
     });
-
-    // .then(
-    //   response => {
-    //     const latitude = response.results[0].geometry.location.lat;
-    //     const longtitude = response.results[0].geometry.location.lng;
-    //     console.log(latitude, longtitude);
-    //     return {
-    //       lat: latitude,
-    //       lng: longtitude
-    //     };
-    //   },
-    //   error => {
-    //     console.error(error);
-    //   }
-    // );
-  };
+  }
   render() {
     const {
       Building_Name,
