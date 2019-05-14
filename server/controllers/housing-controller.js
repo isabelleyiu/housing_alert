@@ -14,16 +14,26 @@ const fetchHousingData = () => {
         moment(housing.Application_Due_Date).isSameOrAfter(Date.now())
       );
 
-      currentHousing.forEach(housing => {
+      currentHousing.forEach(fetchHousing => {
         db.Housing.findOrCreate({
-          where: { listingID: housing.listingID },
-          defaults: housing
+          where: { listingID: fetchHousing.listingID },
+          defaults: fetchHousing
         })
           .then(([housing, created]) => {
             // if created -> text user about new housing
             const housingInfo = formatHousingResult(housing);
             if (created) {
               twilioController.textAllPhone(housingInfo);
+            } else {
+              // if there's an update since we have created it
+              // LastModifiedDate comes after updatedAt, update it
+              if (
+                moment(fetchHousing.LastModifiedDate).isAfter(housing.updatedAt)
+              ) {
+                housing.update(fetchHousing).then(() => {
+                  console.log('updated');
+                });
+              }
             }
             console.log(created);
           })
