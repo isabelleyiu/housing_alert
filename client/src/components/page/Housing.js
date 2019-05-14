@@ -23,7 +23,8 @@ class Housing extends Component {
       .then(housings => {
         this.setState({
           housings,
-          loading: false
+          loading: false,
+          filtered: false
         });
       })
       .catch(err => console.log(err));
@@ -55,8 +56,20 @@ class Housing extends Component {
       })
         .then(res => res.json())
         .then(housings => {
+          const preference = {
+            "SRO": this.state.user.SRO,
+            "Studio": this.state.user.studio,
+            "1 BR": this.state.user.oneBedroom,
+            "2 BR": this.state.user.twoBedroom
+          }
+          const filteredByUnitType = housings.filter(housing => {
+            return housing.unitSummaries.general.some(unit => {
+              const {unitType} = unit;
+              return preference[unitType]
+            })
+          });
           this.setState({
-            housings,
+            housings: filteredByUnitType,
             filtered: true
           });
         })
