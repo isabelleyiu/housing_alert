@@ -43,7 +43,7 @@ class Profile extends Component {
           [name]: value
         },
         user: {
-          ...prevState.updatedUser,
+          ...prevState.user,
           [name]: value
         }
       };
@@ -321,9 +321,9 @@ class Profile extends Component {
                 type="submit"
                 variant="danger"
                 style={{ marginTop: '10px', width: '200px' }}>
-                {this.state.user.phone.isVerified
-                  ? 'OPT-OUT for SMS'
-                  : 'OPT-IN for SMS'}
+                {!this.state.user.phone || !this.state.user.phone.isVerified
+                  ? 'OPT-IN for SMS'
+                  : 'OPT-OUT for SMS'}
               </Button>
             </Form>
           </Card.Body>
