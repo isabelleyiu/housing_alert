@@ -46,7 +46,24 @@ const getAll = (req, res, next) => {
     });
 };
 
+const getEligible = (req, res, next) => {
+  const { householdSize, income } = req.body;
+  axios
+    .get(
+      `https://housing.sfgov.org/api/v1/listings/eligibility.json?householdsize=${householdSize}&incomelevel=${income}&listingsType=rental`
+    )
+    .then(result => {
+      let housings = result.data.listings;
+      const currentHousing = housings.filter(housing =>
+        moment(housing.Application_Due_Date).isSameOrAfter(Date.now())
+      );
+      return res.json(currentHousing);
+    })
+    .catch(err => res.json(err));
+};
+
 module.exports = {
   fetchHousingData,
-  getAll
+  getAll,
+  getEligible
 };
