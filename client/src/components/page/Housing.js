@@ -57,16 +57,16 @@ class Housing extends Component {
         .then(res => res.json())
         .then(housings => {
           const preference = {
-            "SRO": this.state.user.SRO,
-            "Studio": this.state.user.studio,
-            "1 BR": this.state.user.oneBedroom,
-            "2 BR": this.state.user.twoBedroom
-          }
+            SRO: this.state.user.SRO,
+            Studio: this.state.user.studio,
+            '1 BR': this.state.user.oneBedroom,
+            '2 BR': this.state.user.twoBedroom
+          };
           const filteredByUnitType = housings.filter(housing => {
             return housing.unitSummaries.general.some(unit => {
-              const {unitType} = unit;
-              return preference[unitType]
-            })
+              const { unitType } = unit;
+              return preference[unitType];
+            });
           });
           this.setState({
             housings: filteredByUnitType,
@@ -85,9 +85,15 @@ class Housing extends Component {
         <h1 className="padding-all-around-md">
           Currently Available Affordable Housing
         </h1>
-        <Button onClick={this.filterByEligibility}>
-          {this.state.filtered ? 'Show All Housing' : 'Filter By Eligibility'}
-        </Button>
+        {this.state.user === null ||
+        this.state.user.isLogin === false ? null : (
+          <Button onClick={this.filterByEligibility}>
+            {this.state.filtered ? 'Show All Housing' : 'Filter By Eligibility'}
+          </Button>
+        )}
+        {this.state.housings.length === 0 ? (
+          <p>No Match Found at this moment. Please try it another time.</p>
+        ) : null}
         <div className="background wrap-around padding-all-around-md">
           {this.state.housings.map(housing => (
             <HousingCard key={housing.uuid} housing={{ ...housing }} />

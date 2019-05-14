@@ -1,12 +1,57 @@
 import React, { Component } from 'react';
-import { Card, Button, ListGroup, ListGroupItem, CardGroup } from 'react-bootstrap';
+import {
+  Card,
+  Button,
+  ListGroup,
+  ListGroupItem,
+  CardGroup
+} from 'react-bootstrap';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
-import Geocode from "react-geocode";
-require('dotenv').config()
+import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+import Geocode from 'react-geocode';
+import './HousingCard.css';
 
 class HousingCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      lat: null,
+      lng: null
+    };
+  }
+  componentDidMount() {
+    this.getGeocode();
+  }
+  getGeocode = async () => {
+    const { Building_Street_Address, Building_Zip_Code } = this.props.housing;
+
+    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
+
+    const response = await Geocode.fromAddress(
+      `${Building_Street_Address}, San Francisco, CA ${Building_Zip_Code}`
+    );
+
+    this.setState({
+      lat: response.results[0].geometry.location.lat,
+      lng: response.results[0].geometry.location.lng
+    });
+
+    // .then(
+    //   response => {
+    //     const latitude = response.results[0].geometry.location.lat;
+    //     const longtitude = response.results[0].geometry.location.lng;
+    //     console.log(latitude, longtitude);
+    //     return {
+    //       lat: latitude,
+    //       lng: longtitude
+    //     };
+    //   },
+    //   error => {
+    //     console.error(error);
+    //   }
+    // );
+  };
   render() {
     const {
       Building_Name,
@@ -21,8 +66,7 @@ class HousingCard extends Component {
       updatedAt
     } = this.props.housing;
 
-   
-
+    // render details for different unit types
     const units = unitSummaries.general.map((unit, i) => {
       const {
         unitType,
@@ -36,9 +80,10 @@ class HousingCard extends Component {
         minPriceWithoutParking,
         maxPriceWithoutParking
       } = unit;
+
       let rent = null;
       let price = null;
-  
+
       if (Tenure === 'Re-rental') {
         if (minMonthlyRent === null && maxMonthlyRent === null) {
           rent = `${minPercentIncome}% of Income`;
@@ -50,7 +95,7 @@ class HousingCard extends Component {
           rent = `$${minMonthlyRent}`;
         }
       }
-  
+
       if (Tenure === 'Resale') {
         if (minPriceWithParking !== maxPriceWithParking) {
           price = `$${minPriceWithParking} - $${maxPriceWithParking}`;
@@ -63,93 +108,71 @@ class HousingCard extends Component {
         }
       }
       return (
-        <div key="i">
-          <ListGroupItem><strong>Unit Type:</strong> {unit.unitType}</ListGroupItem>
+        <div key={i}>
           <ListGroupItem>
-            {rent ? <strong>Monthly Rent</strong> : <strong>Price</strong>}: {rent ? rent : price}
+            <strong>Unit Type:</strong> {unit.unitType}
+          </ListGroupItem>
+          <ListGroupItem>
+            {rent ? <strong>Monthly Rent</strong> : <strong>Price</strong>}:{' '}
+            {rent ? rent : price}
           </ListGroupItem>
         </div>
-      )
-    })
-
-    const location = {
-      lat: null,
-      lng: null
-    };
-    Geocode.setApiKey();
-    Geocode.fromAddress(`${Building_Street_Address}, San Francisco, CA ${Building_Zip_Code}`).then(
-      response => {
-        location.lat = response.results[0].geometry.location.lat;
-        location.lng = response.results[0].geometry.location.lng;
-        console.log(location);
-      },
-      error => {
-        console.error(error);
-      }
-    );
+      );
+    });
     return (
       <div>
-        <CardGroup className="width margin-top-bottom-md">
-
-        <Card>
-          <Card.Img variant="top" src={imageURL} style={{ height: '300px' }} />
-          <Card.Body style={{ height: '400px' }}>
-            <Card.Title>{Building_Name}</Card.Title>
-            <Card.Text />
-            <ListGroup className="list-group-flush">
-              <ListGroupItem>
-                <strong>Address:</strong> {Building_Street_Address}, San Francisco, CA{' '}
-                {Building_Zip_Code}
-              </ListGroupItem>
-              <ListGroupItem><strong>Tenure:</strong> {Tenure}</ListGroupItem>
-              {/* <ListGroupItem><strong>Available Unit:</strong> {Units_Available || 1}</ListGroupItem> */}
-              {/* <ListGroupItem>
-                {rent ? <strong>Monthly Rent</strong> : <strong>Price</strong>}: {rent ? rent : price}
-              </ListGroupItem> */}
-              <ListGroupItem>
-              <strong>Application Due:</strong>{' '}
-                {moment(Application_Due_Date).format('MMMM Do YYYY, h:mm a')}
-              </ListGroupItem>
-            </ListGroup>
-            <Button variant="success">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`https://housing.sfgov.org/listings/${listingID}`}
-                className="disable-linkStyle">
-                Apply
-              </a>
-            </Button>
-          </Card.Body>
-        </Card>
-        <Card>
-          <Card.Body>
-            <Card.Title>{Units_Available || 1} Unit(s) Available</Card.Title>
-            <ListGroup className="list-group-flush">
-              {units}
-            </ListGroup>
-            <div>
-            <Map 
-              google={this.props.google}
-              // initialCenter={{lat: 37.762391, lng: -122.439192}}
-              zoom={14}
-              style={{
-                width: '100%',
-                height: '50%',
-                position: 'absolute'
-              }}
+        <CardGroup className="housing-card margin-top-bottom-md">
+          <Card>
+            <Card.Img variant="top" src={imageURL} className="card-img" />
+            <Card.Body
+            // style={{ height: 'auto' }}
             >
-            <Marker 
-              name={Building_Name} 
-              position={{lat: 37.7840577, lng: -122.4099743}}
-            />
-          </Map>
-          </div>
-          </Card.Body>
-          <Card.Footer>
-            <small className="text-muted">Last Updated at {moment(updatedAt).fromNow()}</small>
-          </Card.Footer>
-        </Card>
+              <Card.Title>{Building_Name}</Card.Title>
+              <Card.Text />
+              <ListGroup className="list-group-flush">
+                <ListGroupItem>
+                  <strong>Address:</strong> {Building_Street_Address}, San
+                  Francisco, CA {Building_Zip_Code}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Tenure:</strong> {Tenure}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Application Due:</strong>{' '}
+                  {moment(Application_Due_Date).format('MMMM Do YYYY, h:mm a')}
+                </ListGroupItem>
+              </ListGroup>
+              <Button variant="success">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://housing.sfgov.org/listings/${listingID}`}
+                  className="disable-linkStyle">
+                  Apply
+                </a>
+              </Button>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Body className="unit-card">
+              <Card.Title>{Units_Available || 1} Unit(s) Available</Card.Title>
+              <ListGroup className="list-group-flush">{units}</ListGroup>
+              <div className="map-container">
+                <Map
+                  className="map"
+                  google={this.props.google}
+                  center={this.state}
+                  zoom={14}>
+                  <Marker name={Building_Name} position={this.state} />
+                </Map>
+              </div>
+            </Card.Body>
+            <Card.Footer>
+              <small className="text-muted">
+                Last Updated at {moment(updatedAt).fromNow()}
+              </small>
+            </Card.Footer>
+          </Card>
         </CardGroup>
       </div>
     );
@@ -161,5 +184,5 @@ HousingCard.propTypes = {
 };
 
 export default GoogleApiWrapper({
-apiKey: ()
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
 })(HousingCard);

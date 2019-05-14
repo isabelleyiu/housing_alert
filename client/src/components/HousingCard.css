@@ -1,0 +1,38 @@
+/* cards */
+.housing-card {
+  width: 48rem;
+}
+
+.unit-card {
+  position: relative;
+  height: 600px;
+}
+
+.card-img {
+  height: 300px;
+}
+
+/* google map */
+.map-container {
+  height: 50%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  border: 1px solid red;
+  bottom: 0;
+  left: 0;
+}
+
+.map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .housing-card {
+    width: 24rem;
+  }
+}
