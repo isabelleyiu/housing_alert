@@ -24,16 +24,12 @@ const fetchHousingData = () => {
             const housingInfo = formatHousingResult(housing);
             if (created) {
               twilioController.textAllPhone(housingInfo);
-            } else {
+            } else if (created === false && moment(fetchHousing.LastModifiedDate).isAfter(housing.updatedAt)) {
               // if there's an update since we have created it
               // LastModifiedDate comes after updatedAt, update it
-              if (
-                moment(fetchHousing.LastModifiedDate).isAfter(housing.updatedAt)
-              ) {
                 housing.update(fetchHousing).then(() => {
                   console.log('updated');
                 });
-              }
             }
             console.log(created);
           })
