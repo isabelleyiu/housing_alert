@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Card, Button, ListGroup, ListGroupItem, CardGroup } from 'react-bootstrap';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import Geocode from "react-geocode";
+require('dotenv').config()
 
 class HousingCard extends Component {
   render() {
@@ -68,6 +71,22 @@ class HousingCard extends Component {
         </div>
       )
     })
+
+    const location = {
+      lat: null,
+      lng: null
+    };
+    Geocode.setApiKey();
+    Geocode.fromAddress(`${Building_Street_Address}, San Francisco, CA ${Building_Zip_Code}`).then(
+      response => {
+        location.lat = response.results[0].geometry.location.lat;
+        location.lng = response.results[0].geometry.location.lng;
+        console.log(location);
+      },
+      error => {
+        console.error(error);
+      }
+    );
     return (
       <div>
         <CardGroup className="width margin-top-bottom-md">
@@ -104,12 +123,28 @@ class HousingCard extends Component {
           </Card.Body>
         </Card>
         <Card>
-          {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
           <Card.Body>
             <Card.Title>{Units_Available || 1} Unit(s) Available</Card.Title>
             <ListGroup className="list-group-flush">
               {units}
             </ListGroup>
+            <div>
+            <Map 
+              google={this.props.google}
+              // initialCenter={{lat: 37.762391, lng: -122.439192}}
+              zoom={14}
+              style={{
+                width: '100%',
+                height: '50%',
+                position: 'absolute'
+              }}
+            >
+            <Marker 
+              name={Building_Name} 
+              position={{lat: 37.7840577, lng: -122.4099743}}
+            />
+          </Map>
+          </div>
           </Card.Body>
           <Card.Footer>
             <small className="text-muted">Last Updated at {moment(updatedAt).fromNow()}</small>
@@ -125,4 +160,6 @@ HousingCard.propTypes = {
   housing: PropTypes.object
 };
 
-export default HousingCard;
+export default GoogleApiWrapper({
+apiKey: ()
+})(HousingCard);
