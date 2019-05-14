@@ -5,7 +5,8 @@
 
 .unit-card {
   position: relative;
-  height: 600px;
+  height: auto;
+  clear: both;
 }
 
 .card-img {

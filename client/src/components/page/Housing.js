@@ -88,7 +88,7 @@ class Housing extends Component {
         {this.state.user === null ||
         this.state.user.isLogin === false ? null : (
           <Button onClick={this.filterByEligibility}>
-            {this.state.filtered ? 'Show All Housing' : 'Filter By Eligibility'}
+            {this.state.filtered ? 'Show All Housing' : 'Filter By Preference'}
           </Button>
         )}
         {this.state.housings.length === 0 ? (
