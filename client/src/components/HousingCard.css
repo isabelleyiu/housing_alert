@@ -21,6 +21,7 @@
   width: 100%;
   overflow: hidden;
   min-height: 200px;
+  flex-grow: 1;
   position: relative;
   border: 1px solid red;
   bottom: 0;
