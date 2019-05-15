@@ -61,23 +61,21 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Express](https://expressjs.com/) - Node.js framework
+* [Passport](http://www.passportjs.org/) - User Authentication 
+* [Sequelize](http://docs.sequelizejs.com/) - ORM for postgreSQL database
+* [React](https://reactjs.org/) - UI library
 
-## Contributing
+### APIs
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [Twilio](https://www.twilio.com/) - SMS messaging and other communications platform
+* [Google+](https://developers.google.com/) - OAuth2 Authentication
+* [DAHLIA](https://github.com/Exygy/sf-dahlia-salesforce/) - Affordable Housing Data
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Isabelle Yiu** - *Initial work* - [isabelleyiu](https://github.com/isabelleyiu)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
@@ -85,6 +83,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* This is a final Project for [Techtonica](https://techtonica.org/) program. 
+
+
