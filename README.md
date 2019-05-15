@@ -55,25 +55,25 @@ After installing all the prerequisites, please follow this step by step guide to
 1. In your terminal, navigate to where you would like to store this project. Then run
 
 ```
-git clone https://github.com/isabelleyiu/housing_alert.git
+$ git clone https://github.com/isabelleyiu/housing_alert.git
 ```
 
 2. Go into the project directory by running
 
 ```
-cd housing_alert
+$ cd housing_alert
 ```
 
 3. To install server-side dependencies, run:
 
 ```
-npm install 
+$ npm install 
 ```
 
 4. To install client-side dependencies, run:
 
 ```
-npm run client-install
+$ npm run client-install
 ```
 
 5. In order to connect your database to the project. Make sure that your PostgreSQL database is running.
@@ -93,7 +93,7 @@ $ psql housing_alert
 8. open the config.json file in server/config directory. If you are using VS Code, run
 
 ```
-code server/config/config.json
+$ code server/config/config.json
 ```
 
 9. Update the development part of the file with details from your database. If you didn't set up username and password, your config.json should look something like this. Timezone is currently set to UTC -7 America/Los Angeles. This will allow Sequelize to create all of the neccessary tables for you.
@@ -117,13 +117,15 @@ code server/config/config.json
 GOOGLE_API_KEY=12345678
 ```
 
-11. At this point, you should have everything you need to run this project. Start up the servers by running
+11. At this point, you should have everything you need to run this project. Start up the servers by running command in your root directory.
 
 ``` 
-npm run dev
+$ npm run dev
 ```
 
-Viola. Your back-end server should now be running at port 5000, and client server running at 3000. Happy hacking!
+Viola. Your back-end server should now be running at port 5000, and client server running at port 3000. 
+
+Happy hacking!
 
 
 ## Running the tests
