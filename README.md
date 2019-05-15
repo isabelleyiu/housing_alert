@@ -5,35 +5,128 @@ Housing alert is a web app and sms-based free service that aims to close the dig
 
 https://housing-alert.herokuapp.com
 
+## Built With
+
+* [Express](https://expressjs.com/) - Node.js framework
+* [Passport](http://www.passportjs.org/) - User Authentication 
+* [Sequelize](http://docs.sequelizejs.com/) - ORM for PostgreSQL database
+* [React](https://reactjs.org/) - UI library
+
+### APIs
+
+* [Twilio](https://www.twilio.com/) - SMS messaging and other communications platform
+* [Google](https://developers.google.com/) - OAuth2 Authentication, Google Maps, Google Geocoding
+
+### Data 
+
+* [DAHLIA](https://github.com/Exygy/sf-dahlia-salesforce/) - San Francisco Affordable Housing Portal 
+
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+You'll need everything below to run this application. Installation instructions can be found via link below.
 
-```
-Give examples
-```
+* [Node](https://nodejs.org/en/)
+* [Postgres.app](https://postgresapp.com/)(Mac only) Alternative: [PostgreSQL](postgresql.org)
+* [NPM](https://www.npmjs.com/)
+
+A List of API keys that you would need to obtain prior running this project can be found in server/config/keys.js file
+
+From [Twilio](https://www.twilio.com/), you would need: 
+* Twilio phone number
+* Twilio account SID
+* Twilio auth token
+* Authy API key
+* Verify service SID
+
+From [Google](https://developers.google.com/), you would need: 
+* Google oauth2 client ID
+* Google API key
+
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+After installing all the prerequisites, please follow this step by step guide to get your development env running
 
-Say what the step will be
 
-```
-Give the example
-```
-
-And repeat
+1. In your terminal, navigate to where you would like to store this project. Then run
 
 ```
-until finished
+$ git clone https://github.com/isabelleyiu/housing_alert.git
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+2. Go into the project directory by running
+
+```
+$ cd housing_alert
+```
+
+3. To install server-side dependencies, run:
+
+```
+$ npm install 
+```
+
+4. To install client-side dependencies, run:
+
+```
+$ npm run client-install
+```
+
+5. In order to connect your database to the project. Make sure that your PostgreSQL database is running.
+
+6. In your terminal prompts create database housing_alert
+
+```
+$ createdb housing_alert
+```
+
+7. Connect to the database with PostgreSQL
+
+```
+$ psql housing_alert
+```
+
+8. open the config.json file in server/config directory. If you are using VS Code, run
+
+```
+$ code server/config/config.json
+```
+
+9. Update the development part of the file with details from your database. If you didn't set up username and password, your config.json should look something like this. Timezone is currently set to UTC -7 America/Los Angeles. This will allow Sequelize to create all of the neccessary tables for you.
+
+```
+{
+  "development": {
+    "username": "",
+    "password": null,
+    "database": "housing_alert",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "timezone": "-07:00"
+  }
+}
+```
+
+10. In your root directory, create a .env file to hold all of your API keys that you get beforehand.
+
+```
+GOOGLE_API_KEY=12345678
+```
+
+11. At this point, you should have everything you need to run this project. Start up the servers by running command in your root directory.
+
+``` 
+$ npm run dev
+```
+
+Viola. Your back-end server should now be running at port 5000, and client server running at port 3000. 
+
+Happy hacking!
+
 
 ## Running the tests
 
@@ -46,31 +139,6 @@ Explain what these tests test and why
 ```
 Give an example
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Express](https://expressjs.com/) - Node.js framework
-* [Passport](http://www.passportjs.org/) - User Authentication 
-* [Sequelize](http://docs.sequelizejs.com/) - ORM for postgreSQL database
-* [React](https://reactjs.org/) - UI library
-
-### APIs
-
-* [Twilio](https://www.twilio.com/) - SMS messaging and other communications platform
-* [Google+](https://developers.google.com/) - OAuth2 Authentication
-* [DAHLIA](https://github.com/Exygy/sf-dahlia-salesforce/) - Affordable Housing Data
 
 ## Authors
 
