@@ -11,8 +11,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+You'll need everything below to run this application.
 
+* [Node](https://nodejs.org/en/)
+* [PostgreSQL](postgresql.org)
+* [NPM](https://www.npmjs.com/)
 ```
 Give examples
 ```
@@ -63,7 +66,7 @@ Add additional notes about how to deploy this on a live system
 
 * [Express](https://expressjs.com/) - Node.js framework
 * [Passport](http://www.passportjs.org/) - User Authentication 
-* [Sequelize](http://docs.sequelizejs.com/) - ORM for postgreSQL database
+* [Sequelize](http://docs.sequelizejs.com/) - ORM for PostgreSQL database
 * [React](https://reactjs.org/) - UI library
 
 ### APIs
