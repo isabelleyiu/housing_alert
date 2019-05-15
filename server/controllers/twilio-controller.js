@@ -12,13 +12,6 @@ const textAllPhone = messageBody => {
   db.Phone.findAll()
     .then(phones => {
       phones.forEach(phone => {
-        // check user profile to see
-        // db.User.findOne({
-        //   where: { uuid: phone.userUUID }
-        // }).then(user => {
-        //   const { householdSize, householdIncome } = user;
-        //   if(maxOccup)
-        // });
         if (phone.isVerified) {
           client.messages
             .create({
@@ -72,7 +65,7 @@ const verifyPhone = (req, res) => {
             // console.log(updatedPhone);
             sendSMS(
               phone,
-              'Thank you for registering with Housing Alert. You\'ll receive notifications from us when new affordable housing is released. Or text "home" to this number anytime to see all the currently available affordable housing.'
+              'Thank you for registering with Housing Alert. You\'ll receive notifications from us when new affordable housing is released. Or reply "Home" to this number anytime to see all the currently available affordable housing.'
             );
           })
           .catch(err => console.log(err));
@@ -121,7 +114,7 @@ const handleIncomingSMS = (req, res) => {
     )
       .then(updatedPhone => {
         twiml.message(
-          'Thank you for using Housing Alert. You have successfully unsubscribed from our service'
+          'Thank you for using Housing Alert. You have successfully unsubscribed from our service.'
         );
         res.writeHead(200, { 'Content-Type': 'text/xml' });
         res.end(twiml.toString());
@@ -154,7 +147,7 @@ const handleIncomingSMS = (req, res) => {
         } else {
           // check if user's household info is already in database
           twiml.message(
-            'Thank you! Your number is registered. Text "home" anytime to see what affordable housing is available. Visit our web to create a profile for custom experience. https://housing-alert.herokuapp.com/signup'
+            'Thank you! Your number is registered. Text "Home" anytime to see what affordable housing is available. Visit our web to create a profile for custom experience. https://housing-alert.herokuapp.com/signup'
           );
           res.writeHead(200, { 'Content-Type': 'text/xml' });
           res.end(twiml.toString());
@@ -178,13 +171,13 @@ const handleIncomingSMS = (req, res) => {
     console.log(req.session);
     // eligibility according to household size and income
     twiml.message(
-      `Got it. Your household Income is ${inboundSMS}/year. We will keep an eye on affordable housing that your are eligible to apply. Text the word "home" anytime to find out what affordable housing is currently accepting application.`
+      `Got it. Your household Income is $${inboundSMS}/year. We will keep an eye on affordable housing that your are eligible to apply. Reply "Home" anytime to find out what affordable housing is currently accepting applications.`
     );
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
   } else {
     twiml.message(
-      'Hmm...Please make sure you texted the right command. Text "goodbye" to unsubscribe to our messages.'
+      'Hmm...Please make sure you texted the right command. Text "Goodbye" to unsubscribe to our messages.'
     );
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());

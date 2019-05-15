@@ -9,47 +9,71 @@ module.exports = housing => {
     listingID
   } = housing;
 
-  const {
-    unitType,
-    minMonthlyRent,
-    maxMonthlyRent,
-    minPercentIncome,
-    maxPercentIncome,
-    minPriceWithParking,
-    maxPriceWithParking,
-    minPriceWithoutParking,
-    maxPriceWithoutParking
-  } = housing.unitSummaries.general[0];
+  const unitDetails = housing.unitSummaries.general;
 
   let rent = null;
   let price = null;
 
-  if (Tenure === 'Re-rental') {
-    if (minMonthlyRent === null && maxMonthlyRent === null) {
+  const minPrice =
+    unitDetails[0].minPriceWithoutParking || unitDetails[0].minPriceWithParking;
+  const maxPrice =
+    unitDetails[unitDetails.length - 1].maxPriceWithoutParking ||
+    unitDetails[unitDetails.length - 1].maxPriceWithParking;
+  const minRent = unitDetails[0].minMonthlyRent;
+  const maxRent = unitDetails[unitDetails.length - 1].maxMonthlyRent;
+
+  const minPercentIncome = unitDetails[0].minPercentIncome;
+  const maxPercentIncome = unitDetails[unitDetails.length - 1].maxPercentIncome;
+
+  const minIncome = unitDetails[0].minRentalMinIncome;
+  const maxIncome = unitDetails[unitDetails.length - 1].maxRentalMinIncome;
+
+  let eligibleIncome = null;
+
+  if (!minIncome && !maxIncome) {
+    eligibleIncome = '';
+  } else if (minIncome !== maxIncome) {
+    eligibleIncome = `Min Income: $${minIncome} - $${maxIncome}\n`;
+  } else {
+    eligibleIncome = `Min Income: $${minIncome}\n`;
+  }
+
+  // format Unit Types
+  let UnitTypes = [];
+
+  unitDetails.forEach(unit => {
+    UnitTypes.push(unit.unitType);
+  });
+
+  UnitTypes = UnitTypes.join(', ');
+
+  // format display rent/price
+
+  if (Tenure === 'Re-rental' || Tenure === 'New rental') {
+    if (minRent === null && maxRent === null) {
       rent = `${minPercentIncome}% of Income`;
     } else if (minPercentIncome !== maxPercentIncome) {
       rent = `${minPercentIncome}% - ${maxPercentIncome}% of Income`;
-    } else if (minMonthlyRent !== maxMonthlyRent) {
-      rent = `$${minMonthlyRent} - $${maxMonthlyRent}`;
+    } else if (minRent !== maxRent) {
+      rent = `$${minRent} - $${maxRent}`;
     } else {
-      rent = `$${minMonthlyRent}`;
+      rent = `$${minRent}`;
     }
   }
 
-  if (Tenure === 'Resale') {
-    if (minPriceWithParking !== maxPriceWithParking) {
-      price = `$${minPriceWithParking} - $${maxPriceWithParking}`;
-    } else if (minPriceWithParking) {
-      price = `$${minPriceWithParking}`;
-    } else if (minPriceWithoutParking !== maxPriceWithoutParking) {
-      price = `$${minPriceWithoutParking} - $${maxPriceWithoutParking}`;
+  if (Tenure === 'Resale' || Tenure === 'New sale') {
+    if (minPrice !== maxPrice) {
+      price = `$${minPrice} - $${maxPrice}`;
     } else {
-      price = `$${minPriceWithoutParking}`;
+      price = `$${minPrice}`;
     }
   }
 
-  return `--- HOUSING ALERT ---\nBuilding Name: ${Building_Name}\nAddress: ${Building_Street_Address}, San Francisco\nUnit Type: ${unitType}\nTenure: ${Tenure}\nRent/Price: ${rent ||
-    price}\nApplication Due: ${moment(Application_Due_Date).format(
-    'dddd MMMM Do YYYY'
-  )}\nMore Info: https://housing.sfgov.org/listings/${listingID}.\nReply "goodbye" to unsubscribe from all future notification`;
+  // SMS message
+  return `--- HOUSING ALERT ---\nBUILDING NAME: ${Building_Name}\nADDRESS: ${Building_Street_Address}, San Francisco\nUNIT TYPE: ${UnitTypes}\nTENURE: ${Tenure}\nRENT/PRICE: ${rent ||
+    price}\n${eligibleIncome}APPLICATION DUE: ${moment(
+    Application_Due_Date
+  ).format(
+    'dddd MMMM Do YYYY h:mm a'
+  )}\n\nMORE INFO: https://housing.sfgov.org/listings/${listingID}.\nREPLY: "Goodbye" to unsubscribe from all future notifications`;
 };
