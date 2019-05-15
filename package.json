@@ -40,5 +40,8 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^5.7.4",
     "twilio": "^3.30.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
   }
 }
