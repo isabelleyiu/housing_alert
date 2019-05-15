@@ -74,7 +74,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Isabelle Yiu** - *Initial work* - [isabelleyiu](https://github.com/isabelleyiu)
 
 
 ## License
@@ -83,6 +83,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* This is a final Project for [Techtonica] (https://techtonica.org/) program. 
+* This is a final Project for [Techtonica](https://techtonica.org/) program. 
 
 
