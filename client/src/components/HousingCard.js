@@ -36,7 +36,7 @@ class HousingCard extends Component {
       lat: response.results[0].geometry.location.lat,
       lng: response.results[0].geometry.location.lng
     });
-  }
+  };
   render() {
     const {
       Building_Name,
@@ -132,7 +132,8 @@ class HousingCard extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`https://housing.sfgov.org/listings/${listingID}`}
-                  className="disable-linkStyle">
+                  className="disable-linkStyle"
+                  style={{ color: 'inherit', textDecoration: 'none' }}>
                   Apply
                 </a>
               </Button>
@@ -140,7 +141,9 @@ class HousingCard extends Component {
           </Card>
           <Card>
             <Card.Body className="unit-card">
-              <Card.Title>{Units_Available || 1} Unit(s) Available</Card.Title>
+              <Card.Title>
+                {Units_Available || 'Waitlist'} Unit(s) Available
+              </Card.Title>
               <ListGroup className="list-group-flush">{units}</ListGroup>
               <div className="map-container">
                 <Map
