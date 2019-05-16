@@ -119,7 +119,7 @@ $ code server/config/config.json
 }
 ```
 
-10. In your root directory, create a .env file to hold all of your API keys that you get beforehand.
+10. In your root directory, create a .env file to hold all of your API keys that you get beforehand. For example:
 
 ```
 GOOGLE_API_KEY=12345678
@@ -136,17 +136,6 @@ Viola. Your back-end server should now be running at port 5000, and client serve
 Happy hacking!
 
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Authors
 
