@@ -6,14 +6,19 @@ https://housing-alert.herokuapp.com
 
 ## Demo
 
+### [Full Video Demo - click here](https://www.youtube.com/watch?v=MiBklCG1PE0&feature=youtu.be)
+
+
+![Housing Alert](./client/public/housing_alert_registration.gif)
+
+
+![Housing Alert](./client/public/housing_alert_preference.gif)
+
+
 ![SMS Registration](./client/public/housing_alert_SMS_registration.gif)
 
+
 ![SMS Alert](./client/public/housing_alert_SMS_alert.gif)
-<a href="https://imgflip.com/gif/312wi6"><img src="https://i.imgflip.com/312wi6.gif" title="made at imgflip.com"/></a>
-
-<a href="https://imgflip.com/gif/312w0r"><img src="https://i.imgflip.com/312w0r.gif" title="made at imgflip.com"/></a>
-
-### [Video Demo - click here](https://www.youtube.com/watch?v=MiBklCG1PE0&feature=youtu.be)
 
 
 ## Built With
