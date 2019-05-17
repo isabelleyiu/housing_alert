@@ -2,8 +2,16 @@
 
 Housing alert is a web app and sms-based free service that aims to close the digital divide by making the process of finding and applying to affordable housing accessible for people who don’t have internet service or don’t know how to use the internet. 
 
-
 https://housing-alert.herokuapp.com
+
+## Demo
+
+<a href="https://imgflip.com/gif/312wi6"><img src="https://i.imgflip.com/312wi6.gif" title="made at imgflip.com"/></a>
+
+<a href="https://imgflip.com/gif/312w0r"><img src="https://i.imgflip.com/312w0r.gif" title="made at imgflip.com"/></a>
+
+### [Video Demo - click here](https://www.youtube.com/watch?v=MiBklCG1PE0&feature=youtu.be)
+
 
 ## Built With
 
@@ -111,7 +119,7 @@ $ code server/config/config.json
 }
 ```
 
-10. In your root directory, create a .env file to hold all of your API keys that you get beforehand.
+10. In your root directory, create a .env file to hold all of your API keys that you get beforehand. For example:
 
 ```
 GOOGLE_API_KEY=12345678
@@ -128,17 +136,6 @@ Viola. Your back-end server should now be running at port 5000, and client serve
 Happy hacking!
 
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Authors
 
