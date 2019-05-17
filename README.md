@@ -10,7 +10,7 @@ https://housing-alert.herokuapp.com
 
 <a href="https://imgflip.com/gif/312w0r"><img src="https://i.imgflip.com/312w0r.gif" title="made at imgflip.com"/></a>
 
-#### [Video Demo](https://www.youtube.com/watch?v=MiBklCG1PE0&feature=youtu.be)
+#### [Video Demo - click here](https://www.youtube.com/watch?v=MiBklCG1PE0&feature=youtu.be)
 
 
 ## Built With
