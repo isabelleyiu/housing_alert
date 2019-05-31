@@ -1,16 +1,16 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Card,
   Button,
   ListGroup,
   ListGroupItem,
   CardGroup
-} from "react-bootstrap";
-import moment from "moment";
-import PropTypes from "prop-types";
-import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
-import Geocode from "react-geocode";
-import "./HousingCard.css";
+} from 'react-bootstrap';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+import Geocode from 'react-geocode';
+import './HousingCard.css';
 
 class HousingCard extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class HousingCard extends Component {
   getGeocode = async () => {
     const { Building_Street_Address, Building_Zip_Code } = this.props.housing;
 
-    Geocode.setApiKey("AIzaSyCt1a2aohx-NonwFex5Xt5vK9mgOI7t2f4");
+    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
     const response = await Geocode.fromAddress(
       `${Building_Street_Address}, San Francisco, CA ${Building_Zip_Code}`
@@ -69,7 +69,7 @@ class HousingCard extends Component {
       let rent = null;
       let price = null;
 
-      if (Tenure === "Re-rental") {
+      if (Tenure === 'Re-rental') {
         if (minMonthlyRent === null && maxMonthlyRent === null) {
           rent = `${minPercentIncome}% of Income`;
         } else if (minPercentIncome !== maxPercentIncome) {
@@ -81,7 +81,7 @@ class HousingCard extends Component {
         }
       }
 
-      if (Tenure === "Resale") {
+      if (Tenure === 'Resale') {
         if (minPriceWithParking !== maxPriceWithParking) {
           price = `$${minPriceWithParking} - $${maxPriceWithParking}`;
         } else if (minPriceWithParking) {
@@ -98,7 +98,7 @@ class HousingCard extends Component {
             <strong>Unit Type:</strong> {unit.unitType}
           </ListGroupItem>
           <ListGroupItem>
-            {rent ? <strong>Monthly Rent</strong> : <strong>Price</strong>}:{" "}
+            {rent ? <strong>Monthly Rent</strong> : <strong>Price</strong>}:{' '}
             {rent ? rent : price}
           </ListGroupItem>
         </div>
@@ -123,8 +123,8 @@ class HousingCard extends Component {
                   <strong>Tenure:</strong> {Tenure}
                 </ListGroupItem>
                 <ListGroupItem>
-                  <strong>Application Due:</strong>{" "}
-                  {moment(Application_Due_Date).format("MMMM Do YYYY, h:mm a")}
+                  <strong>Application Due:</strong>{' '}
+                  {moment(Application_Due_Date).format('MMMM Do YYYY, h:mm a')}
                 </ListGroupItem>
               </ListGroup>
               <Button variant="success">
@@ -133,8 +133,7 @@ class HousingCard extends Component {
                   rel="noopener noreferrer"
                   href={`https://housing.sfgov.org/listings/${listingID}`}
                   className="disable-linkStyle"
-                  style={{ color: "inherit", textDecoration: "none" }}
-                >
+                  style={{ color: 'inherit', textDecoration: 'none' }}>
                   Apply
                 </a>
               </Button>
@@ -144,7 +143,7 @@ class HousingCard extends Component {
             <Card.Body className="unit-card">
               <Card.Title>
                 {Units_Available === 0
-                  ? "Waitlist Open"
+                  ? 'Waitlist Open'
                   : `${Units_Available} Unit(s) Available`}
               </Card.Title>
               <ListGroup className="list-group-flush">{units}</ListGroup>
@@ -153,8 +152,7 @@ class HousingCard extends Component {
                   className="map"
                   google={this.props.google}
                   center={this.state}
-                  zoom={14}
-                >
+                  zoom={14}>
                   <Marker name={Building_Name} position={this.state} />
                 </Map>
               </div>
@@ -176,5 +174,5 @@ HousingCard.propTypes = {
 };
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyCt1a2aohx-NonwFex5Xt5vK9mgOI7t2f4"
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
 })(HousingCard);
