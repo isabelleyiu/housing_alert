@@ -25,7 +25,7 @@ class About extends Component {
           </div>
           <div>
             <IoMdPerson className="big-icon" />
-            <span>
+            <span className="steps-text">
               <strong>Step 2: </strong>Create a profile with us for custom
               experience
             </span>
