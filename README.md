@@ -100,7 +100,7 @@ $ npm run client-install
 $ createdb housing_alert
 ```
 
-7. Connect to the database with PostgreSQL
+7. Connect to the database with PostgreSQL to make sure you have your database setup 
 
 ```
 $ psql housing_alert
@@ -112,7 +112,7 @@ $ psql housing_alert
 $ code server/config/config.json
 ```
 
-9. Update the development part of the file with details from your database. If you didn't set up username and password, your config.json should look something like this. Timezone is currently set to UTC -7 America/Los Angeles. This will allow Sequelize to create all of the neccessary tables for you.
+9. Update the development part of the file with details from your database. If you didn't create an username and password, your config.json should look something like this. This will allow Sequelize to create all of the neccessary tables for you.
 
 ```
 {
@@ -127,10 +127,13 @@ $ code server/config/config.json
 }
 ```
 
-10. In your root directory, create a .env file to hold all of your API keys that you get beforehand. For example:
+10. In your root directory, create a .env file to hold all of your API keys that you get beforehand. You will at least need the following info to get the project running.
 
 ```
-GOOGLE_API_KEY=12345678
+SESSION_SECRET=1234567890
+TWILIO_PHONE=1234567890
+TWILIO_ACCOUNT_SID=1234567890
+TWILIO_AUTH_TOKEN=1234567890
 ```
 
 11. At this point, you should have everything you need to run this project. Start up the servers by running command in your root directory.
