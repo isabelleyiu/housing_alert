@@ -18,7 +18,7 @@ const login = (req, res, next) => {
       return res.status(400).json(err);
     }
     if (!user) {
-      return res.status(403).json({
+      return res.status(401).json({
         isLogin: false,
         message: 'Login failed. Your Phone or Password is incorrect'
       });
@@ -41,7 +41,7 @@ const login = (req, res, next) => {
         twoBedroom
       } = user.dataValues;
       if (err) {
-        return res.status(403).json({
+        return res.status(401).json({
           isLogin: false,
           message: 'Login failed...'
         });
