@@ -34,7 +34,8 @@ class Signup extends Component {
     });
   };
   signupUser = e => {
-    const { message, ...user } = this.state;
+    let { message, ...user } = this.state;
+    user.phone = user.phone.match(/\d/g).join('');
     e.preventDefault();
     fetch('api/user/', {
       method: 'POST',
