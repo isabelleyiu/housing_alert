@@ -63,9 +63,11 @@ module.exports = housing => {
 
   if (Tenure === 'Resale' || Tenure === 'New sale') {
     if (minPrice !== maxPrice) {
-      price = `$${minPrice} - $${maxPrice}`;
+      price = `$${minPrice.toLocaleString(
+        'en-US'
+      )} - $${maxPrice.toLocaleString('en-US')}`;
     } else {
-      price = `$${minPrice}`;
+      price = `$${minPrice.toLocaleString('en-US')}`;
     }
   }
 

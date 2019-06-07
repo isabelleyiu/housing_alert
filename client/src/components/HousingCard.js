@@ -69,7 +69,7 @@ class HousingCard extends Component {
       let rent = null;
       let price = null;
 
-      if (Tenure === 'Re-rental') {
+      if (Tenure === 'Re-rental' || Tenure === 'New rental') {
         if (minMonthlyRent === null && maxMonthlyRent === null) {
           rent = `${minPercentIncome}% of Income`;
         } else if (minPercentIncome !== maxPercentIncome) {
@@ -81,15 +81,19 @@ class HousingCard extends Component {
         }
       }
 
-      if (Tenure === 'Resale') {
+      if (Tenure === 'Resale' || Tenure === 'New sale') {
         if (minPriceWithParking !== maxPriceWithParking) {
-          price = `$${minPriceWithParking} - $${maxPriceWithParking}`;
+          price = `$${minPriceWithParking.toLocaleString(
+            'en-US'
+          )} - $${maxPriceWithParking.toLocaleString('en-US')}`;
         } else if (minPriceWithParking) {
-          price = `$${minPriceWithParking}`;
+          price = `$${minPriceWithParking.toLocaleString('en-US')}`;
         } else if (minPriceWithoutParking !== maxPriceWithoutParking) {
-          price = `$${minPriceWithoutParking} - $${maxPriceWithoutParking}`;
+          price = `$${minPriceWithoutParking.toLocaleString(
+            'en-US'
+          )} - $${maxPriceWithoutParking.toLocaleString('en-US')}`;
         } else {
-          price = `$${minPriceWithoutParking}`;
+          price = `$${minPriceWithoutParking.toLocaleString('en-US')}`;
         }
       }
       return (
@@ -109,9 +113,7 @@ class HousingCard extends Component {
         <CardGroup className="housing-card margin-top-bottom-md">
           <Card>
             <Card.Img variant="top" src={imageURL} className="card-img" />
-            <Card.Body
-            // style={{ height: 'auto' }}
-            >
+            <Card.Body>
               <Card.Title>{Building_Name}</Card.Title>
               <Card.Text />
               <ListGroup className="list-group-flush">
