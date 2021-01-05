@@ -23,7 +23,7 @@
   "homepage": "https://github.com/isabelleyiu/housing_alert#readme",
   "dependencies": {
     "authy": "^1.4.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "concurrently": "^4.1.0",
     "connect-redis": "^3.4.1",
